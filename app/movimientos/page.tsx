@@ -3,12 +3,22 @@
 import { createClient } from '@/lib/supabase/client'
 import { Suspense, useEffect, useState } from 'react'
 import MovementForm from '@/components/movement/movement-form'
+import MovementListItem from '@/components/movement/movement-list-item'
+
+interface Movimiento {
+    monto: number
+    descripcion?: string | null
+    fecha: string
+    hora?: string | null
+    cuenta_id: string
+    categoria_id: string
+    notas?: string | null
+}
 
 function MovimientosContent() {
-    const [movements, setMovements] = useState<Record<string, unknown>[] | null>(null)
+    const [movements, setMovements] = useState<Movimiento[] | null>(null)
     const supabase = createClient()
     const [loading, setLoading] = useState(true)
-
 
     const fetchRecords = async () => {
         try {
@@ -29,10 +39,17 @@ function MovimientosContent() {
     }, [])
 
     return <>
-
         <MovementForm onMovimientoCreado={fetchRecords} />
 
-        <pre>{JSON.stringify(movements, null, 2)}</pre>
+        {loading ? (
+            <div>Cargando movimientos...</div>
+        ) : (
+            <div className="movements-list">
+                {movements?.map((movimiento, index) => (
+                    <MovementListItem key={index} movimiento={movimiento} />
+                ))}
+            </div>
+        )}
     </>
 }
 

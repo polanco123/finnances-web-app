@@ -1,0 +1,80 @@
+:root {
+  /* Colors - Primary */
+  --theme-color-primary: #1976d2;
+  --theme-color-primary-dark: #1565c0;
+  --theme-color-primary-light: #42a5f5;
+
+  /* Colors - Secondary */
+  --theme-color-secondary: #9c27b0;
+  --theme-color-secondary-dark: #7b1fa2;
+  --theme-color-secondary-light: #ba68c8;
+
+  /* Colors - Accent */
+  --theme-color-accent: #ff6f00;
+  --theme-color-accent-dark: #e65100;
+  --theme-color-accent-light: #ffa726;
+
+  /* Colors - Semantic */
+  --theme-color-success: #2e7d32;
+  --theme-color-error: #c62828;
+  --theme-color-warning: #f57f17;
+  --theme-color-info: #0288d1;
+
+  /* Text Colors */
+  --theme-text-primary: #212121;
+  --theme-text-secondary: #757575;
+  --theme-text-disabled: #9e9e9e;
+  --theme-text-hint: #bdbdbd;
+  --theme-text-on-primary: #ffffff;
+  --theme-text-on-secondary: #ffffff;
+
+  /* Background Colors */
+  --theme-bg-background: #fafafa;
+  --theme-bg-surface: #ffffff;
+  --theme-bg-surface-variant: #f5f5f5;
+
+  /* Border Colors */
+  --theme-border-default: #e0e0e0;
+  --theme-border-focus: #1976d2;
+  --theme-border-error: #c62828;
+
+  /* Spacing (multiples of 4px) */
+  --theme-spacing-1: 4px;
+  --theme-spacing-2: 8px;
+  --theme-spacing-3: 12px;
+  --theme-spacing-4: 16px;
+  --theme-spacing-5: 20px;
+  --theme-spacing-6: 24px;
+  --theme-spacing-8: 32px;
+  --theme-spacing-10: 40px;
+  --theme-spacing-12: 48px;
+
+  /* Border Radius */
+  --theme-radius-sm: 4px;
+  --theme-radius-md: 8px;
+  --theme-radius-lg: 12px;
+  --theme-radius-xl: 16px;
+  --theme-radius-full: 9999px;
+
+  /* Shadows */
+  --theme-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --theme-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+  --theme-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10);
+  --theme-shadow-4: 0 14px 28px rgba(0, 0, 0, 0.18), 0 10px 10px rgba(0, 0, 0, 0.12);
+
+  /* Transitions */
+  --theme-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --theme-font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --theme-font-size-xs: 0.75rem;
+  --theme-font-size-sm: 0.875rem;
+  --theme-font-size-md: 1rem;
+  --theme-font-size-lg: 1.25rem;
+  --theme-font-size-xl: 1.5rem;
+  --theme-font-weight-normal: 400;
+  --theme-font-weight-medium: 500;
+  --theme-font-weight-bold: 700;
+}

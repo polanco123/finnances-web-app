@@ -3,6 +3,7 @@ import { crearMovimiento } from '../movement/movement-mapper'
 import { CUENTAS } from '../../lib/catalogs/cuentas'
 import { CATEGORIAS } from '../../lib/catalogs/categorias'
 import { insertarMovimiento } from '../movement/movement-service'
+import './movement-form.css'
 
 const toLocalDate = (d) => d.toISOString().split('T')[0]
 const toLocalTime = (d) => d.toTimeString().slice(0, 5)
@@ -48,14 +49,15 @@ export default function MovementForm({ onMovimientoCreado }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h2>Nuevo Movimiento</h2>
+    <form className="movement-form" onSubmit={handleSubmit}>
+      <h2 className="movement-form__title">Nuevo Movimiento</h2>
 
-      {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+      {error && <div className="movement-form__error">{error}</div>}
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Monto</label><br />
+      <div className="movement-form__group">
+        <label className="movement-form__label">Monto</label>
         <input
+          className="movement-form__input"
           type="number"
           value={monto}
           onChange={(e) => setMonto(e.target.value)}
@@ -63,38 +65,37 @@ export default function MovementForm({ onMovimientoCreado }) {
           min="0.01"
           step="0.01"
           required
-          style={{ width: '100%', padding: '8px' }}
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-        <div style={{ flex: 1 }}>
-          <label>Fecha</label><br />
+      <div className="movement-form__group-row">
+        <div className="movement-form__group">
+          <label className="movement-form__label">Fecha</label>
           <input
+            className="movement-form__input"
             type="date"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px' }}
           />
         </div>
-        <div style={{ flex: 1 }}>
-          <label>Hora</label><br />
+        <div className="movement-form__group">
+          <label className="movement-form__label">Hora</label>
           <input
+            className="movement-form__input"
             type="time"
             value={hora}
             onChange={(e) => setHora(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
           />
         </div>
       </div>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Categoría</label><br />
+      <div className="movement-form__group">
+        <label className="movement-form__label">Categoría</label>
         <select
+          className="movement-form__select"
           value={categoriaId}
           onChange={(e) => setCategoriaId(e.target.value)}
-          style={{ width: '100%', padding: '8px' }}
         >
           {CATEGORIAS.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.nombre}</option>
@@ -102,12 +103,12 @@ export default function MovementForm({ onMovimientoCreado }) {
         </select>
       </div>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Cuenta</label><br />
+      <div className="movement-form__group">
+        <label className="movement-form__label">Cuenta</label>
         <select
+          className="movement-form__select"
           value={cuentaId}
           onChange={(e) => setCuentaId(e.target.value)}
-          style={{ width: '100%', padding: '8px' }}
         >
           {CUENTAS.map((cue) => (
             <option key={cue.id} value={cue.id}>{cue.nombre}</option>
@@ -115,18 +116,22 @@ export default function MovementForm({ onMovimientoCreado }) {
         </select>
       </div>
 
-      <div style={{ marginBottom: '10px' }}>
-        <label>Notas</label><br />
+      <div className="movement-form__group">
+        <label className="movement-form__label">Notas</label>
         <textarea
+          className="movement-form__textarea"
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
           rows={3}
           placeholder="Comentarios opcionales..."
-          style={{ width: '100%', padding: '8px' }}
         />
       </div>
 
-      <button type="submit" disabled={guardando} style={{ padding: '10px 20px' }}>
+      <button
+        className="movement-form__button"
+        type="submit"
+        disabled={guardando}
+      >
         {guardando ? 'Guardando...' : 'Guardar'}
       </button>
     </form>
