@@ -15,6 +15,7 @@ export default function MovementForm({ onMovimientoCreado }) {
   const [fecha, setFecha] = useState(() => toLocalDate(new Date()))
   const [hora, setHora] = useState(() => toLocalTime(new Date()))
   const [notas, setNotas] = useState('')
+  const [tipoMovimiento, setTipoMovimiento] = useState('gasto')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState(null)
 
@@ -26,8 +27,10 @@ export default function MovementForm({ onMovimientoCreado }) {
       setGuardando(true)
       setError(null)
 
+      const montoFinal = tipoMovimiento === 'gasto' ? -Math.abs(Number(monto)) : Math.abs(Number(monto))
+
       const movimiento = crearMovimiento({
-        monto: Number(monto),
+        monto: montoFinal,
         descripcion: notas || '',
         fecha,
         hora,
@@ -48,11 +51,36 @@ export default function MovementForm({ onMovimientoCreado }) {
     }
   }
 
+  const handleTipoChange = () => {
+    setTipoMovimiento(prev => prev === 'gasto' ? 'ingreso' : 'gasto')
+  }
+
   return (
     <form className="movement-form" onSubmit={handleSubmit}>
       <h2 className="movement-form__title">Nuevo Movimiento</h2>
 
       {error && <div className="movement-form__error">{error}</div>}
+
+      <div className="movement-form__toggle-group">
+        <span className={`movement-form__toggle-label ${tipoMovimiento === 'gasto' ? 'movement-form__toggle-label--active' : ''}`}>
+          Gasto
+        </span>
+        <label className="movement-form__toggle">
+          <input
+            type="checkbox"
+            checked={tipoMovimiento === 'ingreso'}
+            onChange={handleTipoChange}
+          />
+          <span className="movement-form__toggle-track"></span>
+          <span className="movement-form__toggle-thumb"></span>
+        </label>
+        <span className={`movement-form__toggle-label ${tipoMovimiento === 'ingreso' ? 'movement-form__toggle-label--active' : ''}`}>
+          Ingreso
+        </span>
+        <span className={`movement-form__toggle-type ${tipoMovimiento === 'gasto' ? 'movement-form__toggle-type--gasto' : 'movement-form__toggle-type--ingreso'}`}>
+          {tipoMovimiento === 'gasto' ? '(Gasto)' : '(Ingreso)'}
+        </span>
+      </div>
 
       <div className="movement-form__group">
         <label className="movement-form__label">Monto</label>

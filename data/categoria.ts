@@ -57,5 +57,6 @@ const raw: Categoria[] = [
 
 export const CATEGORIAS = raw
   .map(({ id, nombre, tipo, es_diversion }) => ({ id, nombre, tipo, es_diversion }))
+  .sort((a, b) => a.nombre.localeCompare(b.nombre))
 
 export const CATEGORIA_DEFAULT = CATEGORIAS[0]
