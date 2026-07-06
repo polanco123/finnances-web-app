@@ -1,5 +1,5 @@
-import { CUENTAS, CUENTA_DEFAULT } from '../../lib/catalogs/cuentas'
-import { CATEGORIAS, CATEGORIA_DEFAULT } from '../../lib/catalogs/categorias'
+import { CUENTA_DEFAULT } from '../../lib/catalogs/cuentas'
+import { CATEGORIA_DEFAULT } from '../../lib/catalogs/categorias'
 
 export const CAMPOS = {
   MONTO: 'monto',
@@ -48,4 +48,35 @@ export function crearMovimiento({ monto, descripcion, fecha, hora, cuenta_id, ca
     categoria_id: categoria_id || CATEGORIA_DEFAULT.id,
     ...rest,
   }
+}
+
+const TRANSFERENCIA_CATEGORIA_ID = '32151dbb-6732-45a7-befd-9057dc9f935a'
+
+export function crearMovimientoTransferencia({ monto, fecha, hora, cuentaOrigenId, cuentaDestinoId, notas }) {
+  const montoAbs = Math.abs(Number(monto))
+
+  const base = {
+    fecha: fecha || MOVIMIENTO_DEFAULT.fecha,
+    hora: hora || MOVIMIENTO_DEFAULT.hora,
+    categoria_id: TRANSFERENCIA_CATEGORIA_ID,
+    es_transferencia: true,
+    es_ajuste: false,
+    descripcion: '',
+    msi_id: null,
+    notas: notas || null,
+  }
+
+  const origen = {
+    ...base,
+    monto: -montoAbs,
+    cuenta_id: cuentaOrigenId,
+  }
+
+  const destino = {
+    ...base,
+    monto: montoAbs,
+    cuenta_id: cuentaDestinoId,
+  }
+
+  return { origen, destino }
 }

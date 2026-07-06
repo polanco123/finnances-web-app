@@ -1,10 +1,4 @@
-# material-theme
-
-## Purpose
-
-Provide a consistent theming system with CSS custom properties that support both light and dark modes.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Theme CSS variables
 The system SHALL provide a CSS file with custom properties for theming that can be imported by any component. The theme SHALL support both light and dark modes via the `.dark` class.

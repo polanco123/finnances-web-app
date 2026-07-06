@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Suspense, useEffect, useState } from 'react'
 import MovementForm from '@/components/movement/movement-form'
 import MovementListItem from '@/components/movement/movement-list-item'
+import './page.css'
 
 interface Movimiento {
     monto: number
@@ -13,6 +14,8 @@ interface Movimiento {
     cuenta_id: string
     categoria_id: string
     notas?: string | null
+    es_transferencia?: boolean | null
+    transferencia_id?: string | null
 }
 
 function MovimientosContent() {
@@ -24,7 +27,7 @@ function MovimientosContent() {
         try {
             const { data } = await supabase
                 .from('movimiento')
-                .select('monto, descripcion, fecha, hora, cuenta_id, categoria_id, notas, created_at')
+                .select('monto, descripcion, fecha, hora, cuenta_id, categoria_id, notas, created_at, es_transferencia, transferencia_id')
                 .order('created_at', { ascending: false })
                 .limit(10)
             setMovements(data)
@@ -38,24 +41,28 @@ function MovimientosContent() {
         fetchRecords()
     }, [])
 
-    return <>
-        <MovementForm onMovimientoCreado={fetchRecords} />
+    return (
+        <div className="movimientos-page">
+            <div className="movimientos-page__container">
+                <MovementForm onMovimientoCreado={fetchRecords} />
 
-        {loading ? (
-            <div>Cargando movimientos...</div>
-        ) : (
-            <div className="movements-list">
-                {movements?.map((movimiento, index) => (
-                    <MovementListItem key={index} movimiento={movimiento} />
-                ))}
+                {loading ? (
+                    <div className="movimientos-page__loading">Cargando movimientos...</div>
+                ) : (
+                    <div className="movimientos-list">
+                        {movements?.map((movimiento, index) => (
+                            <MovementListItem key={index} movimiento={movimiento} />
+                        ))}
+                    </div>
+                )}
             </div>
-        )}
-    </>
+        </div>
+    )
 }
 
 export default function Page() {
     return (
-        <Suspense fallback={<div>Cargando...</div>}>
+        <Suspense fallback={<div className="movimientos-page"><div className="movimientos-page__loading">Cargando...</div></div>}>
             <MovimientosContent />
         </Suspense>
     )

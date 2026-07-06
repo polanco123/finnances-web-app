@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/client'
 
 export const insertarMovimiento = async (movimiento) => {
-    const supabase = createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('movimiento')
@@ -12,13 +12,22 @@ export const insertarMovimiento = async (movimiento) => {
   return data
 }
 
-export const obtenerMovimientos = async (limite = 10) => {
-  const { data, error } = await supabase
-    .from('movimiento')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(limite)
+export const insertarTransferencia = async (movimientoOrigen, movimientoDestino) => {
+  const supabase = createClient()
 
-  if (error) throw error
-  return data
+  const { data: dataOrigen, error: errorOrigen } = await supabase
+    .from('movimiento')
+    .insert(movimientoOrigen)
+    .select()
+
+  if (errorOrigen) throw errorOrigen
+
+  const { data: dataDestino, error: errorDestino } = await supabase
+    .from('movimiento')
+    .insert(movimientoDestino)
+    .select()
+
+  if (errorDestino) throw errorDestino
+
+  return { origen: dataOrigen, destino: dataDestino }
 }

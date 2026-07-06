@@ -1,10 +1,4 @@
-# movement-display
-
-## Purpose
-
-Display financial movements in a structured list item format with proper currency formatting, responsive layout, and glassmorphic dark mode support.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Movement list item display
 The system SHALL display movement information in a structured list item format with clear visual hierarchy. In dark mode, list items SHALL use glassmorphic styling.

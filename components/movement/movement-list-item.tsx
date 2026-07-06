@@ -13,6 +13,8 @@ interface MovimientoListItemProps {
     cuenta_id: string
     categoria_id: string
     notas?: string | null
+    es_transferencia?: boolean | null
+    transferencia_id?: string | null
   }
 }
 
@@ -39,9 +41,10 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
   const { value, isPositive } = formatCurrency(movimiento.monto)
   const cuentaNombre = resolveCatalogName(movimiento.cuenta_id, CUENTAS)
   const categoriaNombre = resolveCatalogName(movimiento.categoria_id, CATEGORIAS)
+  const isTransfer = movimiento.es_transferencia === true
 
   return (
-    <div className="movement-list-item">
+    <div className={`movement-list-item ${isTransfer ? 'movement-list-item--transfer' : ''}`}>
       <div className="movement-list-item__header">
         <span className={`movement-list-item__monto ${isPositive ? 'positive' : 'negative'}`}>
           {value}
@@ -53,15 +56,30 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
       </div>
 
       <div className="movement-list-item__details">
-        <div className="movement-list-item__detail">
-          <span className="movement-list-item__label">Categoría</span>
-          <span className="movement-list-item__value">{categoriaNombre}</span>
-        </div>
+        {isTransfer ? (
+          <div className="movement-list-item__detail">
+            <span className="movement-list-item__label">Transferencia</span>
+            <span className="movement-list-item__value movement-list-item__value--transfer">
+              {cuentaNombre} →
+            </span>
+          </div>
+        ) : (
+          <div className="movement-list-item__detail">
+            <span className="movement-list-item__label">Categoría</span>
+            <span className="movement-list-item__value">{categoriaNombre}</span>
+          </div>
+        )}
         <div className="movement-list-item__detail">
           <span className="movement-list-item__label">Cuenta</span>
           <span className="movement-list-item__value">{cuentaNombre}</span>
         </div>
       </div>
+
+      {isTransfer && (
+        <div className="movement-list-item__badge">
+          <span className="movement-list-item__badge-text">Transferencia</span>
+        </div>
+      )}
 
       {movimiento.notas && (
         <div className="movement-list-item__notas">
