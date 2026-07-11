@@ -229,17 +229,18 @@ export default function MovementForm({ onMovimientoCreado }) {
       ) : (
         <>
           <AutocompleteInput
-            label="Categoría"
-            options={CATEGORIAS}
-            value={categoriaId}
-            onChange={setCategoriaId}
-          />
-          <AutocompleteInput
             label="Cuenta"
             options={CUENTAS}
             value={cuentaId}
             onChange={setCuentaId}
           />
+          <AutocompleteInput
+            label="Categoría"
+            options={CATEGORIAS}
+            value={categoriaId}
+            onChange={setCategoriaId}
+          />
+          
         </>
       )}
 
