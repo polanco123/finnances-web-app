@@ -1,0 +1,20 @@
+.patrimonio-day-pips {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.patrimonio-day-pips__pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.patrimonio-day-pips__pip--filled {
+  background: var(--ink-faint);
+}
+
+.patrimonio-day-pips__pip--today {
+  background: var(--amber);
+}

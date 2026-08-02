@@ -1,0 +1,55 @@
+.patrimonio-categorias__empty {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin: 0;
+}
+
+.patrimonio-categoria-row {
+  margin-bottom: 14px;
+}
+
+.patrimonio-categoria-row:last-child {
+  margin-bottom: 0;
+}
+
+.patrimonio-categoria-row__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.patrimonio-categoria-row__nombre {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.patrimonio-categoria-row__monto {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.patrimonio-categoria-bar-track {
+  height: 6px;
+  background: var(--line-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.patrimonio-categoria-bar {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.patrimonio-categoria-bar--normal {
+  background: var(--ink-faint);
+}
+
+.patrimonio-categoria-bar--warm {
+  background: var(--amber);
+}
+
+.patrimonio-categoria-bar--hot {
+  background: var(--down);
+}

@@ -34,6 +34,8 @@ const raw: Cuenta[] = [
   { id: "e0b0d841-2ad9-4920-b5a3-6d9ae83ab130", nombre: "Banamex TDC Teleton", tipo: "deuda", saldo_calculado: -705.00, saldo_real: -18685.00, frecuencia_revision: "mensual", es_default: false, activa: true, limite_credito: null, dia_corte: 10, dia_pago: 30 },
   { id: "eaf61119-d528-49e1-8354-b18c4af53f4e", nombre: "Afore", tipo: "retiro", saldo_calculado: 0.00, saldo_real: 164168.00, frecuencia_revision: "trimestral", es_default: false, activa: true, limite_credito: null, dia_corte: null, dia_pago: null },
   { id: "f45ebe82-d244-4e26-88ca-294692d3ba32", nombre: "Banamex débito", tipo: "ingreso", saldo_calculado: 0.00, saldo_real: 0.00, frecuencia_revision: "mensual", es_default: false, activa: true, limite_credito: null, dia_corte: null, dia_pago: null },
+  { id: "e04d3bbe-9ded-4d35-910b-65503896d6cc", nombre: "Coppel", tipo: "deuda", saldo_calculado: -3300.00, saldo_real: -3399.00, frecuencia_revision: "mensual", es_default: false, activa: true, limite_credito: null, dia_corte: null, dia_pago: null },
+  { id: "437b3508-06f4-4ced-ac80-9fb79dec3626", nombre: "Prestadero préstamo", tipo: "deuda", saldo_calculado: -16306.00, saldo_real: -16306.00, frecuencia_revision: "mensual", es_default: false, activa: true, limite_credito: null, dia_corte: null, dia_pago: null },
 ]
 
 const activas = raw.filter((c) => c.activa === true)

@@ -1,0 +1,57 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--theme-spacing-4);
+  background: var(--theme-bg-surface);
+  border-bottom: 1px solid var(--theme-border-default);
+  flex-shrink: 0;
+}
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+}
+
+.topbar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--theme-radius-md);
+  background: transparent;
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast);
+}
+
+.topbar__toggle:hover {
+  background: var(--theme-bg-surface-variant);
+}
+
+.topbar__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--theme-radius-md);
+  background: transparent;
+  color: var(--theme-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast);
+}
+
+.topbar__icon-btn:hover {
+  background: var(--theme-bg-surface-variant);
+}

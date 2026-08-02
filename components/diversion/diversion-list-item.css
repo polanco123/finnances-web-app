@@ -1,0 +1,105 @@
+@import '@/lib/theme.css';
+
+.diversion-list-item {
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-md);
+  box-shadow: var(--theme-shadow-1);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+  transition: box-shadow var(--theme-transition-normal), transform var(--theme-transition-normal);
+}
+
+.diversion-list-item:hover {
+  box-shadow: var(--theme-shadow-2);
+  transform: translateY(-1px);
+}
+
+.diversion-list-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-list-item__monto {
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-medium);
+  letter-spacing: 0.02em;
+}
+
+.diversion-list-item__monto.positive {
+  color: var(--theme-color-success);
+}
+
+.diversion-list-item__monto.negative {
+  color: var(--theme-color-error);
+}
+
+.diversion-list-item__fecha {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+}
+
+.diversion-list-item__hora {
+  margin-left: var(--theme-spacing-1);
+}
+
+.diversion-list-item__details {
+  display: flex;
+  gap: var(--theme-spacing-6);
+  margin-bottom: var(--theme-spacing-2);
+}
+
+.diversion-list-item__detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.diversion-list-item__label {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--theme-spacing-1);
+}
+
+.diversion-list-item__value {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+}
+
+.diversion-list-item__notas {
+  padding-top: var(--theme-spacing-2);
+  border-top: 1px solid var(--theme-border-default);
+}
+
+@media (max-width: 767px) {
+  .diversion-list-item__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--theme-spacing-2);
+  }
+
+  .diversion-list-item__details {
+    flex-direction: column;
+    gap: var(--theme-spacing-2);
+  }
+}
+
+/* Dark Mode - Glassmorphic */
+.dark .diversion-list-item {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .diversion-list-item:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .diversion-list-item__notas {
+  border-top-color: var(--theme-glass-border);
+}

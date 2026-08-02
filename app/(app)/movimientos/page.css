@@ -1,0 +1,41 @@
+@import '@/lib/theme.css';
+
+.movimientos-page {
+  padding: var(--theme-spacing-6) var(--theme-spacing-4);
+}
+
+.movimientos-page__container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.movimientos-page__loading {
+  text-align: center;
+  padding: var(--theme-spacing-8);
+  color: var(--theme-text-secondary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+}
+
+.movimientos-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.movimientos-list__sentinel {
+  height: 1px;
+}
+
+.movimientos-list__loading-more {
+  text-align: center;
+  padding: var(--theme-spacing-4);
+  color: var(--theme-text-secondary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+}
+
+@media (min-width: 768px) {
+  .movimientos-page {
+    padding: var(--theme-spacing-8) var(--theme-spacing-6);
+  }
+}

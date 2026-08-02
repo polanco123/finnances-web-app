@@ -1,107 +1,13 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { crearMovimiento, crearMovimientoTransferencia } from '../movement/movement-mapper'
 import { CUENTAS } from '../../lib/catalogs/cuentas'
 import { CATEGORIAS } from '../../lib/catalogs/categorias'
 import { insertarMovimiento, insertarTransferencia } from '../movement/movement-service'
+import AutocompleteInput from '@/components/ui/autocomplete-input'
 import './movement-form.css'
 
 const toLocalDate = (d) => d.toISOString().split('T')[0]
 const toLocalTime = (d) => d.toTimeString().slice(0, 5)
-
-const TRANSFERENCIA_CATEGORIA_ID = '32151dbb-6732-45a7-befd-9057dc9f935a'
-
-function AutocompleteInput({ label, options, value, onChange, placeholder }) {
-  const [inputValue, setInputValue] = useState('')
-  const [showOptions, setShowOptions] = useState(false)
-  const [highlightIndex, setHighlightIndex] = useState(-1)
-  const wrapperRef = useRef(null)
-  const inputRef = useRef(null)
-
-  const selectedOption = options.find(o => o.id === value)
-
-  useEffect(() => {
-    if (selectedOption && !showOptions) {
-      setInputValue(selectedOption.nombre)
-    }
-  }, [selectedOption, showOptions])
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setShowOptions(false)
-        if (selectedOption) setInputValue(selectedOption.nombre)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [selectedOption])
-
-  const filtered = inputValue.trim() === ''
-    ? options
-    : options.filter(o => o.nombre.toLowerCase().includes(inputValue.toLowerCase()))
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value)
-    setShowOptions(true)
-    setHighlightIndex(-1)
-  }
-
-  const handleSelect = (option) => {
-    onChange(option.id)
-    setInputValue(option.nombre)
-    setShowOptions(false)
-    setHighlightIndex(-1)
-  }
-
-  const handleKeyDown = (e) => {
-    if (!showOptions) return
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setHighlightIndex(prev => Math.min(prev + 1, filtered.length - 1))
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setHighlightIndex(prev => Math.max(prev - 1, 0))
-    } else if (e.key === 'Enter' && highlightIndex >= 0) {
-      e.preventDefault()
-      handleSelect(filtered[highlightIndex])
-    } else if (e.key === 'Escape') {
-      setShowOptions(false)
-      if (selectedOption) setInputValue(selectedOption.nombre)
-    }
-  }
-
-  return (
-    <div className="movement-form__group">
-      <label className="movement-form__label">{label}</label>
-      <div className="movement-form__autocomplete" ref={wrapperRef}>
-        <input
-          ref={inputRef}
-          className="movement-form__input"
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onFocus={() => setShowOptions(true)}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder || 'Escribir para buscar...'}
-          autoComplete="off"
-        />
-        {showOptions && filtered.length > 0 && (
-          <ul className="movement-form__autocomplete-list">
-            {filtered.map((option, index) => (
-              <li
-                key={option.id}
-                className={`movement-form__autocomplete-item ${index === highlightIndex ? 'movement-form__autocomplete-item--highlighted' : ''} ${option.id === value ? 'movement-form__autocomplete-item--selected' : ''}`}
-                onClick={() => handleSelect(option)}
-              >
-                {option.nombre}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  )
-}
 
 export default function MovementForm({ onMovimientoCreado }) {
   const [monto, setMonto] = useState('')

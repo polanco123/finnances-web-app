@@ -1,0 +1,89 @@
+@import '@/lib/theme.css';
+
+.diversion-missing-budget-alert {
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+  border-left: 4px solid var(--theme-color-warning);
+}
+
+.diversion-missing-budget-alert__message {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  margin: 0 0 var(--theme-spacing-3);
+}
+
+.diversion-missing-budget-alert__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin: 0 0 var(--theme-spacing-3);
+}
+
+.diversion-missing-budget-alert__actions {
+  display: flex;
+  gap: var(--theme-spacing-2);
+}
+
+.diversion-missing-budget-alert__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast),
+              opacity var(--theme-transition-fast);
+}
+
+.diversion-missing-budget-alert__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.diversion-missing-budget-alert__btn--accept {
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-warning);
+}
+
+.diversion-missing-budget-alert__btn--accept:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.diversion-missing-budget-alert__btn--close {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
+}
+
+.diversion-missing-budget-alert__btn--close:hover:not(:disabled) {
+  background: var(--theme-border-default);
+}
+
+/* Dark Mode */
+.dark .diversion-missing-budget-alert {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  border-left: 4px solid var(--theme-color-warning);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .diversion-missing-budget-alert__btn--close {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .diversion-missing-budget-alert__btn--close:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}

@@ -1,0 +1,406 @@
+/* ── Page ───────────────────────────────────────────── */
+.dashboard {
+  padding: 24px 16px;
+  font-family: var(--theme-font-family);
+  color: var(--theme-text-primary);
+}
+
+.dashboard__container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.dashboard__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--theme-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.dashboard__date {
+  font-size: 0.875rem;
+  color: var(--theme-text-disabled);
+}
+
+/* ── Cards Grid ─────────────────────────────────────── */
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* ── Card Base ──────────────────────────────────────── */
+.dash-card {
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: 12px;
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.dash-card:hover {
+  box-shadow: var(--theme-shadow-1);
+}
+
+.dash-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dash-card__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-text-disabled);
+  margin: 0;
+}
+
+/* ── Balance Card ───────────────────────────────────── */
+.balance-card {
+  border-left: 4px solid var(--theme-color-accent);
+}
+
+.balance-card__amount {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--theme-text-primary);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.balance-card__label {
+  font-size: 0.8125rem;
+  color: var(--theme-text-disabled);
+  margin: 0;
+}
+
+.balance-card__meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--theme-border-default);
+}
+
+.balance-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.balance-card__stat-label {
+  font-size: 0.75rem;
+  color: var(--theme-text-disabled);
+}
+
+.balance-card__stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.balance-card__stat-value--positive {
+  color: var(--theme-color-success);
+}
+
+.balance-card__stat-value--negative {
+  color: var(--theme-color-error);
+}
+
+/* ── Filter Controls ────────────────────────────────── */
+.filter-select {
+  appearance: none;
+  background: var(--theme-bg-surface-variant);
+  border: 1px solid var(--theme-border-default);
+  border-radius: 8px;
+  padding: 6px 32px 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23757575' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.15s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--theme-color-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-color-accent) 30%, transparent);
+}
+
+/* ── Movements List ─────────────────────────────────── */
+.movements-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.movement-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--theme-border-default);
+}
+
+.movement-row:last-child {
+  border-bottom: none;
+}
+
+.movement-row__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.movement-row__icon--income {
+  background: color-mix(in srgb, var(--theme-color-success) 15%, transparent);
+  color: var(--theme-color-success);
+}
+
+.movement-row__icon--expense {
+  background: color-mix(in srgb, var(--theme-color-error) 15%, transparent);
+  color: var(--theme-color-error);
+}
+
+.movement-row__icon--transfer {
+  background: color-mix(in srgb, var(--theme-text-secondary) 15%, transparent);
+  color: var(--theme-text-secondary);
+}
+
+.movement-row__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.movement-row__desc {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--theme-text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movement-row__category {
+  font-size: 0.75rem;
+  color: var(--theme-text-disabled);
+  margin: 2px 0 0 0;
+}
+
+.movement-row__amount {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.movement-row__amount--income {
+  color: var(--theme-color-success);
+}
+
+.movement-row__amount--expense {
+  color: var(--theme-color-error);
+}
+
+.movement-row__amount--transfer {
+  color: var(--theme-text-secondary);
+}
+
+/* ── Category Bars ──────────────────────────────────── */
+.category-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.category-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.category-bar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.category-bar__name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.category-bar__amount {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--theme-text-secondary);
+}
+
+.category-bar__track {
+  height: 8px;
+  background: var(--theme-bg-surface-variant);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar__fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.category-bar__fill--accent {
+  background: var(--theme-color-accent);
+}
+
+.category-bar__fill--primary {
+  background: var(--theme-color-primary);
+}
+
+.category-bar__fill--positive {
+  background: var(--theme-color-success);
+}
+
+/* ── Account Cards ──────────────────────────────────── */
+.account-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.account-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--theme-bg-surface-variant);
+  border: 1px solid var(--theme-border-default);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.account-pill--active {
+  border-color: var(--theme-color-accent);
+  background: color-mix(in srgb, var(--theme-color-accent) 15%, transparent);
+}
+
+.account-pill__name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.account-pill__balance {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.account-pill__balance--positive {
+  color: var(--theme-color-success);
+}
+
+.account-pill__balance--negative {
+  color: var(--theme-color-error);
+}
+
+.account-pill__balance--zero {
+  color: var(--theme-text-disabled);
+}
+
+/* ── Summary Row ────────────────────────────────────── */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.summary-stat {
+  text-align: center;
+  padding: 16px 8px;
+  border-radius: 10px;
+  background: var(--theme-bg-surface-variant);
+}
+
+.summary-stat__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.summary-stat__label {
+  font-size: 0.75rem;
+  color: var(--theme-text-disabled);
+  margin: 4px 0 0 0;
+}
+
+/* ── Loading ────────────────────────────────────────── */
+.dashboard__loading {
+  text-align: center;
+  padding: 64px 16px;
+  color: var(--theme-text-disabled);
+  font-size: 0.9375rem;
+}
+
+/* ── Empty State ────────────────────────────────────── */
+.dashboard__empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--theme-text-disabled);
+  font-size: 0.875rem;
+}
+
+/* ── Chart Section ──────────────────────────────────── */
+.dash-chart {
+  margin-top: 4px;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (min-width: 640px) {
+  .dashboard {
+    padding: 32px 24px;
+  }
+
+  .dashboard__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard__grid > .dash-card--full {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 960px) {
+  .dashboard {
+    padding: 40px 32px;
+  }
+
+  .dashboard__title {
+    font-size: 2rem;
+  }
+
+  .balance-card__amount {
+    font-size: 2.75rem;
+  }
+}

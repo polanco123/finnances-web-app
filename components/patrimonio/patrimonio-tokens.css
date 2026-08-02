@@ -1,0 +1,94 @@
+/*
+ * Patrimonio dashboard — isolated color/base-layout tokens.
+ *
+ * Deliberately does NOT import the app-wide theme stylesheet and never
+ * references a light/dark class selector or any app-wide CSS custom
+ * property — this page is always dark regardless of the global next-themes
+ * toggle (proposal.md, Resolved Decision #7).
+ */
+
+.patrimonio-page {
+  --bg: #0b0e14;
+  --bg-raised: #12161f;
+  --line: #262b38;
+  --line-soft: #1b2029;
+  --ink: #f2f0ea;
+  --ink-dim: #8b92a5;
+  --ink-faint: #545b6b;
+  --up: #3fb68b;
+  --up-dim: #1e4a3c;
+  --down: #d9534f;
+  --down-dim: #4a2422;
+  --amber: #e8a33d;
+  --amber-dim: #4a3a1e;
+
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 32px 20px 64px;
+}
+
+.patrimonio-page * {
+  box-sizing: border-box;
+}
+
+.patrimonio-page__container {
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.patrimonio-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.patrimonio-masthead__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.patrimonio-masthead__date {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+/* Shared raised-card surface reused by most sections */
+.patrimonio-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.patrimonio-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+  margin: 0 0 12px;
+}
+
+.patrimonio-page__loading,
+.patrimonio-page__error {
+  text-align: center;
+  color: var(--ink-dim);
+  padding: 64px 0;
+}
+
+.patrimonio-page__footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-faint);
+  padding-top: 12px;
+}

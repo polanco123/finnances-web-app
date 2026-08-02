@@ -1,0 +1,74 @@
+@import '@/lib/theme.css';
+
+.cuenta-card {
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-5);
+  transition: box-shadow var(--theme-transition-fast);
+}
+
+.cuenta-card:hover {
+  box-shadow: var(--theme-shadow-1);
+}
+
+.cuenta-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 0 var(--theme-spacing-3);
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.cuenta-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+}
+
+.cuenta-card__chevron {
+  color: var(--theme-text-secondary);
+  transition: transform var(--theme-transition-fast);
+  flex-shrink: 0;
+}
+
+.cuenta-card__chevron--expanded {
+  transform: rotate(180deg);
+}
+
+.cuenta-card__name {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.cuenta-card__balance {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-accent);
+  letter-spacing: -0.02em;
+}
+
+.cuenta-card__movements {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--theme-spacing-4);
+}
+
+.cuenta-card__empty {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  padding: var(--theme-spacing-4) 0;
+  margin: 0;
+}

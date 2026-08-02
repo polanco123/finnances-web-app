@@ -1,0 +1,58 @@
+@import '@/lib/theme.css';
+
+.diversion-progress {
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-progress__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--theme-spacing-3);
+}
+
+.diversion-progress__label {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+.diversion-progress__pct {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-accent);
+}
+
+.diversion-progress__track {
+  height: 8px;
+  background: var(--theme-bg-surface-variant);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.diversion-progress__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--theme-color-accent);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  min-width: 0;
+}
+
+/* Dark Mode */
+.dark .diversion-progress {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .diversion-progress__track {
+  background: rgba(255, 255, 255, 0.08);
+}

@@ -1,0 +1,17 @@
+.app-shell {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--theme-bg-background);
+}
+
+.app-shell__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.app-shell__content {
+  flex: 1;
+  overflow-y: auto;
+}

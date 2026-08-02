@@ -60,3 +60,9 @@ export const CATEGORIAS = raw
   .sort((a, b) => a.nombre.localeCompare(b.nombre))
 
 export const CATEGORIA_DEFAULT = CATEGORIAS[0]
+
+export const GASTO_TIPOS = ['compromiso', 'discrecional', 'suscripcion', 'trabajo', 'hogar'] as const
+
+export function esCategoriaDeGasto(tipo: string): boolean {
+  return (GASTO_TIPOS as readonly string[]).includes(tipo)
+}

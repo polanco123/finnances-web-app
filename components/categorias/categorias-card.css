@@ -1,0 +1,89 @@
+@import '@/lib/theme.css';
+
+.categoria-card {
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-5);
+  transition: box-shadow var(--theme-transition-fast);
+}
+
+.categoria-card:hover {
+  box-shadow: var(--theme-shadow-1);
+}
+
+.categoria-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 0 var(--theme-spacing-3);
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.categoria-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+}
+
+.categoria-card__chevron {
+  color: var(--theme-text-secondary);
+  transition: transform var(--theme-transition-fast);
+  flex-shrink: 0;
+}
+
+.categoria-card__chevron--expanded {
+  transform: rotate(180deg);
+}
+
+.categoria-card__name {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.categoria-card__count {
+  font-weight: var(--theme-font-weight-normal);
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-md);
+}
+
+.categoria-card__total {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-accent);
+  letter-spacing: -0.02em;
+}
+
+.categoria-card__porcentaje {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  min-width: 2.5em;
+  text-align: right;
+}
+
+.categoria-card__movements {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--theme-spacing-4);
+}
+
+.categoria-card__empty {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  padding: var(--theme-spacing-4) 0;
+  margin: 0;
+}

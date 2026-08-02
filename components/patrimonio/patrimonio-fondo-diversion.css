@@ -1,0 +1,99 @@
+/* Receipt-card visual: circular notches cut into the left/right edges,
+   like a physical receipt torn from a printer roll. */
+.patrimonio-fondo {
+  position: relative;
+  overflow: visible;
+}
+
+.patrimonio-fondo::before,
+.patrimonio-fondo::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  transform: translateY(-50%);
+}
+
+.patrimonio-fondo::before {
+  left: -11px;
+}
+
+.patrimonio-fondo::after {
+  right: -11px;
+}
+
+.patrimonio-fondo--empty {
+  text-align: center;
+}
+
+.patrimonio-fondo__empty-message {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin: 0;
+}
+
+.patrimonio-fondo__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.patrimonio-fondo__spent {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.patrimonio-fondo__pct {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--amber);
+}
+
+.patrimonio-fondo__pct--over {
+  color: var(--down);
+}
+
+.patrimonio-fondo__track {
+  height: 8px;
+  background: var(--line-soft);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.patrimonio-fondo__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--amber);
+  transition: width 0.4s ease;
+}
+
+.patrimonio-fondo__fill--over {
+  background: linear-gradient(90deg, var(--amber), var(--down));
+}
+
+.patrimonio-fondo__footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.patrimonio-fondo__remainder strong {
+  font-family: var(--font-jetbrains-mono), monospace;
+  color: var(--ink);
+}
+
+.patrimonio-fondo__average {
+  font-family: var(--font-jetbrains-mono), monospace;
+  color: var(--ink-faint);
+}

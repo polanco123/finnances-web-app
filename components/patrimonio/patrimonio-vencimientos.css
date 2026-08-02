@@ -1,0 +1,30 @@
+.patrimonio-vencimientos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.patrimonio-vencimiento-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.patrimonio-vencimiento-strip__nombre {
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.patrimonio-vencimiento-strip__dias {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amber);
+}
+
+.patrimonio-vencimientos__empty {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin: 0;
+}

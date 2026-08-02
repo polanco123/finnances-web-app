@@ -1,0 +1,160 @@
+@import '@/lib/theme.css';
+
+.diversion-form {
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-form__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  margin: 0 0 var(--theme-spacing-3) 0;
+}
+
+.diversion-form__group {
+  margin-bottom: var(--theme-spacing-3);
+}
+
+.diversion-form__label {
+  display: block;
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.diversion-form__input,
+.diversion-form__textarea {
+  width: 100%;
+  padding: var(--theme-spacing-2) var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface);
+  border: none;
+  border-bottom: 1px solid var(--theme-border-default);
+  border-radius: 0;
+  outline: none;
+  transition: border-color var(--theme-transition-fast);
+  box-sizing: border-box;
+}
+
+.diversion-form__input::placeholder,
+.diversion-form__textarea::placeholder {
+  color: var(--theme-text-hint);
+}
+
+.diversion-form__input:focus,
+.diversion-form__textarea:focus {
+  border-bottom-color: var(--theme-border-focus);
+}
+
+.diversion-form__input:disabled,
+.diversion-form__textarea:disabled {
+  background: var(--theme-bg-surface-variant);
+  color: var(--theme-text-disabled);
+  cursor: not-allowed;
+}
+
+.diversion-form__input--error,
+.diversion-form__textarea--error {
+  border-bottom-color: var(--theme-border-error);
+}
+
+.diversion-form__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin-bottom: var(--theme-spacing-2);
+}
+
+.diversion-form__textarea {
+  min-height: 48px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.diversion-form__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-primary);
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast),
+              opacity var(--theme-transition-fast);
+}
+
+.diversion-form__button:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}
+
+.diversion-form__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .diversion-form {
+    padding: var(--theme-spacing-3);
+  }
+}
+
+/* Dark Mode - Glassmorphic */
+.dark .diversion-form {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .diversion-form__input,
+.dark .diversion-form__textarea {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: var(--theme-border-default);
+}
+
+.dark .diversion-form__input::placeholder,
+.dark .diversion-form__textarea::placeholder {
+  color: var(--theme-text-hint);
+}
+
+.dark .diversion-form__input:focus,
+.dark .diversion-form__textarea:focus {
+  border-bottom-color: var(--theme-border-focus);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .diversion-form__input:disabled,
+.dark .diversion-form__textarea:disabled {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--theme-text-disabled);
+}
+
+.dark .diversion-form__button {
+  background: var(--theme-color-primary);
+  color: var(--theme-text-on-primary);
+}
+
+.dark .diversion-form__button:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}

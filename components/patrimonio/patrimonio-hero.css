@@ -1,0 +1,49 @@
+.patrimonio-hero {
+  display: flex;
+  flex-direction: column;
+}
+
+.patrimonio-hero__amount {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.patrimonio-hero__delta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.patrimonio-hero__delta-amount {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 600;
+}
+
+.patrimonio-hero__delta-label {
+  color: var(--ink-dim);
+}
+
+.patrimonio-hero__delta--up .patrimonio-hero__delta-amount {
+  color: var(--up);
+}
+
+.patrimonio-hero__delta--down .patrimonio-hero__delta-amount {
+  color: var(--down);
+}
+
+.patrimonio-hero__delta--neutral .patrimonio-hero__delta-label {
+  color: var(--ink-faint);
+}
+
+@media (max-width: 480px) {
+  .patrimonio-hero__amount {
+    font-size: 40px;
+  }
+}

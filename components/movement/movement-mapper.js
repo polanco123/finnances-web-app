@@ -64,6 +64,7 @@ export function crearMovimientoTransferencia({ monto, fecha, hora, cuentaOrigenI
     descripcion: '',
     msi_id: null,
     notas: notas || null,
+    transferencia_id: crypto.randomUUID(),
   }
 
   const origen = {

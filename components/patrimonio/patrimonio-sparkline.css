@@ -1,0 +1,21 @@
+.patrimonio-sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 48px;
+}
+
+.patrimonio-sparkline--empty {
+  height: 48px;
+}
+
+.patrimonio-sparkline__bar {
+  flex: 1 1 0;
+  min-width: 4px;
+  background: var(--up-dim);
+  border-radius: 2px 2px 0 0;
+}
+
+.patrimonio-sparkline__bar:last-child {
+  background: var(--up);
+}

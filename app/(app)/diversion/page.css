@@ -1,0 +1,93 @@
+@import '@/lib/theme.css';
+
+.diversion-page {
+  padding: var(--theme-spacing-4);
+}
+
+.diversion-page__container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.diversion-page__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0 0 var(--theme-spacing-4) 0;
+}
+
+.diversion-page__loading {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  padding: var(--theme-spacing-8) 0;
+}
+
+.diversion-page__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-error);
+  background: rgba(198, 40, 40, 0.08);
+  border: 1px solid rgba(198, 40, 40, 0.2);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-page__list {
+  margin-top: var(--theme-spacing-2);
+}
+
+.diversion-page__empty-list {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  padding: var(--theme-spacing-6) 0;
+}
+
+/* Empty State */
+.diversion-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--theme-spacing-10) var(--theme-spacing-4);
+}
+
+.diversion-empty-state__icon {
+  color: var(--theme-text-secondary);
+  opacity: 0.5;
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-empty-state__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  margin: 0 0 var(--theme-spacing-2) 0;
+}
+
+.diversion-empty-state__message {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  margin: 0;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* Dark Mode */
+.dark .diversion-page__error {
+  background: rgba(198, 40, 40, 0.12);
+  border-color: rgba(198, 40, 40, 0.3);
+}
+
+.dark .diversion-empty-state__icon {
+  color: var(--theme-text-secondary);
+  opacity: 0.4;
+}
