@@ -10,7 +10,6 @@ export interface Cuenta {
   nombre: string
   tipo: string
   saldo_real: number
-  saldo_calculado: number
   activa: boolean
 }
 

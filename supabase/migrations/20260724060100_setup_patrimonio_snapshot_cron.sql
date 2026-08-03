@@ -6,11 +6,11 @@ SELECT cron.schedule(
   '0 6 * * *', -- 06:00 UTC = 00:00 America/Mexico_City (no DST)
   $$
   SELECT net.http_post(
-    url := 'https://uiufzcvxzlknsmcxtmtf.supabase.co/functions/v1/patrimonio-snapshot-daily',
+    url := 'https://<PROJECT_REF>.supabase.co/functions/v1/patrimonio-snapshot-daily',
     headers := jsonb_build_object(
       'Authorization', 'Bearer ' || (
         SELECT decrypted_secret FROM vault.decrypted_secrets
-        WHERE name = 'patrimonio_snapshot_service_role_key'
+        WHERE name = '<SERVICE_ROLE_SECRET_NAME>'
       )
     )
   );

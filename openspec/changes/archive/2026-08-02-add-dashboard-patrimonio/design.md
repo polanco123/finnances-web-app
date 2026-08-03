@@ -186,13 +186,13 @@ SELECT cron.schedule(
   SELECT net.http_post(
     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/patrimonio-snapshot-daily',
     headers := jsonb_build_object(
-      'Authorization', 'Bearer ' || current_setting('app.settings.service_role_key')
+      'Authorization', 'Bearer ' || current_setting('app.settings.<SERVICE_ROLE_KEY>')
     )
   );
   $$
 );
 ```
-`<PROJECT_REF>` and the `app.settings.service_role_key` Postgres setting (or a Supabase Vault secret referenced the same way) are filled at apply time from the live project — see Assumptions below. If the Supabase Dashboard's built-in Cron Jobs UI (Integrations → Cron) is available on this project's plan, it may be used instead to wire the same schedule → Edge Function invocation without hand-writing the `net.http_post` call; the outcome (one upserted row/day) is identical either way.
+`<PROJECT_REF>` and the `app.settings.<SERVICE_ROLE_KEY>` Postgres setting (or a Supabase Vault secret referenced the same way) are filled at apply time from the live project — see Assumptions below. If the Supabase Dashboard's built-in Cron Jobs UI (Integrations → Cron) is available on this project's plan, it may be used instead to wire the same schedule → Edge Function invocation without hand-writing the `net.http_post` call; the outcome (one upserted row/day) is identical either way.
 
 **Edge Function** (`supabase/functions/patrimonio-snapshot-daily/index.ts`):
 ```ts
@@ -277,6 +277,6 @@ Day-1 state: `patrimonio_snapshot` starts empty; sparkline renders 0–1 bars un
 None — all decisions above are final. The following are **assumptions requiring apply-time verification** against the live Supabase project (not resolvable from source alone):
 
 - `pg_cron` and `pg_net` extension availability/enablement on this project's Supabase instance (Database → Extensions).
-- Storage mechanism for the service-role secret referenced by `cron.schedule`'s `net.http_post` call — either a Postgres setting (`ALTER DATABASE ... SET app.settings.service_role_key = '...'`) or a Supabase Vault secret; exact syntax depends on which is available/enabled.
+- Storage mechanism for the service-role secret referenced by `cron.schedule`'s `net.http_post` call — either a Postgres setting (`ALTER DATABASE ... SET app.settings.<SERVICE_ROLE_KEY> = '...'`) or a Supabase Vault secret; exact syntax depends on which is available/enabled.
 - `GRANT SELECT ON public.patrimonio_snapshot TO authenticated` and the RLS policy above may need adjustment if the live project's grant model differs from `fondo_semanal`'s (per the proposal's assumption, same fallback pattern applies).
 - Whether the Supabase Dashboard's built-in Cron Jobs UI is available on this project's plan as an alternative to hand-written `pg_cron`/`pg_net` SQL.

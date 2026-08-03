@@ -8,6 +8,7 @@ import {
   type Movimiento,
 } from '@/components/cuentas/cuentas-service'
 import CuentaCard from '@/components/cuentas/cuentas-card'
+import { CUENTAS, syncCuentas } from '@/lib/catalogs/catalog-store'
 import './page.css'
 
 function formatCurrency(amount: number): string {
@@ -23,6 +24,20 @@ function CuentasContent() {
   const [movementsMap, setMovementsMap] = useState<Record<string, Movimiento[]> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncError, setSyncError] = useState<string | null>(null)
+
+  async function handleSync() {
+    setSyncing(true)
+    setSyncError(null)
+    try {
+      await syncCuentas()
+      window.location.reload()
+    } catch (err) {
+      setSyncError(err instanceof Error ? err.message : 'Error al sincronizar catálogo de cuentas')
+      setSyncing(false)
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -48,41 +63,20 @@ function CuentasContent() {
     load()
   }, [])
 
+  const catalogEmpty = CUENTAS.length === 0
+  const balanceTotal = cuentas
+    ? cuentas.reduce((sum, cuenta) => sum + cuenta.saldo_real, 0)
+    : null
+
+  let body: React.ReactNode
   if (loading) {
-    return (
-      <div className="cuentas-page">
-        <div className="cuentas-page__loading">Cargando cuentas...</div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="cuentas-page">
-        <div className="cuentas-page__error">{error}</div>
-      </div>
-    )
-  }
-
-  if (!cuentas || cuentas.length === 0) {
-    return (
-      <div className="cuentas-page">
-        <div className="cuentas-page__empty">No hay cuentas activas</div>
-      </div>
-    )
-  }
-
-  const balanceTotal = cuentas.reduce((sum, cuenta) => sum + cuenta.saldo_calculado, 0)
-
-  return (
-    <div className="cuentas-page">
-      <div className="cuentas-page__header">
-        <h1 className="cuentas-page__title">Cuentas</h1>
-        <div className="cuentas-page__total">
-          <span className="cuentas-page__total-label">Balance total</span>
-          <span className="cuentas-page__total-value">{formatCurrency(balanceTotal)}</span>
-        </div>
-      </div>
+    body = <div className="cuentas-page__loading">Cargando cuentas...</div>
+  } else if (error) {
+    body = <div className="cuentas-page__error">{error}</div>
+  } else if (!cuentas || cuentas.length === 0) {
+    body = <div className="cuentas-page__empty">No hay cuentas activas</div>
+  } else {
+    body = (
       <div className="cuentas-page__grid">
         {cuentas.map((cuenta) => (
           <CuentaCard
@@ -92,6 +86,37 @@ function CuentasContent() {
           />
         ))}
       </div>
+    )
+  }
+
+  return (
+    <div className="cuentas-page">
+      <div className="cuentas-page__header">
+        <h1 className="cuentas-page__title">Cuentas</h1>
+        <div className="cuentas-page__header-actions">
+          <button
+            type="button"
+            className="cuentas-page__sync-button"
+            onClick={handleSync}
+            disabled={syncing}
+          >
+            {syncing ? 'Sincronizando...' : '↻ Sincronizar'}
+          </button>
+          {balanceTotal !== null && (
+            <div className="cuentas-page__total">
+              <span className="cuentas-page__total-label">Balance total</span>
+              <span className="cuentas-page__total-value">{formatCurrency(balanceTotal)}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      {catalogEmpty && (
+        <div className="cuentas-page__catalog-banner">
+          Datos no sincronizados. Haz clic en Sincronizar para cargar las cuentas desde Supabase.
+        </div>
+      )}
+      {syncError && <div className="cuentas-page__error">{syncError}</div>}
+      {body}
     </div>
   )
 }

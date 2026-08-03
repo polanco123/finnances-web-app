@@ -18,6 +18,7 @@ import CategoriasPeriodFilter, {
   type PeriodoTipo,
 } from '@/components/categorias/categorias-period-filter'
 import CategoriaCard from '@/components/categorias/categorias-card'
+import { CATEGORIAS, syncCategorias } from '@/lib/catalogs/catalog-store'
 import './page.css'
 
 function resolveRango(
@@ -48,8 +49,22 @@ function CategoriasContent() {
   const [categorias, setCategorias] = useState<CategoriaConGasto[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncError, setSyncError] = useState<string | null>(null)
 
   const { desde, hasta } = resolveRango(periodo, desdePersonalizado, hastaPersonalizado)
+
+  async function handleSync() {
+    setSyncing(true)
+    setSyncError(null)
+    try {
+      await syncCategorias()
+      window.location.reload()
+    } catch (err) {
+      setSyncError(err instanceof Error ? err.message : 'Error al sincronizar catálogo de categorías')
+      setSyncing(false)
+    }
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -81,11 +96,28 @@ function CategoriasContent() {
     setHastaPersonalizado(nuevoHasta)
   }
 
+  const catalogEmpty = CATEGORIAS.length === 0
+
   return (
     <div className="categorias-page">
       <div className="categorias-page__header">
         <h1 className="categorias-page__title">Categorías</h1>
+        <button
+          type="button"
+          className="categorias-page__sync-button"
+          onClick={handleSync}
+          disabled={syncing}
+        >
+          {syncing ? 'Sincronizando...' : '↻ Sincronizar'}
+        </button>
       </div>
+
+      {catalogEmpty && (
+        <div className="categorias-page__catalog-banner">
+          Datos no sincronizados. Haz clic en Sincronizar para cargar las categorías desde Supabase.
+        </div>
+      )}
+      {syncError && <div className="categorias-page__error">{syncError}</div>}
 
       <CategoriasPeriodFilter
         periodo={periodo}

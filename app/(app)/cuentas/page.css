@@ -20,11 +20,57 @@
   margin: 0;
 }
 
+.cuentas-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-4);
+}
+
 .cuentas-page__total {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--theme-spacing-1);
+}
+
+.cuentas-page__sync-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-2) var(--theme-spacing-3);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-primary);
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--theme-transition-fast),
+              opacity var(--theme-transition-fast);
+}
+
+.cuentas-page__sync-button:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}
+
+.cuentas-page__sync-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cuentas-page__catalog-banner {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-info);
+  background: color-mix(in srgb, var(--theme-color-info) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-info) 20%, transparent);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
 }
 
 .cuentas-page__total-label {

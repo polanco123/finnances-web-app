@@ -33,7 +33,7 @@ export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
         <h3 className="cuenta-card__name">{cuenta.nombre}</h3>
         <span className="cuenta-card__header-right">
           <span className="cuenta-card__balance">
-            {formatCurrency(cuenta.saldo_calculado)}
+            {formatCurrency(cuenta.saldo_real)}
           </span>
           <ChevronDown
             className={`cuenta-card__chevron ${expanded ? 'cuenta-card__chevron--expanded' : ''}`}
