@@ -14,6 +14,7 @@ export interface Cuenta {
 }
 
 export interface Movimiento {
+  id: string
   monto: number
   descripcion?: string | null
   fecha: string
@@ -21,6 +22,7 @@ export interface Movimiento {
   cuenta_id: string
   categoria_id: string
   notas?: string | null
+  created_at: string
   es_transferencia?: boolean | null
   transferencia_id?: string | null
 }
@@ -70,6 +72,36 @@ export async function fetchRecentMovimientos(
     .eq('cuenta_id', cuentaId)
     .order('fecha', { ascending: false })
     .limit(limit)
+
+  if (error) throw error
+  return data ?? []
+}
+
+/**
+ * Fetches every movimiento row (both legs) belonging to the given
+ * transferencia_id values, regardless of which account they belong to.
+ *
+ * Used to complete transfer pairs for display: a single account's own
+ * recent movimientos only ever contains ITS side of a transfer (matching
+ * `cuenta_id`), never the paired account's side. Fetching by
+ * `transferencia_id` returns both legs so they can be merged into one
+ * card via `groupMovimientos()`, mirroring `/movimientos`' behavior.
+ *
+ * @param transferenciaIds Distinct transferencia_id values to resolve
+ * @returns All matching rows (both legs per id) — empty array if none/no ids given
+ * @throws On Supabase error
+ */
+export async function fetchTransferSiblings(
+  transferenciaIds: string[],
+): Promise<Movimiento[]> {
+  if (transferenciaIds.length === 0) return []
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('movimiento')
+    .select('*')
+    .in('transferencia_id', transferenciaIds)
 
   if (error) throw error
   return data ?? []

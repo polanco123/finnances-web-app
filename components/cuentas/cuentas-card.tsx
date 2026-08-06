@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { Cuenta, Movimiento } from '@/components/cuentas/cuentas-service'
 import MovementListItem from '@/components/movement/movement-list-item'
+import MovementTransferCard from '@/components/movement/movement-transfer-card'
+import { groupMovimientos } from '@/components/movement/movement-grouping'
+import type { DisplayItem } from '@/components/movement/movement-grouping'
 import './cuentas-card.css'
 
 interface CuentaCardProps {
@@ -19,8 +22,18 @@ function formatCurrency(amount: number): string {
   }).format(amount)
 }
 
+/** Sort key combining fecha + hora so ties on date order by time of day too. */
+function fechaHoraKey(movimiento: Movimiento): string {
+  return `${movimiento.fecha}T${movimiento.hora ?? '00:00:00'}`
+}
+
 export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
   const [expanded, setExpanded] = useState(false)
+  const sortedMovements = useMemo(
+    () => [...movements].sort((a, b) => fechaHoraKey(b).localeCompare(fechaHoraKey(a))),
+    [movements],
+  )
+  const displayItems = useMemo(() => groupMovimientos(sortedMovements), [sortedMovements])
 
   return (
     <div className="cuenta-card">
@@ -45,12 +58,20 @@ export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
 
       {expanded && (
         <div className="cuenta-card__movements">
-          {movements.length === 0 ? (
+          {displayItems.length === 0 ? (
             <p className="cuenta-card__empty">Sin movimientos recientes</p>
           ) : (
-            movements.map((movement, index) => (
-              <MovementListItem key={index} movimiento={movement} />
-            ))
+            displayItems.map((item: DisplayItem) =>
+              item.kind === 'merged-transfer' ? (
+                <MovementTransferCard
+                  key={`merged-${item.transferenciaId}`}
+                  origen={item.origen}
+                  destino={item.destino}
+                />
+              ) : (
+                <MovementListItem key={item.data.id} movimiento={item.data} />
+              ),
+            )
           )}
         </div>
       )}

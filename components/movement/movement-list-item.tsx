@@ -60,19 +60,21 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
           <div className="movement-list-item__detail">
             <span className="movement-list-item__label">Transferencia</span>
             <span className="movement-list-item__value movement-list-item__value--transfer">
-              {cuentaNombre} →
+              {cuentaNombre}
             </span>
           </div>
         ) : (
-          <div className="movement-list-item__detail">
-            <span className="movement-list-item__label">Categoría</span>
-            <span className="movement-list-item__value">{categoriaNombre}</span>
-          </div>
+          <>
+            <div className="movement-list-item__detail">
+              <span className="movement-list-item__label">Categoría</span>
+              <span className="movement-list-item__value">{categoriaNombre}</span>
+            </div>
+            <div className="movement-list-item__detail">
+              <span className="movement-list-item__label">Cuenta</span>
+              <span className="movement-list-item__value">{cuentaNombre}</span>
+            </div>
+          </>
         )}
-        <div className="movement-list-item__detail">
-          <span className="movement-list-item__label">Cuenta</span>
-          <span className="movement-list-item__value">{cuentaNombre}</span>
-        </div>
       </div>
 
       {isTransfer && (

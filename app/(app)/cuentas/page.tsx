@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import {
   fetchActiveCuentas,
   fetchRecentMovimientos,
+  fetchTransferSiblings,
   type Cuenta,
   type Movimiento,
 } from '@/components/cuentas/cuentas-service'
@@ -52,7 +53,44 @@ function CuentasContent() {
           }),
         )
 
-        setMovementsMap(Object.fromEntries(movementsEntries))
+        const ownMap = Object.fromEntries(movementsEntries) as Record<string, Movimiento[]>
+
+        // A single account's own recent movimientos only ever contains ITS
+        // side of a transfer (matching cuenta_id) — fetch the paired
+        // account's side too so groupMovimientos() can merge them into one
+        // card per transfer, mirroring /movimientos' behavior.
+        const transferIds = new Set<string>()
+        for (const movs of Object.values(ownMap)) {
+          for (const m of movs) {
+            if (m.es_transferencia && m.transferencia_id) transferIds.add(m.transferencia_id)
+          }
+        }
+
+        const siblings = await fetchTransferSiblings(Array.from(transferIds))
+        const siblingsByTransferId = new Map<string, Movimiento[]>()
+        for (const sibling of siblings) {
+          if (!sibling.transferencia_id) continue
+          const existing = siblingsByTransferId.get(sibling.transferencia_id)
+          if (existing) existing.push(sibling)
+          else siblingsByTransferId.set(sibling.transferencia_id, [sibling])
+        }
+
+        const augmentedMap: Record<string, Movimiento[]> = {}
+        for (const [accountId, movs] of Object.entries(ownMap)) {
+          const ownIds = new Set(movs.map((m) => m.id))
+          const extra: Movimiento[] = []
+          for (const m of movs) {
+            if (!m.es_transferencia || !m.transferencia_id) continue
+            for (const pairRow of siblingsByTransferId.get(m.transferencia_id) ?? []) {
+              if (!ownIds.has(pairRow.id) && !extra.some((e) => e.id === pairRow.id)) {
+                extra.push(pairRow)
+              }
+            }
+          }
+          augmentedMap[accountId] = extra.length > 0 ? [...movs, ...extra] : movs
+        }
+
+        setMovementsMap(augmentedMap)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error al cargar las cuentas')
       } finally {
