@@ -1,0 +1,67 @@
+@import '@/lib/theme.css';
+
+.voice-entry-button__wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-3);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.voice-entry-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--theme-radius-lg);
+  border: 1px solid var(--theme-border-default);
+  background: var(--theme-bg-surface);
+  cursor: pointer;
+  font-size: var(--theme-font-size-lg);
+  transition: box-shadow var(--theme-transition-fast), background var(--theme-transition-fast);
+}
+
+.voice-entry-button:hover:not(:disabled) {
+  box-shadow: var(--theme-shadow-1);
+}
+
+.voice-entry-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.voice-entry-button--listening {
+  background: var(--theme-color-accent);
+  animation: voice-entry-button-pulse 1.2s ease-in-out infinite;
+}
+
+.voice-entry-button--error {
+  border-color: var(--theme-color-error);
+}
+
+.voice-entry-button__icon {
+  line-height: 1;
+}
+
+.voice-entry-button__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-error);
+}
+
+@keyframes voice-entry-button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--theme-color-accent) 45%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--theme-color-accent) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--theme-color-accent) 0%, transparent);
+  }
+}
+
+.dark .voice-entry-button {
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-border-default);
+}

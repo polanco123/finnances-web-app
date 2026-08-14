@@ -103,7 +103,7 @@ function CuentasContent() {
 
   const catalogEmpty = CUENTAS.length === 0
   const balanceTotal = cuentas
-    ? cuentas.reduce((sum, cuenta) => sum + cuenta.saldo_real, 0)
+    ? cuentas.reduce((sum, cuenta) => sum + cuenta.saldo_calculado, 0)
     : null
 
   let body: React.ReactNode

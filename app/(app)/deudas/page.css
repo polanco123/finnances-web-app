@@ -1,0 +1,63 @@
+@import '@/lib/theme.css';
+
+.deudas-page {
+  padding: var(--theme-spacing-6) var(--theme-spacing-4);
+}
+
+.deudas-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-6);
+}
+
+.deudas-page__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.deudas-page__loading {
+  text-align: center;
+  padding: var(--theme-spacing-10);
+  color: var(--theme-text-secondary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+}
+
+.deudas-page__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-error);
+  background: color-mix(in srgb, var(--theme-color-error) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-error) 20%, transparent);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.deudas-page__empty {
+  text-align: center;
+  padding: var(--theme-spacing-10);
+  color: var(--theme-text-secondary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .deudas-page {
+    padding: var(--theme-spacing-8) var(--theme-spacing-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .deudas-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--theme-spacing-10) var(--theme-spacing-8);
+  }
+}

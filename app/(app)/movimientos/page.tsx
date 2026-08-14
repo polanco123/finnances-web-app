@@ -11,6 +11,8 @@ import {
   type MovimientoCursor,
   fetchMovimientosPage,
 } from '@/components/movement/movement-service'
+import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
+import type { ParsedMovimiento } from '@/components/voice-entry/voice-parser'
 import './page.css'
 
 const PAGE_SIZE = 10
@@ -23,6 +25,8 @@ function MovimientosContent() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const [voicePrefill, setVoicePrefill] = useState<ParsedMovimiento | null>(null)
+  const [formKey, setFormKey] = useState(0)
 
   const loadInitial = useCallback(async () => {
     try {
@@ -62,6 +66,11 @@ function MovimientosContent() {
     loadInitial()
   }, [loadInitial])
 
+  const handleVoiceParsed = useCallback((parsed: ParsedMovimiento) => {
+    setVoicePrefill(parsed)
+    setFormKey((k) => k + 1)
+  }, [])
+
   const handleIntersect = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       if (entries[0]?.isIntersecting && hasMore && !loadingMore) {
@@ -94,7 +103,19 @@ function MovimientosContent() {
   return (
     <div className="movimientos-page">
       <div className="movimientos-page__container">
-        <MovementForm onMovimientoCreado={handleMovimientoCreado} />
+        <VoiceEntryButton onParsed={handleVoiceParsed} />
+
+        <MovementForm
+          key={formKey}
+          onMovimientoCreado={handleMovimientoCreado}
+          initialTipo={voicePrefill?.tipo}
+          initialMonto={voicePrefill?.cantidad != null ? String(voicePrefill.cantidad) : undefined}
+          initialCuentaId={voicePrefill?.cuentaId ?? undefined}
+          initialCategoriaId={voicePrefill?.categoriaId ?? undefined}
+          initialCuentaOrigenId={voicePrefill?.cuentaOrigenId ?? undefined}
+          initialCuentaDestinoId={voicePrefill?.cuentaDestinoId ?? undefined}
+          initialNotas={voicePrefill?.notas ?? undefined}
+        />
 
         {error && <div className="movimientos-page__error">{error}</div>}
 

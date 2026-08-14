@@ -9,16 +9,36 @@ import './movement-form.css'
 const toLocalDate = (d) => d.toISOString().split('T')[0]
 const toLocalTime = (d) => d.toTimeString().slice(0, 5)
 
-export default function MovementForm({ onMovimientoCreado }) {
-  const [monto, setMonto] = useState('')
-  const [categoriaId, setCategoriaId] = useState(CATEGORIAS[0]?.id || '')
-  const [cuentaId, setCuentaId] = useState(CUENTAS[0]?.id || '')
-  const [cuentaOrigenId, setCuentaOrigenId] = useState(CUENTAS[0]?.id || '')
-  const [cuentaDestinoId, setCuentaDestinoId] = useState(CUENTAS[1]?.id || '')
+/**
+ * @param {object} props
+ * @param {() => void} [props.onMovimientoCreado]
+ * @param {'gasto' | 'ingreso' | 'transferencia'} [props.initialTipo]
+ * @param {string} [props.initialMonto]
+ * @param {string} [props.initialCuentaId]
+ * @param {string} [props.initialCategoriaId]
+ * @param {string} [props.initialCuentaOrigenId]
+ * @param {string} [props.initialCuentaDestinoId]
+ * @param {string} [props.initialNotas]
+ */
+export default function MovementForm({
+  onMovimientoCreado,
+  initialTipo,
+  initialMonto,
+  initialCuentaId,
+  initialCategoriaId,
+  initialCuentaOrigenId,
+  initialCuentaDestinoId,
+  initialNotas,
+}) {
+  const [monto, setMonto] = useState(initialMonto || '')
+  const [categoriaId, setCategoriaId] = useState(initialCategoriaId || CATEGORIAS[0]?.id || '')
+  const [cuentaId, setCuentaId] = useState(initialCuentaId || CUENTAS[0]?.id || '')
+  const [cuentaOrigenId, setCuentaOrigenId] = useState(initialCuentaOrigenId || CUENTAS[0]?.id || '')
+  const [cuentaDestinoId, setCuentaDestinoId] = useState(initialCuentaDestinoId || CUENTAS[1]?.id || '')
   const [fecha, setFecha] = useState(() => toLocalDate(new Date()))
   const [hora, setHora] = useState(() => toLocalTime(new Date()))
-  const [notas, setNotas] = useState('')
-  const [tipoMovimiento, setTipoMovimiento] = useState('gasto')
+  const [notas, setNotas] = useState(initialNotas || '')
+  const [tipoMovimiento, setTipoMovimiento] = useState(initialTipo || 'gasto')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState(null)
 

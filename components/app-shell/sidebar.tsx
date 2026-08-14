@@ -10,6 +10,7 @@ import {
   Tags,
   BarChart3,
   Settings,
+  MinusCircle,
 } from 'lucide-react'
 import './sidebar.css'
 
@@ -25,6 +26,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/movimientos', label: 'Movimientos', icon: ArrowLeftRight },
   { href: '/diversion', label: 'Diversión', icon: Gamepad2 },
   { href: '/cuentas', label: 'Cuentas', icon: Wallet },
+  { href: '/deudas', label: 'Deudas', icon: MinusCircle },
   { href: '/categorias', label: 'Categorías', icon: Tags },
   { href: '/reportes', label: 'Patrimonio', icon: BarChart3 },
   { href: '/configuracion', label: 'Configuración', icon: Settings, comingSoon: true },
@@ -40,7 +42,9 @@ export function Sidebar({ isOpen }: SidebarProps) {
   return (
     <aside className={`sidebar${isOpen ? ' sidebar--open' : ''}`}>
       <nav className="sidebar__nav">
-        <div className="sidebar__brand">Finanzas</div>
+        <div className="sidebar__brand">
+          <img src="/logo.png" alt="Finances web app" className="sidebar__logo" />
+        </div>
         <ul className="sidebar__list">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href

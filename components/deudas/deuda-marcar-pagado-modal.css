@@ -1,0 +1,189 @@
+@import '@/lib/theme.css';
+
+.deuda-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-4);
+  z-index: 1000;
+  animation: deuda-modal-fade-in var(--theme-transition-fast) ease-out;
+}
+
+@keyframes deuda-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.deuda-modal__panel {
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-4);
+  width: 100%;
+  max-width: 380px;
+  padding: var(--theme-spacing-6);
+  animation: deuda-modal-scale-in var(--theme-transition-normal) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes deuda-modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.deuda-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--theme-spacing-3);
+}
+
+.deuda-modal__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.deuda-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--theme-radius-full);
+  background: transparent;
+  color: var(--theme-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast), color var(--theme-transition-fast);
+  flex-shrink: 0;
+}
+
+.deuda-modal__close:hover {
+  background: var(--theme-bg-surface-variant);
+  color: var(--theme-text-primary);
+}
+
+.deuda-modal__subtitle {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  margin: var(--theme-spacing-1) 0 0;
+}
+
+.deuda-modal__field {
+  margin-top: var(--theme-spacing-5);
+}
+
+.deuda-modal__label {
+  display: block;
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--theme-spacing-2);
+}
+
+.deuda-modal__input {
+  width: 100%;
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-background);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  transition: border-color var(--theme-transition-fast), box-shadow var(--theme-transition-fast);
+}
+
+.deuda-modal__input:focus {
+  outline: none;
+  border-color: var(--theme-border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-color-primary) 15%, transparent);
+}
+
+.deuda-modal__input--error {
+  border-color: var(--theme-border-error);
+}
+
+.deuda-modal__hint {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-hint);
+  margin: var(--theme-spacing-2) 0 0;
+}
+
+.deuda-modal__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin: var(--theme-spacing-2) 0 0;
+}
+
+.deuda-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--theme-spacing-3);
+  margin-top: var(--theme-spacing-6);
+}
+
+.deuda-modal__btn {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-2) var(--theme-spacing-5);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast), opacity var(--theme-transition-fast);
+}
+
+.deuda-modal__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deuda-modal__btn--secondary {
+  background: transparent;
+  border-color: var(--theme-border-default);
+  color: var(--theme-text-secondary);
+}
+
+.deuda-modal__btn--secondary:hover:not(:disabled) {
+  background: var(--theme-bg-surface-variant);
+}
+
+.deuda-modal__btn--primary {
+  background: var(--theme-color-success);
+  color: var(--theme-text-on-primary);
+}
+
+.deuda-modal__btn--primary:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+/* Dark mode */
+.dark .deuda-modal__panel {
+  background: var(--theme-glass-bg);
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border-color: var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .deuda-modal__input {
+  background: var(--theme-bg-surface);
+}

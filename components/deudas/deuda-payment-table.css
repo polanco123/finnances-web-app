@@ -1,0 +1,265 @@
+@import '@/lib/theme.css';
+
+.deuda-payment-table__wrapper {
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+  overflow-x: auto;
+}
+
+.deuda-payment-table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+  font-family: var(--theme-font-family);
+}
+
+.deuda-payment-table thead th {
+  text-align: left;
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--theme-border-default);
+  white-space: nowrap;
+}
+
+.deuda-payment-table__row {
+  border-bottom: 1px solid var(--theme-border-default);
+}
+
+.deuda-payment-table__row:last-child {
+  border-bottom: none;
+}
+
+.deuda-payment-table__row:hover {
+  background: var(--theme-bg-surface-variant);
+}
+
+.deuda-payment-table__cell {
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  vertical-align: middle;
+}
+
+.deuda-payment-table__cell--cuenta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.deuda-payment-table__nombre {
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+}
+
+.deuda-payment-table__cell--dias {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+}
+
+.deuda-payment-table__badge {
+  align-self: flex-start;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  padding: 2px var(--theme-spacing-2);
+  border-radius: var(--theme-radius-full);
+  white-space: nowrap;
+}
+
+.deuda-payment-table__badge--bloqueado {
+  color: var(--theme-text-secondary);
+  background: var(--theme-bg-surface-variant);
+  border: 1px dashed var(--theme-border-default);
+}
+
+.deuda-payment-table__readonly {
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  white-space: nowrap;
+}
+
+.deuda-payment-table__readonly--paid {
+  color: var(--theme-color-success);
+}
+
+.deuda-payment-table__dash {
+  color: var(--theme-text-hint);
+}
+
+.deuda-payment-table__date-input,
+.deuda-payment-table__number-input,
+.deuda-payment-table__notas-input {
+  width: 100%;
+  min-width: 110px;
+  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-sm);
+  outline: none;
+  transition: border-color var(--theme-transition-fast);
+  box-sizing: border-box;
+}
+
+.deuda-payment-table__notas-input {
+  min-width: 140px;
+}
+
+.deuda-payment-table__date-input:focus,
+.deuda-payment-table__number-input:focus,
+.deuda-payment-table__notas-input:focus {
+  border-color: var(--theme-border-focus);
+}
+
+.deuda-payment-table__number-input--error {
+  border-color: var(--theme-border-error);
+}
+
+.deuda-payment-table__date-input:disabled,
+.deuda-payment-table__number-input:disabled,
+.deuda-payment-table__notas-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deuda-payment-table__create-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-1);
+  min-width: 130px;
+}
+
+.deuda-payment-table__create-btn {
+  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-primary);
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast), opacity var(--theme-transition-fast);
+}
+
+.deuda-payment-table__create-btn:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}
+
+.deuda-payment-table__create-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deuda-payment-table__error {
+  display: block;
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin-top: 2px;
+}
+
+/* Styled square checkbox */
+.deuda-payment-table__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  color: var(--theme-text-on-primary);
+  background: var(--theme-bg-surface);
+  border: 2px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast), border-color var(--theme-transition-fast),
+    opacity var(--theme-transition-fast);
+}
+
+.deuda-payment-table__checkbox:hover:not(:disabled) {
+  border-color: var(--theme-color-success);
+}
+
+.deuda-payment-table__checkbox--checked {
+  background: var(--theme-color-success);
+  border-color: var(--theme-color-success);
+}
+
+.deuda-payment-table__checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.deuda-payment-table__checkbox--checked:disabled {
+  opacity: 1;
+}
+
+/* Totals row */
+.deuda-payment-table__totals-row {
+  background: var(--theme-bg-surface-variant);
+}
+
+.deuda-payment-table__totals-label {
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.deuda-payment-table__totals-value {
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  white-space: nowrap;
+}
+
+.deuda-payment-table__empty {
+  text-align: center;
+  padding: var(--theme-spacing-10);
+  color: var(--theme-text-secondary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+}
+
+/* Dark Mode */
+.dark .deuda-payment-table__wrapper {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .deuda-payment-table__date-input,
+.dark .deuda-payment-table__number-input,
+.dark .deuda-payment-table__notas-input {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--theme-border-default);
+}
+
+.dark .deuda-payment-table__date-input:focus,
+.dark .deuda-payment-table__number-input:focus,
+.dark .deuda-payment-table__notas-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--theme-border-focus);
+}
+
+.dark .deuda-payment-table__checkbox {
+  background: rgba(255, 255, 255, 0.05);
+}

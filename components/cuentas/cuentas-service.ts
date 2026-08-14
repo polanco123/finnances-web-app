@@ -9,6 +9,7 @@ export interface Cuenta {
   id: string
   nombre: string
   tipo: string
+  saldo_calculado: number
   saldo_real: number
   activa: boolean
 }

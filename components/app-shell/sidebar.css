@@ -22,12 +22,18 @@
 }
 
 .sidebar__brand {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-lg);
-  font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-primary);
+  display: flex;
+  align-items: center;
   padding: var(--theme-spacing-2) var(--theme-spacing-2);
   margin-bottom: var(--theme-spacing-6);
+}
+
+.sidebar__logo {
+  max-height: 64px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .sidebar__list {

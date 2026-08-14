@@ -1,0 +1,53 @@
+@import '@/lib/theme.css';
+
+.deuda-month-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: var(--theme-spacing-1);
+  padding-bottom: var(--theme-spacing-1);
+  margin-bottom: var(--theme-spacing-4);
+  border-bottom: 1px solid var(--theme-border-default);
+  -ms-overflow-style: none;
+  scrollbar-width: thin;
+}
+
+.deuda-month-tabs__tab {
+  flex-shrink: 0;
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--theme-radius-sm) var(--theme-radius-sm) 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--theme-transition-fast), background-color var(--theme-transition-fast),
+    border-color var(--theme-transition-fast);
+}
+
+.deuda-month-tabs__tab:hover {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
+}
+
+.deuda-month-tabs__tab--active {
+  color: var(--theme-color-primary);
+  border-bottom-color: var(--theme-color-primary);
+}
+
+.deuda-month-tabs__tab--active:hover {
+  color: var(--theme-color-primary);
+  background: none;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .deuda-month-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
