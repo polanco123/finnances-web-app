@@ -132,6 +132,14 @@
   box-sizing: border-box;
 }
 
+.movement-form__input--monto {
+  font-size: 32px;
+  font-weight: var(--theme-font-weight-bold);
+  padding: var(--theme-spacing-2) 0;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
 .movement-form__input::placeholder,
 .movement-form__textarea::placeholder {
   color: var(--theme-text-hint);

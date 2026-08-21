@@ -16,6 +16,23 @@
   color: var(--ink);
 }
 
+.patrimonio-vencimiento-strip__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patrimonio-vencimiento-strip__monto {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-dim);
+}
+
+.patrimonio-vencimiento-strip__monto--pagado {
+  color: var(--up);
+}
+
 .patrimonio-vencimiento-strip__dias {
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 13px;

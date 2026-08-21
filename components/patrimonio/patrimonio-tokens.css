@@ -2,25 +2,30 @@
  * Patrimonio dashboard — isolated color/base-layout tokens.
  *
  * Deliberately does NOT import the app-wide theme stylesheet and never
- * references a light/dark class selector or any app-wide CSS custom
- * property — this page is always dark regardless of the global next-themes
- * toggle (proposal.md, Resolved Decision #7).
+ * references an app-wide `--theme-*` custom property — this page keeps its
+ * own hardcoded palette (proposal.md, Resolved Decision #7 / design.md's
+ * "Color system isolation") rather than adopting the global theme system.
+ *
+ * It DOES respond to the global next-themes light/dark toggle: light values
+ * are the `.patrimonio-page` default below, overridden under `.dark
+ * .patrimonio-page` — the same `:root`/`.dark` scoping convention as
+ * `lib/theme.css`, just scoped to this subtree instead of applied globally.
  */
 
 .patrimonio-page {
-  --bg: #0b0e14;
-  --bg-raised: #12161f;
-  --line: #262b38;
-  --line-soft: #1b2029;
-  --ink: #f2f0ea;
-  --ink-dim: #8b92a5;
-  --ink-faint: #545b6b;
-  --up: #3fb68b;
-  --up-dim: #1e4a3c;
-  --down: #d9534f;
-  --down-dim: #4a2422;
-  --amber: #e8a33d;
-  --amber-dim: #4a3a1e;
+  --bg: #f5f6f8;
+  --bg-raised: #ffffff;
+  --line: #dde1e8;
+  --line-soft: #eceef2;
+  --ink: #12151c;
+  --ink-dim: #5b6274;
+  --ink-faint: #9aa0b0;
+  --up: #1f9d6c;
+  --up-dim: #d7f0e4;
+  --down: #c9433e;
+  --down-dim: #fbdede;
+  --amber: #b5790f;
+  --amber-dim: #f6e6c8;
 
   background: var(--bg);
   color: var(--ink);
@@ -91,4 +96,20 @@
   font-size: 12px;
   color: var(--ink-faint);
   padding-top: 12px;
+}
+
+.dark .patrimonio-page {
+  --bg: #0b0e14;
+  --bg-raised: #12161f;
+  --line: #262b38;
+  --line-soft: #1b2029;
+  --ink: #f2f0ea;
+  --ink-dim: #8b92a5;
+  --ink-faint: #545b6b;
+  --up: #3fb68b;
+  --up-dim: #1e4a3c;
+  --down: #d9534f;
+  --down-dim: #4a2422;
+  --amber: #e8a33d;
+  --amber-dim: #4a3a1e;
 }

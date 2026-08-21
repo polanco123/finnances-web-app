@@ -1,0 +1,79 @@
+/*
+ * Cuentas page — isolated color/base-layout tokens.
+ *
+ * Deliberately does NOT import the app-wide theme stylesheet — this page
+ * carries its own light/dark palette, scoped under `.cuentas-page`, mirroring
+ * the app's own `:root` / `.dark` convention (lib/theme.css) just narrowed to
+ * this page's subtree. Visually matches /reportes' palette 1:1 on purpose
+ * (components/patrimonio/patrimonio-tokens.css) even though the hex values
+ * are duplicated rather than shared — these are independent, domain-owned
+ * stylesheets by convention (components/{domain}/{domain}-tokens.css).
+ */
+
+.cuentas-page {
+  --bg: #f5f6f8;
+  --bg-raised: #ffffff;
+  --line: #dde1e8;
+  --line-soft: #eceef2;
+  --ink: #12151c;
+  --ink-dim: #5b6274;
+  --ink-faint: #9aa0b0;
+  --up: #1f9d6c;
+  --up-dim: #d7f0e4;
+  --down: #c9433e;
+  --down-dim: #fbdede;
+  --amber: #b5790f;
+  --amber-dim: #f6e6c8;
+
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 32px 20px 64px;
+}
+
+.dark .cuentas-page {
+  --bg: #0b0e14;
+  --bg-raised: #12161f;
+  --line: #262b38;
+  --line-soft: #1b2029;
+  --ink: #f2f0ea;
+  --ink-dim: #8b92a5;
+  --ink-faint: #545b6b;
+  --up: #3fb68b;
+  --up-dim: #1e4a3c;
+  --down: #d9534f;
+  --down-dim: #4a2422;
+  --amber: #e8a33d;
+  --amber-dim: #4a3a1e;
+}
+
+.cuentas-page * {
+  box-sizing: border-box;
+}
+
+.cuentas-page__container {
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Shared raised-card surface reused by summary cells and banners */
+.cuentas-card-surface {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.cuentas-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+  margin: 0 0 12px;
+}

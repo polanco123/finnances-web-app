@@ -9,6 +9,7 @@ import {
   type Movimiento,
 } from '@/components/cuentas/cuentas-service'
 import CuentaCard from '@/components/cuentas/cuentas-card'
+import { jetbrainsMono, inter } from '@/components/cuentas/cuentas-fonts'
 import { CUENTAS, syncCuentas } from '@/lib/catalogs/catalog-store'
 import './page.css'
 
@@ -18,6 +19,22 @@ function formatCurrency(amount: number): string {
     currency: 'MXN',
     minimumFractionDigits: 2,
   }).format(amount)
+}
+
+/** Formats a `Date` as YYYY-MM-DD using its local (not UTC) components. */
+function toLocalISODate(date: Date): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={`${jetbrainsMono.variable} ${inter.variable} cuentas-page`}>
+      <div className="cuentas-page__container">{children}</div>
+    </div>
+  )
 }
 
 function CuentasContent() {
@@ -102,60 +119,125 @@ function CuentasContent() {
   }, [])
 
   const catalogEmpty = CUENTAS.length === 0
-  const balanceTotal = cuentas
-    ? cuentas.reduce((sum, cuenta) => sum + cuenta.saldo_calculado, 0)
-    : null
+  const today = toLocalISODate(new Date())
 
-  let body: React.ReactNode
-  if (loading) {
-    body = <div className="cuentas-page__loading">Cargando cuentas...</div>
-  } else if (error) {
-    body = <div className="cuentas-page__error">{error}</div>
-  } else if (!cuentas || cuentas.length === 0) {
-    body = <div className="cuentas-page__empty">No hay cuentas activas</div>
-  } else {
-    body = (
-      <div className="cuentas-page__grid">
-        {cuentas.map((cuenta) => (
-          <CuentaCard
-            key={cuenta.id}
-            cuenta={cuenta}
-            movements={movementsMap?.[cuenta.id] ?? []}
-          />
-        ))}
+  const activos = cuentas?.filter((c) => c.tipo !== 'deuda') ?? []
+  const deudas = cuentas?.filter((c) => c.tipo === 'deuda') ?? []
+  const totalActivos = activos.reduce((sum, c) => sum + c.saldo_calculado, 0)
+  const totalDeudas = deudas.reduce((sum, c) => sum + c.saldo_calculado, 0)
+
+  const masthead = (
+    <header className="cuentas-masthead">
+      <h1 className="cuentas-masthead__title">Cuentas</h1>
+      <div className="cuentas-masthead__right">
+        <button
+          type="button"
+          className="cuentas-page__sync-button"
+          onClick={handleSync}
+          disabled={syncing}
+        >
+          {syncing ? 'Sincronizando...' : '↻ Sincronizar'}
+        </button>
+        <span className="cuentas-masthead__date">{today}</span>
       </div>
+    </header>
+  )
+
+  if (loading) {
+    return (
+      <PageShell>
+        {masthead}
+        <p className="cuentas-page__loading">Cargando cuentas...</p>
+      </PageShell>
+    )
+  }
+
+  if (error) {
+    return (
+      <PageShell>
+        {masthead}
+        <p className="cuentas-page__error">{error}</p>
+      </PageShell>
+    )
+  }
+
+  if (!cuentas || cuentas.length === 0) {
+    return (
+      <PageShell>
+        {masthead}
+        {catalogEmpty && (
+          <p className="cuentas-page__catalog-banner">
+            Datos no sincronizados. Haz clic en Sincronizar para cargar las cuentas desde Supabase.
+          </p>
+        )}
+        {syncError && <p className="cuentas-page__error">{syncError}</p>}
+        <p className="cuentas-page__empty">No hay cuentas activas</p>
+      </PageShell>
     )
   }
 
   return (
-    <div className="cuentas-page">
-      <div className="cuentas-page__header">
-        <h1 className="cuentas-page__title">Cuentas</h1>
-        <div className="cuentas-page__header-actions">
-          <button
-            type="button"
-            className="cuentas-page__sync-button"
-            onClick={handleSync}
-            disabled={syncing}
+    <PageShell>
+      {masthead}
+
+      {catalogEmpty && (
+        <p className="cuentas-page__catalog-banner">
+          Datos no sincronizados. Haz clic en Sincronizar para cargar las cuentas desde Supabase.
+        </p>
+      )}
+      {syncError && <p className="cuentas-page__error">{syncError}</p>}
+
+      <div className="cuentas-summary">
+        <div className="cuentas-summary__cell">
+          <span className="cuentas-summary__label">Total activos</span>
+          <span className="cuentas-summary__value">{formatCurrency(totalActivos)}</span>
+          <span className="cuentas-summary__sub">{activos.length} cuentas</span>
+        </div>
+        <div className="cuentas-summary__cell">
+          <span className="cuentas-summary__label">Total deudas</span>
+          <span
+            className={`cuentas-summary__value ${totalDeudas < 0 ? 'cuentas-summary__value--negative' : ''}`}
           >
-            {syncing ? 'Sincronizando...' : '↻ Sincronizar'}
-          </button>
-          {balanceTotal !== null && (
-            <div className="cuentas-page__total">
-              <span className="cuentas-page__total-label">Balance total</span>
-              <span className="cuentas-page__total-value">{formatCurrency(balanceTotal)}</span>
-            </div>
-          )}
+            {formatCurrency(totalDeudas)}
+          </span>
+          <span className="cuentas-summary__sub">{deudas.length} cuentas</span>
         </div>
       </div>
-      {catalogEmpty && (
-        <div className="cuentas-page__catalog-banner">
-          Datos no sincronizados. Haz clic en Sincronizar para cargar las cuentas desde Supabase.
-        </div>
+
+      {activos.length > 0 && (
+        <section className="cuentas-section">
+          <p className="cuentas-section-title">Activos ({activos.length})</p>
+          <div className="cuentas-list">
+            {activos.map((cuenta) => (
+              <CuentaCard
+                key={cuenta.id}
+                cuenta={cuenta}
+                movements={movementsMap?.[cuenta.id] ?? []}
+              />
+            ))}
+          </div>
+        </section>
       )}
-      {syncError && <div className="cuentas-page__error">{syncError}</div>}
-      {body}
-    </div>
+
+      {deudas.length > 0 && (
+        <section className="cuentas-section">
+          <p className="cuentas-section-title">Deudas ({deudas.length})</p>
+          <div className="cuentas-list">
+            {deudas.map((cuenta) => (
+              <CuentaCard
+                key={cuenta.id}
+                cuenta={cuenta}
+                movements={movementsMap?.[cuenta.id] ?? []}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <footer className="cuentas-page__footer">
+        {cuentas.length} cuentas · datos en tiempo real desde Supabase
+      </footer>
+    </PageShell>
   )
 }
 
@@ -163,9 +245,9 @@ export default function Page() {
   return (
     <Suspense
       fallback={
-        <div className="cuentas-page">
-          <div className="cuentas-page__loading">Cargando...</div>
-        </div>
+        <PageShell>
+          <p className="cuentas-page__loading">Cargando...</p>
+        </PageShell>
       }
     >
       <CuentasContent />

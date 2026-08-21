@@ -1,0 +1,134 @@
+@import '@/lib/theme.css';
+
+.meta-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-3);
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.meta-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-1);
+}
+
+.meta-form__label {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.meta-form__input {
+  width: 100%;
+  padding: var(--theme-spacing-2) var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface);
+  border: none;
+  border-bottom: 1px solid var(--theme-border-default);
+  border-radius: 0;
+  outline: none;
+  transition: border-color var(--theme-transition-fast);
+  box-sizing: border-box;
+}
+
+.meta-form__input:focus {
+  border-bottom-color: var(--theme-border-focus);
+}
+
+.meta-form__input--error {
+  border-bottom-color: var(--theme-border-error);
+}
+
+.meta-form__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin: 0;
+}
+
+.meta-form__actions {
+  display: flex;
+  gap: var(--theme-spacing-2);
+}
+
+.meta-form__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast),
+              opacity var(--theme-transition-fast);
+}
+
+.meta-form__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.meta-form__btn--save {
+  flex: 1;
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-primary);
+}
+
+.meta-form__btn--save:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}
+
+.meta-form__btn--cancel {
+  flex: 1;
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
+}
+
+.meta-form__btn--cancel:hover:not(:disabled) {
+  background: var(--theme-border-default);
+}
+
+/* Dark Mode */
+.dark .meta-form {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .meta-form__input {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: var(--theme-border-default);
+}
+
+.dark .meta-form__input:focus {
+  border-bottom-color: var(--theme-border-focus);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .meta-form__btn--cancel {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .meta-form__btn--cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}

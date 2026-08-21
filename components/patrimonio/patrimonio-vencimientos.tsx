@@ -1,6 +1,7 @@
 'use client'
 
 import type { VencimientoCuenta } from './patrimonio-service'
+import { formatMoney } from './patrimonio-format'
 import './patrimonio-vencimientos.css'
 
 interface PatrimonioVencimientosProps {
@@ -24,8 +25,19 @@ export default function PatrimonioVencimientos({ vencimientos }: PatrimonioVenci
         vencimientos.map((v) => (
           <div key={v.id} className="patrimonio-card patrimonio-vencimiento-strip">
             <span className="patrimonio-vencimiento-strip__nombre">{v.nombre}</span>
-            <span className="patrimonio-vencimiento-strip__dias">
-              {labelDiasRestantes(v.diasRestantes)}
+            <span className="patrimonio-vencimiento-strip__right">
+              {v.montoPlaneado !== undefined && (
+                <span
+                  className={`patrimonio-vencimiento-strip__monto${
+                    v.pagado ? ' patrimonio-vencimiento-strip__monto--pagado' : ''
+                  }`}
+                >
+                  {v.pagado ? formatMoney(v.montoPagado ?? 0) : formatMoney(v.montoPlaneado)}
+                </span>
+              )}
+              <span className="patrimonio-vencimiento-strip__dias">
+                {labelDiasRestantes(v.diasRestantes)}
+              </span>
             </span>
           </div>
         ))

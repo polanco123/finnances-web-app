@@ -1,74 +1,151 @@
-@import '@/lib/theme.css';
-
-.cuenta-card {
-  background: var(--theme-bg-surface);
-  border: 1px solid var(--theme-border-default);
-  border-radius: var(--theme-radius-lg);
-  padding: var(--theme-spacing-5);
-  transition: box-shadow var(--theme-transition-fast);
+.acct-card {
+  display: flex;
+  flex-direction: column;
 }
 
-.cuenta-card:hover {
-  box-shadow: var(--theme-shadow-1);
+.acct-card + .acct-card {
+  border-top: 1px solid var(--line-soft);
 }
 
-.cuenta-card__header {
+.acct-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   width: 100%;
-  padding: 0 0 var(--theme-spacing-3);
+  padding: 14px 16px;
   border: none;
   background: none;
   cursor: pointer;
   text-align: left;
   font: inherit;
   color: inherit;
+  transition: background-color 0.15s ease;
 }
 
-.cuenta-card__header-right {
+/* Hover feedback only in light mode — dark mode has no --bg-raised
+   contrast step worth showing here (per Reportes' isolated-token convention). */
+.acct-row:hover {
+  background: var(--line-soft);
+}
+
+.dark .acct-row:hover {
+  background: none;
+}
+
+.acct-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.acct-row__name {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acct-row__meta {
   display: flex;
   align-items: center;
-  gap: var(--theme-spacing-2);
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  color: var(--ink-faint);
 }
 
-.cuenta-card__chevron {
-  color: var(--theme-text-secondary);
-  transition: transform var(--theme-transition-fast);
+.acct-row__semaphore {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.acct-row__semaphore-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
-.cuenta-card__chevron--expanded {
+.acct-row__semaphore-dot--up {
+  background: var(--up);
+}
+
+.acct-row__semaphore-dot--amber {
+  background: var(--amber);
+}
+
+.acct-row__semaphore-dot--down {
+  background: var(--down);
+}
+
+.acct-row__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.acct-row__balance {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.acct-row__chevron {
+  color: var(--ink-faint);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.acct-row__chevron--expanded {
   transform: rotate(180deg);
 }
 
-.cuenta-card__name {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-lg);
-  font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-text-primary);
-  margin: 0;
+.acct-row__progress {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line-soft);
+  margin: 0 16px 12px;
+  overflow: hidden;
 }
 
-.cuenta-card__balance {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-xl);
-  font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-accent);
-  letter-spacing: -0.02em;
+.acct-row__progress-fill {
+  height: 100%;
+  border-radius: 2px;
 }
 
-.cuenta-card__movements {
-  display: flex;
-  flex-direction: column;
-  margin-top: var(--theme-spacing-4);
+.acct-row__progress-fill--up {
+  background: var(--up);
 }
 
-.cuenta-card__empty {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
-  color: var(--theme-text-secondary);
+.acct-row__progress-fill--amber {
+  background: var(--amber);
+}
+
+.acct-row__progress-fill--down {
+  background: var(--down);
+}
+
+.acct-card__detail {
+  background: var(--bg-raised);
+  border-top: 1px solid var(--line-soft);
+  padding: 12px 16px 16px;
+}
+
+.acct-card__empty {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  color: var(--ink-faint);
   text-align: center;
-  padding: var(--theme-spacing-4) 0;
+  padding: 16px 0;
   margin: 0;
 }

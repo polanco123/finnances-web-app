@@ -12,6 +12,7 @@ import {
   AreaChart,
   Area,
 } from 'recharts'
+import MovementFab from '@/components/movement/movement-fab'
 import './page.css'
 
 // ── Mock Data ─────────────────────────────────────────
@@ -479,6 +480,8 @@ function DashboardContent() {
           <AccountCards cuentaId={cuentaSeleccionada} onCuentaChange={setCuentaSeleccionada} />
         </div>
       </div>
+
+      <MovementFab />
     </div>
   )
 }

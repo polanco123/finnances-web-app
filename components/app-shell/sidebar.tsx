@@ -11,6 +11,7 @@ import {
   BarChart3,
   Settings,
   MinusCircle,
+  Target,
 } from 'lucide-react'
 import './sidebar.css'
 
@@ -27,8 +28,9 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/diversion', label: 'Diversión', icon: Gamepad2 },
   { href: '/cuentas', label: 'Cuentas', icon: Wallet },
   { href: '/deudas', label: 'Deudas', icon: MinusCircle },
+  { href: '/metas', label: 'Metas', icon: Target },
   { href: '/categorias', label: 'Categorías', icon: Tags },
-  { href: '/reportes', label: 'Patrimonio', icon: BarChart3 },
+  { href: '/reportes', label: 'Reportes', icon: BarChart3 },
   { href: '/configuracion', label: 'Configuración', icon: Settings, comingSoon: true },
 ]
 

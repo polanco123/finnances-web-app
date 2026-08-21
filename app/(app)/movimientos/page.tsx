@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 import MovementForm from '@/components/movement/movement-form'
 import MovementListItem from '@/components/movement/movement-list-item'
 import MovementTransferCard from '@/components/movement/movement-transfer-card'
@@ -17,7 +18,15 @@ import './page.css'
 
 const PAGE_SIZE = 10
 
+const VALID_TIPOS = ['gasto', 'ingreso', 'transferencia']
+
 function MovimientosContent() {
+  const searchParams = useSearchParams()
+  const tipoParam = searchParams.get('tipo')
+  const initialTipoFromUrl = VALID_TIPOS.includes(tipoParam ?? '')
+    ? (tipoParam as 'gasto' | 'ingreso' | 'transferencia')
+    : undefined
+
   const [movements, setMovements] = useState<Movimiento[]>([])
   const [cursor, setCursor] = useState<MovimientoCursor | null>(null)
   const [hasMore, setHasMore] = useState(true)
@@ -108,13 +117,14 @@ function MovimientosContent() {
         <MovementForm
           key={formKey}
           onMovimientoCreado={handleMovimientoCreado}
-          initialTipo={voicePrefill?.tipo}
+          initialTipo={voicePrefill?.tipo ?? initialTipoFromUrl}
           initialMonto={voicePrefill?.cantidad != null ? String(voicePrefill.cantidad) : undefined}
           initialCuentaId={voicePrefill?.cuentaId ?? undefined}
           initialCategoriaId={voicePrefill?.categoriaId ?? undefined}
           initialCuentaOrigenId={voicePrefill?.cuentaOrigenId ?? undefined}
           initialCuentaDestinoId={voicePrefill?.cuentaDestinoId ?? undefined}
           initialNotas={voicePrefill?.notas ?? undefined}
+          autoFocusMonto={Boolean(initialTipoFromUrl) && !voicePrefill}
         />
 
         {error && <div className="movimientos-page__error">{error}</div>}

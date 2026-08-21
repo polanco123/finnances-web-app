@@ -125,7 +125,7 @@ function ReportesContent() {
   return (
     <PageShell>
       <header className="patrimonio-masthead">
-        <h1 className="patrimonio-masthead__title">Patrimonio</h1>
+        <h1 className="patrimonio-masthead__title">Reportes</h1>
         <span className="patrimonio-masthead__date">{today}</span>
       </header>
 

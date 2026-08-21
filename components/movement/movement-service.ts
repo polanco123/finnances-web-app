@@ -36,7 +36,7 @@ export async function fetchMovimientosPage(
   let query = supabase
     .from('movimiento')
     .select(SELECT_FIELDS)
-    .order('created_at', { ascending: false })
+    .order('fecha', { ascending: false })
     .order('id', { ascending: false })
     .limit(pageSize + 1)
 

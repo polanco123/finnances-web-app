@@ -12,6 +12,8 @@ export interface Cuenta {
   saldo_calculado: number
   saldo_real: number
   activa: boolean
+  limite_credito: number | null
+  dia_pago: number | null
 }
 
 export interface Movimiento {

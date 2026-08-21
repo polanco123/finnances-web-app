@@ -12,6 +12,7 @@ import {
   startOfMonth,
   toISODate,
 } from './patrimonio-dates'
+import { fetchLatestPagosPorCuentas } from '@/components/deudas/deudas-service'
 
 export interface PatrimonioSnapshot {
   id: string
@@ -27,6 +28,9 @@ export interface VencimientoCuenta {
   nombre: string
   diaPago: number
   diasRestantes: number
+  montoPlaneado?: number
+  montoPagado?: number | null
+  pagado?: boolean
 }
 
 export interface CategoriaHeat {
@@ -113,9 +117,12 @@ export async function fetchSnapshotHistory(days: number): Promise<PatrimonioSnap
 }
 
 /**
- * Fetches active credit-card accounts (`dia_pago IS NOT NULL`) whose next
+ * Fetches active `deuda` accounts (`dia_pago IS NOT NULL`) whose next
  * `dia_pago` occurrence falls within `windowDays` of today (inclusive),
- * sorted by ascending `diasRestantes` (most urgent first).
+ * sorted by ascending `diasRestantes` (most urgent first). Each entry is
+ * enriched with its latest `deuda_pago` record (if any) via the same
+ * "latest record per account" resolution `/deudas` itself uses, so the
+ * widget's monto data always reconciles with the `/deudas` page.
  *
  * @param windowDays Alert window size in days (default 7)
  * @throws On Supabase error
@@ -127,13 +134,14 @@ export async function fetchProximosVencimientos(windowDays: number = 7): Promise
     .from('cuenta')
     .select('id, nombre, dia_pago')
     .eq('activa', true)
+    .eq('tipo', 'deuda')
     .not('dia_pago', 'is', null)
 
   if (error) throw error
 
   const today = getTodayLocalDate()
 
-  return (data ?? [])
+  const vencimientos = (data ?? [])
     .map((c) => ({
       id: c.id as string,
       nombre: c.nombre as string,
@@ -142,6 +150,21 @@ export async function fetchProximosVencimientos(windowDays: number = 7): Promise
     }))
     .filter((v) => v.diasRestantes >= 0 && v.diasRestantes <= windowDays)
     .sort((a, b) => a.diasRestantes - b.diasRestantes)
+
+  if (vencimientos.length === 0) return vencimientos
+
+  const pagosPorCuenta = await fetchLatestPagosPorCuentas(vencimientos.map((v) => v.id))
+
+  return vencimientos.map((v) => {
+    const pago = pagosPorCuenta.get(v.id)
+    if (!pago) return v
+    return {
+      ...v,
+      montoPlaneado: pago.montoPlaneado,
+      montoPagado: pago.montoPagado,
+      pagado: pago.pagado,
+    }
+  })
 }
 
 /**

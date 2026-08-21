@@ -1,0 +1,64 @@
+@import '@/lib/theme.css';
+
+.metas-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2);
+}
+
+.metas-progress__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--theme-spacing-3);
+}
+
+.metas-progress__label {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+.metas-progress__pct {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-accent);
+}
+
+.metas-progress__label--negative {
+  color: var(--theme-color-error);
+}
+
+.metas-progress__track {
+  height: 8px;
+  background: var(--theme-bg-surface-variant);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.metas-progress__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--theme-color-accent);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  min-width: 0;
+}
+
+.metas-progress__fill--cumplida {
+  background: var(--theme-color-success);
+}
+
+.metas-progress__badge {
+  align-self: flex-start;
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-success);
+}
+
+/* Dark Mode */
+.dark .metas-progress__track {
+  background: rgba(255, 255, 255, 0.08);
+}

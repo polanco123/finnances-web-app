@@ -7,8 +7,8 @@ Authenticated application shell (sidebar + topbar) providing shared, consistent 
 ## ADDED Requirements
 
 ### Requirement: Functional sidebar navigation links
-The sidebar SHALL render five functional navigation links — Dashboard (`/`), Movimientos (`/movimientos`), Diversión (`/diversion`), Cuentas (`/cuentas`), Patrimonio (`/reportes`) — that navigate the application to the corresponding route when activated.
-(Previously: four functional links — Dashboard, Movimientos, Diversión, Cuentas; the entry now targeting `/reportes` was a placeholder labeled "Reportes".)
+The sidebar SHALL render seven functional navigation links — Dashboard (`/`), Movimientos (`/movimientos`), Diversión (`/diversion`), Cuentas (`/cuentas`), Patrimonio (`/reportes`), Deudas (`/deudas`), Metas (`/metas`) — that navigate the application to the corresponding route when activated.
+(Previously: six functional links — Dashboard, Movimientos, Diversión, Cuentas, Patrimonio, Deudas; "Metas" did not exist as an entry, functional or placeholder.)
 
 #### Scenario: Activating a functional sidebar link navigates to its route
 - GIVEN the shell is rendered with the sidebar visible
@@ -16,10 +16,10 @@ The sidebar SHALL render five functional navigation links — Dashboard (`/`), M
 - THEN the application SHALL navigate to `/movimientos`
 - AND the shell (sidebar + topbar) SHALL remain rendered around the new route's content
 
-#### Scenario: All five functional links are present
+#### Scenario: All seven functional links are present
 - GIVEN the shell is rendered
 - WHEN the sidebar is inspected
-- THEN it SHALL contain exactly five functional links labeled for Dashboard, Movimientos, Diversión, Cuentas, and Patrimonio, targeting `/`, `/movimientos`, `/diversion`, `/cuentas`, and `/reportes` respectively
+- THEN it SHALL contain exactly seven functional links labeled for Dashboard, Movimientos, Diversión, Cuentas, Patrimonio, Deudas, and Metas, targeting `/`, `/movimientos`, `/diversion`, `/cuentas`, `/reportes`, `/deudas`, and `/metas` respectively
 
 #### Scenario: Activating the Cuentas link navigates to the live overview page
 - GIVEN the shell is rendered with the sidebar visible
@@ -32,6 +32,21 @@ The sidebar SHALL render five functional navigation links — Dashboard (`/`), M
 - WHEN the user activates the "Patrimonio" sidebar link
 - THEN the application SHALL navigate to `/reportes`
 - AND the link SHALL NOT display the "Próximamente" badge or muted styling
+
+#### Scenario: Activating the Deudas link navigates to the debt payment panel
+
+- GIVEN the shell is rendered with the sidebar visible
+- WHEN the user activates the "Deudas" sidebar link
+- THEN the application SHALL navigate to `/deudas`
+- AND the link SHALL NOT display the "Próximamente" badge or muted styling
+
+#### Scenario: Activating the Metas link navigates to the savings goals panel
+
+- GIVEN the shell is rendered with the sidebar visible
+- WHEN the user activates the "Metas" sidebar link
+- THEN the application SHALL navigate to `/metas`
+- AND the link SHALL NOT display the "Próximamente" badge or muted styling
+- AND the link SHALL appear positioned after "Deudas" and before "Categorías" in the sidebar
 
 ### Requirement: Placeholder navigation entries for future phases
 The sidebar SHALL also render two placeholder entries — Categorías, Configuración — for capabilities not implemented this change. Activating a placeholder entry MUST NOT produce a broken/404 experience or an unhandled error. The exact placeholder treatment (disabled control, inert stub link, "próximamente" page, etc.) is a design-phase decision, not specified here.

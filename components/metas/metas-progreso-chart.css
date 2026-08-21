@@ -1,0 +1,30 @@
+@import '@/lib/theme.css';
+
+.metas-progreso-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 48px;
+}
+
+.metas-progreso-chart__empty {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  margin: 0;
+  padding: var(--theme-spacing-4) 0;
+}
+
+.metas-progreso-chart__bar {
+  flex: 1 1 0;
+  min-width: 4px;
+  background: var(--theme-color-accent);
+  opacity: 0.5;
+  border-radius: 2px 2px 0 0;
+}
+
+.metas-progreso-chart__bar--current {
+  background: var(--theme-color-accent);
+  opacity: 1;
+}

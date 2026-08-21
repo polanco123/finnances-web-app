@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { crearMovimiento, crearMovimientoTransferencia } from '../movement/movement-mapper'
 import { CUENTAS } from '../../lib/catalogs/cuentas'
 import { CATEGORIAS } from '../../lib/catalogs/categorias'
@@ -19,6 +19,7 @@ const toLocalTime = (d) => d.toTimeString().slice(0, 5)
  * @param {string} [props.initialCuentaOrigenId]
  * @param {string} [props.initialCuentaDestinoId]
  * @param {string} [props.initialNotas]
+ * @param {boolean} [props.autoFocusMonto]
  */
 export default function MovementForm({
   onMovimientoCreado,
@@ -29,7 +30,9 @@ export default function MovementForm({
   initialCuentaOrigenId,
   initialCuentaDestinoId,
   initialNotas,
+  autoFocusMonto,
 }) {
+  const montoInputRef = useRef(null)
   const [monto, setMonto] = useState(initialMonto || '')
   const [categoriaId, setCategoriaId] = useState(initialCategoriaId || CATEGORIAS[0]?.id || '')
   const [cuentaId, setCuentaId] = useState(initialCuentaId || CUENTAS[0]?.id || '')
@@ -43,6 +46,10 @@ export default function MovementForm({
   const [error, setError] = useState(null)
 
   const isTransferencia = tipoMovimiento === 'transferencia'
+
+  useEffect(() => {
+    if (autoFocusMonto) montoInputRef.current?.focus()
+  }, [autoFocusMonto])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -126,7 +133,8 @@ export default function MovementForm({
       <div className="movement-form__group">
         <label className="movement-form__label">Monto</label>
         <input
-          className="movement-form__input"
+          ref={montoInputRef}
+          className="movement-form__input movement-form__input--monto"
           type="number"
           value={monto}
           onChange={(e) => setMonto(e.target.value)}
@@ -138,7 +146,7 @@ export default function MovementForm({
       </div>
 
       {isTransferencia ? (
-        <>
+        <div className="movement-form__group-row">
           <AutocompleteInput
             label="Cuenta Origen"
             options={CUENTAS}
@@ -151,9 +159,9 @@ export default function MovementForm({
             value={cuentaDestinoId}
             onChange={setCuentaDestinoId}
           />
-        </>
+        </div>
       ) : (
-        <>
+        <div className="movement-form__group-row">
           <AutocompleteInput
             label="Cuenta"
             options={CUENTAS}
@@ -166,8 +174,7 @@ export default function MovementForm({
             value={categoriaId}
             onChange={setCategoriaId}
           />
-          
-        </>
+        </div>
       )}
 
       <div className="movement-form__group">
