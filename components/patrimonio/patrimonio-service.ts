@@ -26,6 +26,7 @@ export interface PatrimonioSnapshot {
 export interface VencimientoCuenta {
   id: string
   nombre: string
+  icono: string | null
   diaPago: number
   diasRestantes: number
   montoPlaneado?: number
@@ -36,6 +37,7 @@ export interface VencimientoCuenta {
 export interface CategoriaHeat {
   categoriaId: string
   nombre: string
+  icono: string | null
   gastoMes: number
   ratio: number | null
   heat: 'hot' | 'warm' | 'normal'
@@ -132,7 +134,7 @@ export async function fetchProximosVencimientos(windowDays: number = 7): Promise
 
   const { data, error } = await supabase
     .from('cuenta')
-    .select('id, nombre, dia_pago')
+    .select('id, nombre, dia_pago, icono')
     .eq('activa', true)
     .eq('tipo', 'deuda')
     .not('dia_pago', 'is', null)
@@ -145,6 +147,7 @@ export async function fetchProximosVencimientos(windowDays: number = 7): Promise
     .map((c) => ({
       id: c.id as string,
       nombre: c.nombre as string,
+      icono: (c.icono as string | null) ?? null,
       diaPago: c.dia_pago as number,
       diasRestantes: diasRestantesHelper(c.dia_pago as number, today),
     }))
@@ -214,19 +217,21 @@ export async function fetchCategoriasDelMes(): Promise<CategoriaHeat[]> {
 
   const categorias: CategoriaHeat[] = Array.from(categoriaIds)
     .map((categoriaId) => {
-      const nombre = CATEGORIAS.find((c) => c.id === categoriaId)?.nombre ?? 'Sin categoría'
+      const categoria = CATEGORIAS.find((c) => c.id === categoriaId)
+      const nombre = categoria?.nombre ?? 'Sin categoría'
+      const icono = categoria?.icono ?? null
       const gastoMes = gastoMesActual.get(categoriaId) ?? 0
       const trailingTotal = gastoTrailing.get(categoriaId) ?? 0
 
       if (trailingTotal <= 0) {
-        return { categoriaId, nombre, gastoMes, ratio: null, heat: 'normal' as const }
+        return { categoriaId, nombre, icono, gastoMes, ratio: null, heat: 'normal' as const }
       }
 
       const promedioTrimestral = trailingTotal / 3
       const ratio = gastoMes / promedioTrimestral
       const heat: CategoriaHeat['heat'] = ratio > 1.5 ? 'hot' : ratio > 1.15 ? 'warm' : 'normal'
 
-      return { categoriaId, nombre, gastoMes, ratio, heat }
+      return { categoriaId, nombre, icono, gastoMes, ratio, heat }
     })
     .filter((c) => c.gastoMes > 0)
 

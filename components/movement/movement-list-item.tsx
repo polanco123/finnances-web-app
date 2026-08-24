@@ -2,6 +2,7 @@
 
 import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { CATEGORIAS } from '@/lib/catalogs/categorias'
+import { resolveIcon } from '@/lib/catalogs/icon-catalog'
 import './movement-list-item.css'
 
 interface MovimientoListItemProps {
@@ -32,15 +33,28 @@ function formatCurrency(amount: number): { value: string; isPositive: boolean } 
   }
 }
 
-function resolveCatalogName(id: string, catalog: { id: string; nombre: string }[]): string {
+function resolveCatalogName(
+  id: string,
+  catalog: { id: string; nombre: string; icono?: string | null }[]
+): string {
   const item = catalog.find((c) => c.id === id)
   return item?.nombre || 'Sin nombre'
+}
+
+function resolveCatalogIcono(
+  id: string,
+  catalog: { id: string; nombre: string; icono?: string | null }[]
+): string | null {
+  const item = catalog.find((c) => c.id === id)
+  return item?.icono ?? null
 }
 
 export default function MovementListItem({ movimiento }: MovimientoListItemProps) {
   const { value, isPositive } = formatCurrency(movimiento.monto)
   const cuentaNombre = resolveCatalogName(movimiento.cuenta_id, CUENTAS)
   const categoriaNombre = resolveCatalogName(movimiento.categoria_id, CATEGORIAS)
+  const CuentaIcon = resolveIcon(resolveCatalogIcono(movimiento.cuenta_id, CUENTAS), 'cuenta')
+  const CategoriaIcon = resolveIcon(resolveCatalogIcono(movimiento.categoria_id, CATEGORIAS), 'categoria')
   const isTransfer = movimiento.es_transferencia === true
 
   return (
@@ -60,6 +74,7 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
           <div className="movement-list-item__detail">
             <span className="movement-list-item__label">Transferencia</span>
             <span className="movement-list-item__value movement-list-item__value--transfer">
+              <CuentaIcon size={14} className="movement-list-item__icon" />
               {cuentaNombre}
             </span>
           </div>
@@ -67,11 +82,17 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
           <>
             <div className="movement-list-item__detail">
               <span className="movement-list-item__label">Categoría</span>
-              <span className="movement-list-item__value">{categoriaNombre}</span>
+              <span className="movement-list-item__value">
+                <CategoriaIcon size={14} className="movement-list-item__icon" />
+                {categoriaNombre}
+              </span>
             </div>
             <div className="movement-list-item__detail">
               <span className="movement-list-item__label">Cuenta</span>
-              <span className="movement-list-item__value">{cuentaNombre}</span>
+              <span className="movement-list-item__value">
+                <CuentaIcon size={14} className="movement-list-item__icon" />
+                {cuentaNombre}
+              </span>
             </div>
           </>
         )}

@@ -12,6 +12,7 @@ import {
 } from '@/components/categorias/categorias-dates'
 import {
   fetchCategoriasConGasto,
+  updateCategoriaIcono,
   type CategoriaConGasto,
 } from '@/components/categorias/categorias-service'
 import CategoriasPeriodFilter, {
@@ -53,6 +54,13 @@ function CategoriasContent() {
   const [syncError, setSyncError] = useState<string | null>(null)
 
   const { desde, hasta } = resolveRango(periodo, desdePersonalizado, hastaPersonalizado)
+
+  async function handleUpdateCategoriaIcono(id: string, icono: string) {
+    const updated = await updateCategoriaIcono(id, icono)
+    setCategorias((prev) =>
+      prev ? prev.map((c) => (c.categoriaId === id ? { ...c, icono: updated.icono } : c)) : prev,
+    )
+  }
 
   async function handleSync() {
     setSyncing(true)
@@ -140,7 +148,11 @@ function CategoriasContent() {
       {!loading && !error && categorias && categorias.length > 0 && (
         <div className="categorias-page__grid">
           {categorias.map((categoria) => (
-            <CategoriaCard key={categoria.categoriaId} categoria={categoria} />
+            <CategoriaCard
+              key={categoria.categoriaId}
+              categoria={categoria}
+              onUpdateIcono={handleUpdateCategoriaIcono}
+            />
           ))}
         </div>
       )}

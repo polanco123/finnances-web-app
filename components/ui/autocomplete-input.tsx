@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { resolveIcon } from '@/lib/catalogs/icon-catalog'
 import './autocomplete-input.css'
 
 export interface AutocompleteOption {
   id: string
   nombre: string
+  icono?: string | null
 }
 
 export interface AutocompleteInputProps {
@@ -14,6 +16,7 @@ export interface AutocompleteInputProps {
   value: string
   onChange: (id: string) => void
   placeholder?: string
+  kind: 'cuenta' | 'categoria'
 }
 
 export function AutocompleteInput({
@@ -22,6 +25,7 @@ export function AutocompleteInput({
   value,
   onChange,
   placeholder,
+  kind,
 }: AutocompleteInputProps) {
   const [inputValue, setInputValue] = useState('')
   const [showOptions, setShowOptions] = useState(false)
@@ -102,23 +106,27 @@ export function AutocompleteInput({
         />
         {showOptions && filtered.length > 0 && (
           <ul className="autocomplete-input__list">
-            {filtered.map((option, index) => (
-              <li
-                key={option.id}
-                className={`autocomplete-input__item ${
-                  index === highlightIndex
-                    ? 'autocomplete-input__item--highlighted'
-                    : ''
-                } ${
-                  option.id === value
-                    ? 'autocomplete-input__item--selected'
-                    : ''
-                }`}
-                onClick={() => handleSelect(option)}
-              >
-                {option.nombre}
-              </li>
-            ))}
+            {filtered.map((option, index) => {
+              const OptionIcon = resolveIcon(option.icono, kind)
+              return (
+                <li
+                  key={option.id}
+                  className={`autocomplete-input__item ${
+                    index === highlightIndex
+                      ? 'autocomplete-input__item--highlighted'
+                      : ''
+                  } ${
+                    option.id === value
+                      ? 'autocomplete-input__item--selected'
+                      : ''
+                  }`}
+                  onClick={() => handleSelect(option)}
+                >
+                  <OptionIcon size={14} className="autocomplete-input__item-icon" />
+                  {option.nombre}
+                </li>
+              )
+            })}
           </ul>
         )}
       </div>

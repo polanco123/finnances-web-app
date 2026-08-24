@@ -84,6 +84,7 @@ export default function DiversionForm({ onMovimientoCreado }: DiversionFormProps
           value={cuentaId}
           onChange={setCuentaId}
           placeholder="Buscar cuenta..."
+          kind="cuenta"
         />
 
         <div className="diversion-form__group">

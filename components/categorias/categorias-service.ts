@@ -4,6 +4,7 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { CATEGORIAS, esCategoriaDeGasto } from '@/data/categoria'
+import type { Categoria } from '@/data/categoria'
 
 export interface Movimiento {
   id: string
@@ -22,6 +23,7 @@ export interface Movimiento {
 export interface CategoriaConGasto {
   categoriaId: string
   nombre: string
+  icono: string | null
   total: number
   count: number
   porcentaje: number
@@ -83,10 +85,13 @@ export async function fetchCategoriasConGasto(desde: string, hasta: string): Pro
   const sumaTotal = Array.from(buckets.values()).reduce((sum, b) => sum + b.total, 0)
 
   const categorias: CategoriaConGasto[] = Array.from(buckets.entries()).map(([categoriaId, bucket]) => {
-    const nombre = CATEGORIAS.find((c) => c.id === categoriaId)?.nombre ?? 'Sin categoría'
+    const categoria = CATEGORIAS.find((c) => c.id === categoriaId)
+    const nombre = categoria?.nombre ?? 'Sin categoría'
+    const icono = categoria?.icono ?? null
     return {
       categoriaId,
       nombre,
+      icono,
       total: bucket.total,
       count: bucket.count,
       porcentaje: sumaTotal > 0 ? Math.round((bucket.total / sumaTotal) * 100) : 0,
@@ -95,4 +100,29 @@ export async function fetchCategoriasConGasto(desde: string, hasta: string): Pro
   })
 
   return categorias.sort((a, b) => b.total - a.total)
+}
+
+/**
+ * Updates the `icono` field for a single categoria.
+ *
+ * No `user_id` filter — the `categoria` table does not have a `user_id`
+ * column and is single-user at the data-model level.
+ *
+ * @param id    The categoria UUID to update
+ * @param icono The new icon name (must be a key of `ICON_CATALOG`)
+ * @returns The updated categoria row
+ * @throws On Supabase error
+ */
+export async function updateCategoriaIcono(id: string, icono: string): Promise<Categoria> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('categoria')
+    .update({ icono })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
 }

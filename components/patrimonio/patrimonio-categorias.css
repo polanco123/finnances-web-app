@@ -20,8 +20,16 @@
 }
 
 .patrimonio-categoria-row__nombre {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   color: var(--ink);
+}
+
+.patrimonio-categoria-row__icon {
+  flex-shrink: 0;
+  color: var(--ink-dim);
 }
 
 .patrimonio-categoria-row__monto {

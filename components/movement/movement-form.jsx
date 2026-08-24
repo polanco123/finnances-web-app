@@ -152,12 +152,14 @@ export default function MovementForm({
             options={CUENTAS}
             value={cuentaOrigenId}
             onChange={setCuentaOrigenId}
+            kind="cuenta"
           />
           <AutocompleteInput
             label="Cuenta Destino"
             options={CUENTAS}
             value={cuentaDestinoId}
             onChange={setCuentaDestinoId}
+            kind="cuenta"
           />
         </div>
       ) : (
@@ -167,12 +169,14 @@ export default function MovementForm({
             options={CUENTAS}
             value={cuentaId}
             onChange={setCuentaId}
+            kind="cuenta"
           />
           <AutocompleteInput
             label="Categoría"
             options={CATEGORIAS}
             value={categoriaId}
             onChange={setCategoriaId}
+            kind="categoria"
           />
         </div>
       )}

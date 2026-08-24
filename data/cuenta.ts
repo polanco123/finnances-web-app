@@ -12,6 +12,7 @@ export interface Cuenta {
   limite_credito: number | null
   dia_corte: number | null
   dia_pago: number | null
+  icono: string | null
 }
 
 export { CUENTAS, CUENTA_DEFAULT }

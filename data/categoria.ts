@@ -6,6 +6,7 @@ export interface Categoria {
   tipo: string
   es_diversion: boolean
   activa: boolean
+  icono: string | null
 }
 
 export { CATEGORIAS, CATEGORIA_DEFAULT }

@@ -14,6 +14,7 @@ export interface Cuenta {
   activa: boolean
   limite_credito: number | null
   dia_pago: number | null
+  icono: string | null
 }
 
 export interface Movimiento {
@@ -50,6 +51,31 @@ export async function fetchActiveCuentas(): Promise<Cuenta[]> {
 
   if (error) throw error
   return data ?? []
+}
+
+/**
+ * Updates the `icono` field for a single cuenta.
+ *
+ * No `user_id` filter — the `cuenta` table does not have a `user_id` column
+ * and is single-user at the data-model level.
+ *
+ * @param id    The cuenta UUID to update
+ * @param icono The new icon name (must be a key of `ICON_CATALOG`)
+ * @returns The updated cuenta row
+ * @throws On Supabase error
+ */
+export async function updateCuentaIcono(id: string, icono: string): Promise<Cuenta> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('cuenta')
+    .update({ icono })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
 }
 
 /**

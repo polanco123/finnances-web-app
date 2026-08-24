@@ -64,8 +64,16 @@
 }
 
 .movement-list-item__value {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-1);
   font-size: var(--theme-font-size-sm);
   color: var(--theme-text-primary);
+}
+
+.movement-list-item__icon {
+  flex-shrink: 0;
+  color: var(--theme-text-secondary);
 }
 
 .movement-list-item__notas {

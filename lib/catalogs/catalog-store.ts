@@ -5,12 +5,13 @@ export interface CatalogItem {
   nombre: string
   tipo: string
   es_diversion?: boolean
+  icono: string | null
 }
 
 const CUENTAS_KEY = 'finanzas:catalog:cuentas'
 const CATEGORIAS_KEY = 'finanzas:catalog:categorias'
 
-const EMPTY_DEFAULT: CatalogItem = { id: '', nombre: 'Sin seleccionar', tipo: '' }
+const EMPTY_DEFAULT: CatalogItem = { id: '', nombre: 'Sin seleccionar', tipo: '', icono: null }
 
 let _cuentas: CatalogItem[] = []
 let _categorias: CatalogItem[] = []
@@ -49,7 +50,7 @@ async function fetchCuentasFromSupabase(): Promise<CatalogItem[]> {
 
   const { data, error } = await supabase
     .from('cuenta')
-    .select('id, nombre, tipo')
+    .select('id, nombre, tipo, icono')
     .eq('activa', true)
     .order('nombre')
 
@@ -62,7 +63,7 @@ async function fetchCategoriasFromSupabase(): Promise<CatalogItem[]> {
 
   const { data, error } = await supabase
     .from('categoria')
-    .select('id, nombre, tipo, es_diversion')
+    .select('id, nombre, tipo, es_diversion, icono')
     .eq('activa', true)
     .order('nombre')
 

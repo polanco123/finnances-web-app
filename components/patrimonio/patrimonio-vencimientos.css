@@ -12,8 +12,16 @@
 }
 
 .patrimonio-vencimiento-strip__nombre {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   color: var(--ink);
+}
+
+.patrimonio-vencimiento-strip__icon {
+  flex-shrink: 0;
+  color: var(--ink-dim);
 }
 
 .patrimonio-vencimiento-strip__right {

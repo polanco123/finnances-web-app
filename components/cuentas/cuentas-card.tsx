@@ -1,17 +1,20 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Pencil } from 'lucide-react'
 import type { Cuenta, Movimiento } from '@/components/cuentas/cuentas-service'
 import MovementListItem from '@/components/movement/movement-list-item'
 import MovementTransferCard from '@/components/movement/movement-transfer-card'
 import { groupMovimientos } from '@/components/movement/movement-grouping'
 import type { DisplayItem } from '@/components/movement/movement-grouping'
+import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import IconPicker from '@/components/ui/icon-picker'
 import './cuentas-card.css'
 
 interface CuentaCardProps {
   cuenta: Cuenta
   movements: Movimiento[]
+  onUpdateIcono: (id: string, icono: string) => Promise<void>
 }
 
 type SemaphoreLevel = 'up' | 'amber' | 'down'
@@ -62,8 +65,10 @@ function semaphoreLevel(utilizacion: number): SemaphoreLevel {
   return 'down'
 }
 
-export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
+export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaCardProps) {
   const [expanded, setExpanded] = useState(false)
+  const [editingIcono, setEditingIcono] = useState(false)
+  const Icon = resolveIcon(cuenta.icono, 'cuenta')
   const sortedMovements = useMemo(
     () => [...movements].sort((a, b) => fechaHoraKey(b).localeCompare(fechaHoraKey(a))),
     [movements],
@@ -90,7 +95,10 @@ export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
         aria-expanded={expanded}
       >
         <span className="acct-row__main">
-          <span className="acct-row__name">{cuenta.nombre}</span>
+          <span className="acct-row__name">
+            <Icon className="acct-row__icon" size={16} aria-hidden="true" />
+            {cuenta.nombre}
+          </span>
           <span className="acct-row__meta">
             {lastMovement ? `Últ. mov. ${formatUltimoMovimiento(lastMovement.fecha)}` : 'Sin movimientos'}
             {showSemaphore && (
@@ -122,6 +130,27 @@ export default function CuentaCard({ cuenta, movements }: CuentaCardProps) {
 
       {expanded && (
         <div className="acct-card__detail">
+          <div className="acct-card__actions">
+            <button
+              type="button"
+              className="acct-card__action-btn"
+              onClick={() => setEditingIcono((prev) => !prev)}
+            >
+              <Pencil size={14} aria-hidden="true" />
+              Editar ícono
+            </button>
+          </div>
+
+          {editingIcono && (
+            <div className="acct-card__icon-picker">
+              <IconPicker
+                icono={cuenta.icono}
+                kind="cuenta"
+                onSelect={(iconName) => onUpdateIcono(cuenta.id, iconName)}
+              />
+            </div>
+          )}
+
           {displayItems.length === 0 ? (
             <p className="acct-card__empty">Sin movimientos recientes</p>
           ) : (

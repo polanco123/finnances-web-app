@@ -5,6 +5,7 @@ import { Check } from 'lucide-react'
 import type { Cuenta } from '@/data/cuenta'
 import { computePeriodoParaMes, type DeudaPago } from '@/components/deudas/deudas-service'
 import DeudaMarcarPagadoModal from '@/components/deudas/deuda-marcar-pagado-modal'
+import { resolveIcon } from '@/lib/catalogs/icon-catalog'
 import './deuda-payment-table.css'
 
 export interface DeudaMonthRow {
@@ -122,6 +123,7 @@ function DeudaPaymentTableRow({
 }: DeudaPaymentTableRowProps) {
   const diaPagoConfigured = cuenta.dia_pago !== null && cuenta.dia_pago !== undefined
   const estado = getEstado(pago, diaPagoConfigured)
+  const CuentaIcon = resolveIcon(cuenta.icono, 'cuenta')
   const periodoDefault = diaPagoConfigured
     ? computePeriodoParaMes(cuenta.dia_pago as number, year, month)
     : null
@@ -249,7 +251,10 @@ function DeudaPaymentTableRow({
   return (
     <tr className="deuda-payment-table__row">
       <td className="deuda-payment-table__cell deuda-payment-table__cell--cuenta">
-        <span className="deuda-payment-table__nombre">{cuenta.nombre}</span>
+        <span className="deuda-payment-table__nombre">
+          <CuentaIcon size={14} className="deuda-payment-table__icon" />
+          {cuenta.nombre}
+        </span>
         {estado === 'bloqueado' && (
           <span className="deuda-payment-table__badge deuda-payment-table__badge--bloqueado">
             Sin día de pago

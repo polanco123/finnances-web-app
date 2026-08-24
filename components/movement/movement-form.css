@@ -260,12 +260,17 @@
   }
 
   .movement-form__group-row {
-    flex-direction: column;
-    gap: 0;
+    gap: var(--theme-spacing-2);
   }
 
   .movement-form__group-row > .movement-form__group {
-    margin-bottom: var(--theme-spacing-3);
+    min-width: 0;
+  }
+
+  .movement-form__group-row .movement-form__input {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

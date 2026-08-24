@@ -5,6 +5,7 @@ import {
   fetchActiveCuentas,
   fetchRecentMovimientos,
   fetchTransferSiblings,
+  updateCuentaIcono,
   type Cuenta,
   type Movimiento,
 } from '@/components/cuentas/cuentas-service'
@@ -44,6 +45,11 @@ function CuentasContent() {
   const [error, setError] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncError, setSyncError] = useState<string | null>(null)
+
+  async function handleUpdateCuentaIcono(id: string, icono: string) {
+    const updated = await updateCuentaIcono(id, icono)
+    setCuentas((prev) => (prev ? prev.map((c) => (c.id === id ? updated : c)) : prev))
+  }
 
   async function handleSync() {
     setSyncing(true)
@@ -213,6 +219,7 @@ function CuentasContent() {
                 key={cuenta.id}
                 cuenta={cuenta}
                 movements={movementsMap?.[cuenta.id] ?? []}
+                onUpdateIcono={handleUpdateCuentaIcono}
               />
             ))}
           </div>
@@ -228,6 +235,7 @@ function CuentasContent() {
                 key={cuenta.id}
                 cuenta={cuenta}
                 movements={movementsMap?.[cuenta.id] ?? []}
+                onUpdateIcono={handleUpdateCuentaIcono}
               />
             ))}
           </div>
