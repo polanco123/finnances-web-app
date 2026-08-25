@@ -36,6 +36,75 @@
   margin-bottom: var(--theme-spacing-4);
 }
 
+.diversion-page__week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--theme-spacing-3);
+  margin-bottom: var(--theme-spacing-4);
+}
+
+.diversion-page__week-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-full);
+  background: var(--theme-bg-surface);
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast), opacity var(--theme-transition-fast);
+}
+
+.diversion-page__week-nav-btn:hover:not(:disabled) {
+  background: var(--theme-bg-surface-variant);
+}
+
+.diversion-page__week-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.diversion-page__week-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  min-width: 140px;
+  justify-content: center;
+  text-align: center;
+}
+
+.diversion-page__week-current-badge {
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+  background: color-mix(in srgb, var(--theme-color-primary) 12%, transparent);
+  padding: 1px var(--theme-spacing-2);
+  border-radius: var(--theme-radius-full);
+}
+
+.diversion-page__past-total {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  color: var(--theme-text-primary);
+  text-align: center;
+  margin: 0 0 var(--theme-spacing-1) 0;
+}
+
+.diversion-page__past-note {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  margin: 0 0 var(--theme-spacing-4) 0;
+}
+
 .diversion-page__list {
   margin-top: var(--theme-spacing-2);
 }

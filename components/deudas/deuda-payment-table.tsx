@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Check } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Check, ChevronUp, ChevronDown } from 'lucide-react'
 import type { Cuenta } from '@/data/cuenta'
 import { computePeriodoParaMes, type DeudaPago } from '@/components/deudas/deudas-service'
 import DeudaMarcarPagadoModal from '@/components/deudas/deuda-marcar-pagado-modal'
@@ -51,6 +51,18 @@ function formatDiasInfo(cuenta: Cuenta): string {
   if (dia_corte != null) parts.push(`Corte: ${dia_corte}`)
   if (dia_pago != null) parts.push(`Pago: ${dia_pago}`)
   return parts.join(' · ')
+}
+
+/**
+ * The row's effective `periodo` for sorting/display purposes: the real
+ * record's `periodo` if one exists, otherwise the computed default due date
+ * for the selected month (same value the "sin-registrar" state pre-fills),
+ * or `null` if the account has no `dia_pago` configured at all (bloqueado).
+ */
+function getEffectivePeriodo(row: DeudaMonthRow, year: number, month: number): string | null {
+  if (row.pago) return row.pago.periodo
+  if (row.cuenta.dia_pago == null) return null
+  return computePeriodoParaMes(row.cuenta.dia_pago, year, month)
 }
 
 /** Parses a `YYYY-MM-DD` string as a local date (avoids UTC-shift-by-one-day bugs from `new Date(iso)`). */
@@ -406,6 +418,8 @@ function DeudaPaymentTableRow({
  * `monto_planeado` (all rows with a record) and `monto_pagado` (only rows
  * marked paid) for that month.
  */
+type SortDirection = 'asc' | 'desc' | null
+
 export default function DeudaPaymentTable({
   rows,
   year,
@@ -416,6 +430,32 @@ export default function DeudaPaymentTable({
   onSaveNotas,
   onMarcarPagado,
 }: DeudaPaymentTableProps) {
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
+
+  const sortedRows = useMemo(() => {
+    if (!sortDirection) return rows
+
+    const withKey = rows.map((row) => ({
+      row,
+      key: getEffectivePeriodo(row, year, month),
+    }))
+
+    withKey.sort((a, b) => {
+      // Rows with no periodo at all (no dia_pago configured) always sort last.
+      if (a.key === null && b.key === null) return 0
+      if (a.key === null) return 1
+      if (b.key === null) return -1
+      const cmp = a.key.localeCompare(b.key)
+      return sortDirection === 'asc' ? cmp : -cmp
+    })
+
+    return withKey.map((entry) => entry.row)
+  }, [rows, sortDirection, year, month])
+
+  function handleToggleSort() {
+    setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
+  }
+
   const totalPlaneado = rows.reduce((sum, r) => sum + (r.pago?.montoPlaneado ?? 0), 0)
   const totalPagado = rows.reduce(
     (sum, r) => sum + (r.pago?.pagado ? r.pago.montoPagado ?? 0 : 0),
@@ -433,7 +473,18 @@ export default function DeudaPaymentTable({
           <tr>
             <th>Cuenta</th>
             <th>Corte / Pago</th>
-            <th>Periodo</th>
+            <th>
+              <button
+                type="button"
+                className="deuda-payment-table__sort-btn"
+                onClick={handleToggleSort}
+                aria-label={`Ordenar por fecha de pago ${sortDirection === 'asc' ? 'descendente' : 'ascendente'}`}
+              >
+                Fecha de pago
+                {sortDirection === 'asc' && <ChevronUp size={14} aria-hidden="true" />}
+                {sortDirection === 'desc' && <ChevronDown size={14} aria-hidden="true" />}
+              </button>
+            </th>
             <th>Monto planeado</th>
             <th>Monto pagado</th>
             <th>Notas</th>
@@ -441,7 +492,7 @@ export default function DeudaPaymentTable({
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ cuenta, pago }) => (
+          {sortedRows.map(({ cuenta, pago }) => (
             <DeudaPaymentTableRow
               key={`${cuenta.id}-${month}`}
               cuenta={cuenta}

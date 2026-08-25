@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
 import { createClient } from '@/lib/supabase/client'
@@ -15,6 +15,16 @@ export function AppShell({ children }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [authChecked, setAuthChecked] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
+
+  // Auto-close the sidebar after navigating — only on mobile, where it's a
+  // temporary overlay drawer; on desktop it's a persistent nav rail and
+  // should stay open across route changes.
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
+      setIsSidebarOpen(false)
+    }
+  }, [pathname])
 
   // Client-side auth gate: proxy.ts (middleware) does not run on a static
   // export (GitHub Pages has no server), so this is the real enforcement
@@ -46,6 +56,9 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="app-shell">
       <Sidebar isOpen={isSidebarOpen} />
+      {isSidebarOpen && (
+        <div className="app-shell__backdrop" onClick={() => setIsSidebarOpen(false)} />
+      )}
       <div className="app-shell__main">
         <Topbar
           isSidebarOpen={isSidebarOpen}
