@@ -45,7 +45,11 @@ export function Sidebar({ isOpen }: SidebarProps) {
     <aside className={`sidebar${isOpen ? ' sidebar--open' : ''}`}>
       <nav className="sidebar__nav">
         <div className="sidebar__brand">
-          <img src="/logo.png" alt="Finances web app" className="sidebar__logo" />
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo.png`}
+            alt="Finances web app"
+            className="sidebar__logo"
+          />
         </div>
         <ul className="sidebar__list">
           {NAV_ITEMS.map((item) => {

@@ -6,7 +6,12 @@ import { insertarMovimiento, insertarTransferencia } from '../movement/movement-
 import AutocompleteInput from '@/components/ui/autocomplete-input'
 import './movement-form.css'
 
-const toLocalDate = (d) => d.toISOString().split('T')[0]
+const toLocalDate = (d) => {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 const toLocalTime = (d) => d.toTimeString().slice(0, 5)
 
 /**

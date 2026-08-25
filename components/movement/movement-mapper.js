@@ -22,10 +22,17 @@ export const FUENTES = {
   TRANSFERENCIA: 'transferencia',
 }
 
+function toLocalDate(d) {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 const MOVIMIENTO_DEFAULT = {
   monto: 0,
   descripcion: '',
-  fecha: new Date().toISOString().split('T')[0],
+  fecha: toLocalDate(new Date()),
   hora: null,
   cuenta_id: CUENTA_DEFAULT.id,
   categoria_id: CATEGORIA_DEFAULT.id,
