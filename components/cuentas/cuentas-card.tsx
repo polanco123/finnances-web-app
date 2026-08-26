@@ -8,6 +8,7 @@ import MovementTransferCard from '@/components/movement/movement-transfer-card'
 import { groupMovimientos } from '@/components/movement/movement-grouping'
 import type { DisplayItem } from '@/components/movement/movement-grouping'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import IconPicker from '@/components/ui/icon-picker'
 import './cuentas-card.css'
 
@@ -15,6 +16,7 @@ interface CuentaCardProps {
   cuenta: Cuenta
   movements: Movimiento[]
   onUpdateIcono: (id: string, icono: string) => Promise<void>
+  onUpdateColor: (id: string, color: string | null) => Promise<void>
 }
 
 type SemaphoreLevel = 'up' | 'amber' | 'down'
@@ -65,7 +67,7 @@ function semaphoreLevel(utilizacion: number): SemaphoreLevel {
   return 'down'
 }
 
-export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaCardProps) {
+export default function CuentaCard({ cuenta, movements, onUpdateIcono, onUpdateColor }: CuentaCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [editingIcono, setEditingIcono] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -110,7 +112,12 @@ export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaC
         >
           <span className="acct-row__main">
             <span className="acct-row__name">
-              <Icon className="acct-row__icon" size={16} aria-hidden="true" />
+              <Icon
+                className="acct-row__icon"
+                size={16}
+                aria-hidden="true"
+                style={{ color: resolveIconColor(cuenta.color) }}
+              />
               {cuenta.nombre}
             </span>
             <span className="acct-row__meta">
@@ -180,8 +187,10 @@ export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaC
             <div className="acct-card__icon-picker">
               <IconPicker
                 icono={cuenta.icono}
+                color={cuenta.color}
                 kind="cuenta"
                 onSelect={(iconName) => onUpdateIcono(cuenta.id, iconName)}
+                onSelectColor={(color) => onUpdateColor(cuenta.id, color)}
               />
             </div>
           )}

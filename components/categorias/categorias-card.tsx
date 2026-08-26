@@ -5,12 +5,14 @@ import { ChevronDown, Pencil } from 'lucide-react'
 import type { CategoriaConGasto } from '@/components/categorias/categorias-service'
 import MovementListItem from '@/components/movement/movement-list-item'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import IconPicker from '@/components/ui/icon-picker'
 import './categorias-card.css'
 
 interface CategoriaCardProps {
   categoria: CategoriaConGasto
   onUpdateIcono: (id: string, icono: string) => Promise<void>
+  onUpdateColor: (id: string, color: string | null) => Promise<void>
 }
 
 function formatCurrency(amount: number): string {
@@ -21,7 +23,7 @@ function formatCurrency(amount: number): string {
   }).format(amount)
 }
 
-export default function CategoriaCard({ categoria, onUpdateIcono }: CategoriaCardProps) {
+export default function CategoriaCard({ categoria, onUpdateIcono, onUpdateColor }: CategoriaCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [editingIcono, setEditingIcono] = useState(false)
   const Icon = resolveIcon(categoria.icono, 'categoria')
@@ -35,7 +37,12 @@ export default function CategoriaCard({ categoria, onUpdateIcono }: CategoriaCar
         aria-expanded={expanded}
       >
         <h3 className="categoria-card__name">
-          <Icon className="categoria-card__icon" size={16} aria-hidden="true" />
+          <Icon
+            className="categoria-card__icon"
+            size={16}
+            aria-hidden="true"
+            style={{ color: resolveIconColor(categoria.color) }}
+          />
           {categoria.nombre} <span className="categoria-card__count">({categoria.count})</span>
         </h3>
         <span className="categoria-card__header-right">
@@ -66,8 +73,10 @@ export default function CategoriaCard({ categoria, onUpdateIcono }: CategoriaCar
             <div className="categoria-card__icon-picker">
               <IconPicker
                 icono={categoria.icono}
+                color={categoria.color}
                 kind="categoria"
                 onSelect={(iconName) => onUpdateIcono(categoria.categoriaId, iconName)}
+                onSelectColor={(color) => onUpdateColor(categoria.categoriaId, color)}
               />
             </div>
           )}

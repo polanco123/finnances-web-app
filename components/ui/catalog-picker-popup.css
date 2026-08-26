@@ -125,7 +125,45 @@
   font-size: var(--theme-font-size-sm);
   color: var(--theme-text-hint);
   text-align: center;
-  padding: var(--theme-spacing-6) var(--theme-spacing-3);
+  padding: var(--theme-spacing-6) var(--theme-spacing-3) var(--theme-spacing-2);
+}
+
+.catalog-picker__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.catalog-picker__create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+  background: color-mix(in srgb, var(--theme-color-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-color-primary) 30%, transparent);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast);
+}
+
+.catalog-picker__create-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--theme-color-primary) 18%, transparent);
+}
+
+.catalog-picker__create-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.catalog-picker__create-error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin-top: var(--theme-spacing-2);
 }
 
 .catalog-picker__grid {

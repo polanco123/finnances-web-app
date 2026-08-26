@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { X } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import type { AutocompleteOption } from './autocomplete-input'
 import './catalog-picker-popup.css'
 
@@ -13,6 +14,9 @@ export interface CatalogPickerPopupProps {
   label: string
   onSelect: (id: string) => void
   onClose: () => void
+  /** When provided, a "Crear <nombre>" action appears once the search has
+   * zero matches, letting the user register a new catalog item inline. */
+  onCreate?: (nombre: string) => Promise<AutocompleteOption>
 }
 
 /**
@@ -29,9 +33,12 @@ export default function CatalogPickerPopup({
   label,
   onSelect,
   onClose,
+  onCreate,
 }: CatalogPickerPopupProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [shake, setShake] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -68,6 +75,21 @@ export default function CatalogPickerPopup({
     requestClose()
   }
 
+  async function handleCreate() {
+    const nombre = searchTerm.trim()
+    if (!nombre || !onCreate) return
+
+    setCreating(true)
+    setCreateError(null)
+    try {
+      const created = await onCreate(nombre)
+      handleOptionClick(created.id)
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'Error al crear')
+      setCreating(false)
+    }
+  }
+
   const filtered =
     searchTerm.trim() === ''
       ? options
@@ -84,8 +106,14 @@ export default function CatalogPickerPopup({
       return
     }
 
-    // Zero or multiple matches — Enter can't unambiguously pick one; give a
-    // brief shake + red-flash cue instead of silently doing nothing.
+    if (filtered.length === 0 && onCreate) {
+      handleCreate()
+      return
+    }
+
+    // Zero matches with no create option, or multiple matches — Enter can't
+    // unambiguously pick one; give a brief shake + red-flash cue instead of
+    // silently doing nothing.
     setShake(true)
   }
 
@@ -132,9 +160,23 @@ export default function CatalogPickerPopup({
               No hay {catalogLabel} disponibles
             </p>
           ) : filtered.length === 0 ? (
-            <p className="catalog-picker__empty">
-              Sin resultados para &ldquo;{searchTerm}&rdquo;
-            </p>
+            <div className="catalog-picker__empty-state">
+              <p className="catalog-picker__empty">
+                Sin resultados para &ldquo;{searchTerm}&rdquo;
+              </p>
+              {onCreate && (
+                <button
+                  type="button"
+                  className="catalog-picker__create-btn"
+                  onClick={handleCreate}
+                  disabled={creating}
+                >
+                  <Plus size={16} aria-hidden="true" />
+                  {creating ? 'Creando...' : `Crear "${searchTerm.trim()}"`}
+                </button>
+              )}
+              {createError && <p className="catalog-picker__create-error">{createError}</p>}
+            </div>
           ) : (
             <div className="catalog-picker__grid">
               {filtered.map((option) => {
@@ -150,7 +192,11 @@ export default function CatalogPickerPopup({
                     onClick={() => handleOptionClick(option.id)}
                     aria-pressed={isSelected}
                   >
-                    <OptionIcon size={26} aria-hidden="true" />
+                    <OptionIcon
+                      size={26}
+                      aria-hidden="true"
+                      style={{ color: resolveIconColor(option.color) }}
+                    />
                     <span className="catalog-picker__tile-label">
                       {option.nombre}
                     </span>

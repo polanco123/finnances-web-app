@@ -3,6 +3,7 @@ import { crearMovimiento, crearMovimientoTransferencia } from '../movement/movem
 import { CUENTAS } from '../../lib/catalogs/cuentas'
 import { CATEGORIAS } from '../../lib/catalogs/categorias'
 import { insertarMovimiento, insertarTransferencia } from '../movement/movement-service'
+import { crearCategoria } from '@/lib/catalogs/catalog-store'
 import AutocompleteInput from '@/components/ui/autocomplete-input'
 import './movement-form.css'
 
@@ -51,6 +52,12 @@ export default function MovementForm({
   const [error, setError] = useState(null)
 
   const isTransferencia = tipoMovimiento === 'transferencia'
+
+  const handleCreateCategoria = (nombre) =>
+    crearCategoria({
+      nombre,
+      tipo: tipoMovimiento === 'ingreso' ? 'ingreso' : 'discrecional',
+    })
 
   useEffect(() => {
     if (autoFocusMonto) montoInputRef.current?.focus()
@@ -182,6 +189,7 @@ export default function MovementForm({
             value={categoriaId}
             onChange={setCategoriaId}
             kind="categoria"
+            onCreateOption={handleCreateCategoria}
           />
         </div>
       )}

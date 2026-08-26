@@ -7,6 +7,7 @@ export interface Categoria {
   es_diversion: boolean
   activa: boolean
   icono: string | null
+  color: string | null
 }
 
 export { CATEGORIAS, CATEGORIA_DEFAULT }

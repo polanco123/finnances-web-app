@@ -15,6 +15,7 @@ export interface Cuenta {
   limite_credito: number | null
   dia_pago: number | null
   icono: string | null
+  color: string | null
 }
 
 export interface Movimiento {
@@ -70,6 +71,29 @@ export async function updateCuentaIcono(id: string, icono: string): Promise<Cuen
   const { data, error } = await supabase
     .from('cuenta')
     .update({ icono })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+/**
+ * Updates the `color` field for a single cuenta — `null` resets it to the
+ * default gray. Same no-`user_id`-filter rationale as `updateCuentaIcono`.
+ *
+ * @param id    The cuenta UUID to update
+ * @param color A CSS color value, or `null` for the default gray
+ * @returns The updated cuenta row
+ * @throws On Supabase error
+ */
+export async function updateCuentaColor(id: string, color: string | null): Promise<Cuenta> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('cuenta')
+    .update({ color })
     .eq('id', id)
     .select()
     .single()

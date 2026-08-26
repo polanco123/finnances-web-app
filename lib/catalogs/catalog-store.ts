@@ -6,6 +6,7 @@ export interface CatalogItem {
   tipo: string
   es_diversion?: boolean
   icono: string | null
+  color?: string | null
 }
 
 const CUENTAS_KEY = 'finanzas:catalog:cuentas'
@@ -50,7 +51,7 @@ async function fetchCuentasFromSupabase(): Promise<CatalogItem[]> {
 
   const { data, error } = await supabase
     .from('cuenta')
-    .select('id, nombre, tipo, icono')
+    .select('id, nombre, tipo, icono, color')
     .eq('activa', true)
     .order('nombre')
 
@@ -63,7 +64,7 @@ async function fetchCategoriasFromSupabase(): Promise<CatalogItem[]> {
 
   const { data, error } = await supabase
     .from('categoria')
-    .select('id, nombre, tipo, es_diversion, icono')
+    .select('id, nombre, tipo, es_diversion, icono, color')
     .eq('activa', true)
     .order('nombre')
 
@@ -131,6 +132,49 @@ export async function syncCategorias(): Promise<CatalogItem[]> {
   saveToStorage(CATEGORIAS_KEY, fetched)
   applyCategorias(fetched)
   return fetched
+}
+
+/**
+ * Inserts a new categoria in Supabase and merges it into the cached catalog +
+ * in-memory `CATEGORIAS`, so callers immediately see it in `CATEGORIAS`
+ * without a full `syncCategorias()` round trip or page reload.
+ */
+export async function crearCategoria(input: {
+  nombre: string
+  tipo: string
+  es_diversion?: boolean
+  icono?: string | null
+}): Promise<CatalogItem> {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+  if (userError || !user) throw new Error('Usuario no autenticado')
+
+  const { data, error } = await supabase
+    .from('categoria')
+    .insert({
+      user_id: user.id,
+      nombre: input.nombre,
+      tipo: input.tipo,
+      es_diversion: input.es_diversion ?? false,
+      icono: input.icono ?? null,
+      activa: true,
+    })
+    .select('id, nombre, tipo, es_diversion, icono, color')
+    .single()
+
+  if (error) throw error
+
+  const updated = [..._categorias, data as CatalogItem].sort((a, b) =>
+    a.nombre.localeCompare(b.nombre),
+  )
+  saveToStorage(CATEGORIAS_KEY, updated)
+  applyCategorias(updated)
+
+  return data as CatalogItem
 }
 
 /** Synchronous read for non-React consumers. */

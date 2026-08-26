@@ -3,6 +3,7 @@
 import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { CATEGORIAS } from '@/lib/catalogs/categorias'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import { formatFechaHora } from '@/components/movement/movement-format'
 import './movement-list-item.css'
 
@@ -50,6 +51,14 @@ function resolveCatalogIcono(
   return item?.icono ?? null
 }
 
+function resolveCatalogColor(
+  id: string,
+  catalog: { id: string; color?: string | null }[]
+): string | null {
+  const item = catalog.find((c) => c.id === id)
+  return item?.color ?? null
+}
+
 export default function MovementListItem({ movimiento }: MovimientoListItemProps) {
   const { value, isPositive } = formatCurrency(movimiento.monto)
   const cuentaNombre = resolveCatalogName(movimiento.cuenta_id, CUENTAS)
@@ -59,11 +68,14 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
   const isTransfer = movimiento.es_transferencia === true
 
   const LeadingIcon = isTransfer ? CuentaIcon : CategoriaIcon
+  const leadingColor = isTransfer
+    ? resolveCatalogColor(movimiento.cuenta_id, CUENTAS)
+    : resolveCatalogColor(movimiento.categoria_id, CATEGORIAS)
 
   return (
     <div className={`movement-list-item ${isTransfer ? 'movement-list-item--transfer' : ''}`}>
       <span className="movement-list-item__icon-badge">
-        <LeadingIcon size={16} aria-hidden="true" />
+        <LeadingIcon size={16} aria-hidden="true" style={{ color: resolveIconColor(leadingColor) }} />
       </span>
 
       <div className="movement-list-item__main">

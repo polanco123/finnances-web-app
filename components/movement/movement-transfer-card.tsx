@@ -3,6 +3,7 @@
 import { ArrowRight } from 'lucide-react'
 import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import { formatFechaHora } from '@/components/movement/movement-format'
 import './movement-transfer-card.css'
 
@@ -47,12 +48,22 @@ function resolveCatalogIcono(
   return item?.icono ?? null
 }
 
+function resolveCatalogColor(
+  id: string,
+  catalog: { id: string; color?: string | null }[]
+): string | null {
+  const item = catalog.find((c) => c.id === id)
+  return item?.color ?? null
+}
+
 export default function MovementTransferCard({ origen, destino }: MovementTransferCardProps) {
   const amount = formatCurrency(origen.monto)
   const origenNombre = resolveCatalogName(origen.cuenta_id, CUENTAS)
   const destinoNombre = resolveCatalogName(destino.cuenta_id, CUENTAS)
   const OrigenIcon = resolveIcon(resolveCatalogIcono(origen.cuenta_id, CUENTAS), 'cuenta')
   const DestinoIcon = resolveIcon(resolveCatalogIcono(destino.cuenta_id, CUENTAS), 'cuenta')
+  const origenColor = resolveIconColor(resolveCatalogColor(origen.cuenta_id, CUENTAS))
+  const destinoColor = resolveIconColor(resolveCatalogColor(destino.cuenta_id, CUENTAS))
   const notas = origen.notas || destino.notas
 
   return (
@@ -64,10 +75,20 @@ export default function MovementTransferCard({ origen, destino }: MovementTransf
       <div className="movement-transfer-card__main">
         <div className="movement-transfer-card__title-row">
           <span className="movement-transfer-card__title">
-            <OrigenIcon size={14} className="movement-transfer-card__account-icon" aria-hidden="true" />
+            <OrigenIcon
+              size={14}
+              className="movement-transfer-card__account-icon"
+              aria-hidden="true"
+              style={{ color: origenColor }}
+            />
             {origenNombre}
             <ArrowRight className="movement-transfer-card__arrow" size={12} aria-hidden="true" />
-            <DestinoIcon size={14} className="movement-transfer-card__account-icon" aria-hidden="true" />
+            <DestinoIcon
+              size={14}
+              className="movement-transfer-card__account-icon"
+              aria-hidden="true"
+              style={{ color: destinoColor }}
+            />
             {destinoNombre}
           </span>
           <span className="movement-transfer-card__badge-text">Transferencia</span>

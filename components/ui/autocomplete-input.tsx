@@ -8,6 +8,7 @@ export interface AutocompleteOption {
   id: string
   nombre: string
   icono?: string | null
+  color?: string | null
 }
 
 export interface AutocompleteInputProps {
@@ -17,6 +18,7 @@ export interface AutocompleteInputProps {
   onChange: (id: string) => void
   placeholder?: string
   kind: 'cuenta' | 'categoria'
+  onCreateOption?: (nombre: string) => Promise<AutocompleteOption>
 }
 
 export function AutocompleteInput({
@@ -26,6 +28,7 @@ export function AutocompleteInput({
   onChange,
   placeholder,
   kind,
+  onCreateOption,
 }: AutocompleteInputProps) {
   const [pickerOpen, setPickerOpen] = useState(false)
 
@@ -53,6 +56,7 @@ export function AutocompleteInput({
             label={label}
             onSelect={onChange}
             onClose={() => setPickerOpen(false)}
+            onCreate={onCreateOption}
           />
         )}
       </div>

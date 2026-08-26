@@ -6,6 +6,7 @@ import {
   fetchRecentMovimientos,
   fetchTransferSiblings,
   updateCuentaIcono,
+  updateCuentaColor,
   type Cuenta,
   type Movimiento,
 } from '@/components/cuentas/cuentas-service'
@@ -48,6 +49,11 @@ function CuentasContent() {
 
   async function handleUpdateCuentaIcono(id: string, icono: string) {
     const updated = await updateCuentaIcono(id, icono)
+    setCuentas((prev) => (prev ? prev.map((c) => (c.id === id ? updated : c)) : prev))
+  }
+
+  async function handleUpdateCuentaColor(id: string, color: string | null) {
+    const updated = await updateCuentaColor(id, color)
     setCuentas((prev) => (prev ? prev.map((c) => (c.id === id ? updated : c)) : prev))
   }
 
@@ -220,6 +226,7 @@ function CuentasContent() {
                 cuenta={cuenta}
                 movements={movementsMap?.[cuenta.id] ?? []}
                 onUpdateIcono={handleUpdateCuentaIcono}
+                onUpdateColor={handleUpdateCuentaColor}
               />
             ))}
           </div>
@@ -236,6 +243,7 @@ function CuentasContent() {
                 cuenta={cuenta}
                 movements={movementsMap?.[cuenta.id] ?? []}
                 onUpdateIcono={handleUpdateCuentaIcono}
+                onUpdateColor={handleUpdateCuentaColor}
               />
             ))}
           </div>

@@ -24,6 +24,7 @@ export interface CategoriaConGasto {
   categoriaId: string
   nombre: string
   icono: string | null
+  color: string | null
   total: number
   count: number
   porcentaje: number
@@ -88,10 +89,12 @@ export async function fetchCategoriasConGasto(desde: string, hasta: string): Pro
     const categoria = CATEGORIAS.find((c) => c.id === categoriaId)
     const nombre = categoria?.nombre ?? 'Sin categoría'
     const icono = categoria?.icono ?? null
+    const color = categoria?.color ?? null
     return {
       categoriaId,
       nombre,
       icono,
+      color,
       total: bucket.total,
       count: bucket.count,
       porcentaje: sumaTotal > 0 ? Math.round((bucket.total / sumaTotal) * 100) : 0,
@@ -119,6 +122,31 @@ export async function updateCategoriaIcono(id: string, icono: string): Promise<C
   const { data, error } = await supabase
     .from('categoria')
     .update({ icono })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+/**
+ * Updates the `color` field for a single categoria — `null` resets it to the
+ * default gray.
+ *
+ * No `user_id` filter — see `updateCategoriaIcono`.
+ *
+ * @param id    The categoria UUID to update
+ * @param color A CSS color value, or `null` for the default gray
+ * @returns The updated categoria row
+ * @throws On Supabase error
+ */
+export async function updateCategoriaColor(id: string, color: string | null): Promise<Categoria> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('categoria')
+    .update({ color })
     .eq('id', id)
     .select()
     .single()

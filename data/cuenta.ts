@@ -13,6 +13,7 @@ export interface Cuenta {
   dia_corte: number | null
   dia_pago: number | null
   icono: string | null
+  color: string | null
 }
 
 export { CUENTAS, CUENTA_DEFAULT }

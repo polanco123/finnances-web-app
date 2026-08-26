@@ -13,6 +13,7 @@ import {
 import {
   fetchCategoriasConGasto,
   updateCategoriaIcono,
+  updateCategoriaColor,
   type CategoriaConGasto,
 } from '@/components/categorias/categorias-service'
 import CategoriasPeriodFilter, {
@@ -59,6 +60,13 @@ function CategoriasContent() {
     const updated = await updateCategoriaIcono(id, icono)
     setCategorias((prev) =>
       prev ? prev.map((c) => (c.categoriaId === id ? { ...c, icono: updated.icono } : c)) : prev,
+    )
+  }
+
+  async function handleUpdateCategoriaColor(id: string, color: string | null) {
+    const updated = await updateCategoriaColor(id, color)
+    setCategorias((prev) =>
+      prev ? prev.map((c) => (c.categoriaId === id ? { ...c, color: updated.color } : c)) : prev,
     )
   }
 
@@ -152,6 +160,7 @@ function CategoriasContent() {
               key={categoria.categoriaId}
               categoria={categoria}
               onUpdateIcono={handleUpdateCategoriaIcono}
+              onUpdateColor={handleUpdateCategoriaColor}
             />
           ))}
         </div>
