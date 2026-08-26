@@ -31,6 +31,7 @@ export default function CatalogPickerPopup({
   onClose,
 }: CatalogPickerPopupProps) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [shake, setShake] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -74,6 +75,20 @@ export default function CatalogPickerPopup({
           o.nombre.toLowerCase().includes(searchTerm.toLowerCase())
         )
 
+  function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== 'Enter') return
+    e.preventDefault()
+
+    if (filtered.length === 1) {
+      handleOptionClick(filtered[0].id)
+      return
+    }
+
+    // Zero or multiple matches — Enter can't unambiguously pick one; give a
+    // brief shake + red-flash cue instead of silently doing nothing.
+    setShake(true)
+  }
+
   const catalogLabel = kind === 'cuenta' ? 'cuentas' : 'categorías'
 
   return (
@@ -102,10 +117,12 @@ export default function CatalogPickerPopup({
         <input
           ref={searchInputRef}
           type="text"
-          className="catalog-picker__search"
+          className={`catalog-picker__search${shake ? ' catalog-picker__search--shake' : ''}`}
           placeholder="Buscar..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
+          onAnimationEnd={() => setShake(false)}
           autoComplete="off"
         />
 

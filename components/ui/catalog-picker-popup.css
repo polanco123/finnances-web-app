@@ -101,6 +101,19 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-color-primary) 15%, transparent);
 }
 
+.catalog-picker__search--shake {
+  animation: catalog-picker-search-shake 0.35s ease-in-out;
+  border-color: var(--theme-color-error);
+}
+
+@keyframes catalog-picker-search-shake {
+  0%, 100% { transform: translateX(0); border-color: var(--theme-color-error); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
 .catalog-picker__grid-wrapper {
   flex: 1;
   overflow-y: auto;

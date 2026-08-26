@@ -1,7 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { ChevronDown, Pencil } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChevronDown, MoreVertical, Pencil } from 'lucide-react'
 import type { Cuenta, Movimiento } from '@/components/cuentas/cuentas-service'
 import MovementListItem from '@/components/movement/movement-list-item'
 import MovementTransferCard from '@/components/movement/movement-transfer-card'
@@ -68,7 +68,20 @@ function semaphoreLevel(utilizacion: number): SemaphoreLevel {
 export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [editingIcono, setEditingIcono] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
   const Icon = resolveIcon(cuenta.icono, 'cuenta')
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [menuOpen])
   const sortedMovements = useMemo(
     () => [...movements].sort((a, b) => fechaHoraKey(b).localeCompare(fechaHoraKey(a))),
     [movements],
@@ -88,36 +101,69 @@ export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaC
 
   return (
     <div className="acct-card">
-      <button
-        type="button"
-        className="acct-row"
-        onClick={() => setExpanded((prev) => !prev)}
-        aria-expanded={expanded}
-      >
-        <span className="acct-row__main">
-          <span className="acct-row__name">
-            <Icon className="acct-row__icon" size={16} aria-hidden="true" />
-            {cuenta.nombre}
+      <div className="acct-row">
+        <button
+          type="button"
+          className="acct-row__toggle"
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+        >
+          <span className="acct-row__main">
+            <span className="acct-row__name">
+              <Icon className="acct-row__icon" size={16} aria-hidden="true" />
+              {cuenta.nombre}
+            </span>
+            <span className="acct-row__meta">
+              {lastMovement ? `Últ. mov. ${formatUltimoMovimiento(lastMovement.fecha)}` : 'Sin movimientos'}
+              {showSemaphore && (
+                <span className="acct-row__semaphore">
+                  <span className={`acct-row__semaphore-dot acct-row__semaphore-dot--${level}`} />
+                  {Math.round(utilizacion)}% del límite
+                </span>
+              )}
+            </span>
           </span>
-          <span className="acct-row__meta">
-            {lastMovement ? `Últ. mov. ${formatUltimoMovimiento(lastMovement.fecha)}` : 'Sin movimientos'}
-            {showSemaphore && (
-              <span className="acct-row__semaphore">
-                <span className={`acct-row__semaphore-dot acct-row__semaphore-dot--${level}`} />
-                {Math.round(utilizacion)}% del límite
-              </span>
-            )}
+          <span className="acct-row__right">
+            <span className="acct-row__balance">{formatCurrency(cuenta.saldo_calculado)}</span>
+            <ChevronDown
+              className={`acct-row__chevron ${expanded ? 'acct-row__chevron--expanded' : ''}`}
+              size={18}
+              aria-hidden="true"
+            />
           </span>
-        </span>
-        <span className="acct-row__right">
-          <span className="acct-row__balance">{formatCurrency(cuenta.saldo_calculado)}</span>
-          <ChevronDown
-            className={`acct-row__chevron ${expanded ? 'acct-row__chevron--expanded' : ''}`}
-            size={18}
-            aria-hidden="true"
-          />
-        </span>
-      </button>
+        </button>
+
+        <div className="acct-row__menu" ref={menuRef}>
+          <button
+            type="button"
+            className="acct-row__menu-btn"
+            aria-label="Más opciones"
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            <MoreVertical size={16} aria-hidden="true" />
+          </button>
+
+          {menuOpen && (
+            <div className="acct-row__menu-dropdown" role="menu">
+              <button
+                type="button"
+                role="menuitem"
+                className="acct-row__menu-item"
+                onClick={() => {
+                  setExpanded(true)
+                  setEditingIcono(true)
+                  setMenuOpen(false)
+                }}
+              >
+                <Pencil size={14} aria-hidden="true" />
+                Editar ícono
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       {showSemaphore && (
         <div className="acct-row__progress">
@@ -128,19 +174,8 @@ export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaC
         </div>
       )}
 
-      {expanded && (
+      <div className={`acct-card__detail-wrapper ${expanded ? 'acct-card__detail-wrapper--expanded' : ''}`}>
         <div className="acct-card__detail">
-          <div className="acct-card__actions">
-            <button
-              type="button"
-              className="acct-card__action-btn"
-              onClick={() => setEditingIcono((prev) => !prev)}
-            >
-              <Pencil size={14} aria-hidden="true" />
-              Editar ícono
-            </button>
-          </div>
-
           {editingIcono && (
             <div className="acct-card__icon-picker">
               <IconPicker
@@ -167,7 +202,7 @@ export default function CuentaCard({ cuenta, movements, onUpdateIcono }: CuentaC
             )
           )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -64,7 +64,11 @@ export function AppShell({ children }: AppShellProps) {
           isSidebarOpen={isSidebarOpen}
           onToggleSidebar={() => setIsSidebarOpen((v) => !v)}
         />
-        <main className="app-shell__content">{children}</main>
+        <main className="app-shell__content">
+          <div key={pathname} className="app-shell__page-transition">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )

@@ -1,30 +1,103 @@
 @import '@/lib/theme.css';
 
 .movement-list-item {
-  background: var(--theme-bg-surface);
-  border-radius: var(--theme-radius-md);
-  box-shadow: var(--theme-shadow-1);
-  padding: var(--theme-spacing-4);
-  margin-bottom: var(--theme-spacing-4);
-  transition: box-shadow var(--theme-transition-normal), transform var(--theme-transition-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-3);
+  background: none;
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  transition: background-color var(--theme-transition-normal);
+}
+
+.movement-list-item + .movement-list-item,
+.movement-list-item + .movement-transfer-card,
+.movement-transfer-card + .movement-list-item,
+.movement-transfer-card + .movement-transfer-card {
+  border-top: 1px solid var(--theme-border-default);
 }
 
 .movement-list-item:hover {
-  box-shadow: var(--theme-shadow-2);
-  transform: translateY(-1px);
+  background: var(--theme-bg-surface-variant);
 }
 
-.movement-list-item__header {
-  display: flex;
-  justify-content: space-between;
+.movement-list-item__icon-badge {
+  display: inline-flex;
   align-items: center;
-  margin-bottom: var(--theme-spacing-4);
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--theme-radius-full);
+  background: var(--theme-bg-surface-variant);
+  color: var(--theme-text-secondary);
+  flex-shrink: 0;
+}
+
+.movement-list-item--transfer .movement-list-item__icon-badge {
+  background: color-mix(in srgb, var(--theme-color-primary) 15%, transparent);
+  color: var(--theme-color-primary);
+}
+
+.movement-list-item__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.movement-list-item__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+}
+
+.movement-list-item__title {
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.movement-list-item__subtitle {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-1);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  min-width: 0;
+}
+
+.movement-list-item__subtitle-item {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.movement-list-item__subtitle-item + .movement-list-item__subtitle-item::before {
+  content: '·';
+  margin-right: var(--theme-spacing-1);
+}
+
+.movement-list-item__notas {
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.movement-list-item__notas::before {
+  content: '·';
+  margin-right: var(--theme-spacing-1);
+  font-style: normal;
 }
 
 .movement-list-item__monto {
-  font-size: var(--theme-font-size-xl);
-  font-weight: var(--theme-font-weight-medium);
-  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-bold);
+  letter-spacing: -0.02em;
 }
 
 .movement-list-item__monto.positive {
@@ -33,60 +106,6 @@
 
 .movement-list-item__monto.negative {
   color: var(--theme-color-error);
-}
-
-.movement-list-item__fecha {
-  font-size: var(--theme-font-size-sm);
-  color: var(--theme-text-secondary);
-}
-
-.movement-list-item__hora {
-  margin-left: var(--theme-spacing-1);
-}
-
-.movement-list-item__details {
-  display: flex;
-  gap: var(--theme-spacing-6);
-  margin-bottom: var(--theme-spacing-2);
-}
-
-.movement-list-item__detail {
-  display: flex;
-  flex-direction: column;
-}
-
-.movement-list-item__label {
-  font-size: var(--theme-font-size-xs);
-  color: var(--theme-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--theme-spacing-1);
-}
-
-.movement-list-item__value {
-  display: flex;
-  align-items: center;
-  gap: var(--theme-spacing-1);
-  font-size: var(--theme-font-size-sm);
-  color: var(--theme-text-primary);
-}
-
-.movement-list-item__icon {
-  flex-shrink: 0;
-  color: var(--theme-text-secondary);
-}
-
-.movement-list-item__notas {
-  padding-top: var(--theme-spacing-2);
-  border-top: 1px solid var(--theme-border-default);
-}
-
-.movement-list-item--transfer {
-  border-left: 3px solid var(--theme-color-primary);
-}
-
-.movement-list-item__badge {
-  margin-top: var(--theme-spacing-2);
 }
 
 .movement-list-item__badge-text {
@@ -99,50 +118,37 @@
   border-radius: var(--theme-radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-}
-
-.movement-list-item__value--transfer {
-  color: var(--theme-color-primary);
-  font-weight: var(--theme-font-weight-medium);
+  flex-shrink: 0;
 }
 
 @media (max-width: 767px) {
-  .movement-list-item__header {
-    flex-direction: column;
+  .movement-list-item {
     align-items: flex-start;
-    gap: var(--theme-spacing-2);
   }
 
-  .movement-list-item__details {
-    flex-direction: column;
-    gap: var(--theme-spacing-2);
+  .movement-list-item__title-row {
+    flex-wrap: wrap;
   }
 }
 
-/* Dark Mode - Glassmorphic */
-.dark .movement-list-item {
-  background: var(--theme-glass-bg);
-  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
-  backdrop-filter: blur(var(--theme-glass-blur));
-  border: 1px solid var(--theme-glass-border);
-  box-shadow: var(--theme-glass-shadow);
+/* Dark mode: flat row, no elevation — hover feedback stays light-mode only,
+   matching .acct-row__toggle's convention. */
+.dark .movement-list-item + .movement-list-item,
+.dark .movement-list-item + .movement-transfer-card,
+.dark .movement-transfer-card + .movement-list-item,
+.dark .movement-transfer-card + .movement-transfer-card {
+  border-top-color: var(--theme-glass-border);
 }
 
 .dark .movement-list-item:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: none;
 }
 
-.dark .movement-list-item--transfer {
-  border-left: 3px solid var(--theme-color-primary);
-  background: rgba(66, 165, 245, 0.08);
+.dark .movement-list-item--transfer .movement-list-item__icon-badge {
+  background: rgba(66, 165, 245, 0.15);
 }
 
 .dark .movement-list-item__badge-text {
   color: var(--theme-color-primary);
   background: rgba(66, 165, 245, 0.15);
-}
-
-.dark .movement-list-item__notas {
-  border-top-color: var(--theme-glass-border);
 }

@@ -6,9 +6,10 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   padding: var(--theme-spacing-4);
+  padding-top: 10vh;
   z-index: 1000;
   animation: deuda-modal-fade-in var(--theme-transition-fast) ease-out;
 }

@@ -20,6 +20,7 @@
 .movimientos-list {
   display: flex;
   flex-direction: column;
+  padding: var(--theme-spacing-4) 0;
 }
 
 .movimientos-list__sentinel {

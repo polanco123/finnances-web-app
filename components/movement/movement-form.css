@@ -3,8 +3,8 @@
 /* Form Container */
 .movement-form {
   background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-lg);
-  box-shadow: var(--theme-shadow-2);
   padding: var(--theme-spacing-4);
   margin-bottom: var(--theme-spacing-4);
 }
@@ -274,13 +274,10 @@
   }
 }
 
-/* Dark Mode - Glassmorphic */
+/* Dark mode: flat surface, no glass/elevation */
 .dark .movement-form {
-  background: var(--theme-glass-bg);
-  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
-  backdrop-filter: blur(var(--theme-glass-blur));
-  border: 1px solid var(--theme-glass-border);
-  box-shadow: var(--theme-glass-shadow);
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-glass-border);
 }
 
 .dark .movement-form__tabs {

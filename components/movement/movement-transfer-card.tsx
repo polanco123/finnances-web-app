@@ -3,6 +3,7 @@
 import { ArrowRight } from 'lucide-react'
 import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { formatFechaHora } from '@/components/movement/movement-format'
 import './movement-transfer-card.css'
 
 interface MovementTransferCardProps {
@@ -56,41 +57,34 @@ export default function MovementTransferCard({ origen, destino }: MovementTransf
 
   return (
     <div className="movement-transfer-card">
-      <div className="movement-transfer-card__header">
-        <span className="movement-transfer-card__monto">{amount}</span>
-        <span className="movement-transfer-card__fecha">
-          {origen.fecha}
-          {origen.hora && <span className="movement-transfer-card__hora"> {origen.hora}</span>}
-        </span>
-      </div>
+      <span className="movement-transfer-card__icon-badge">
+        <ArrowRight size={16} aria-hidden="true" />
+      </span>
 
-      <div className="movement-transfer-card__details">
-        <div className="movement-transfer-card__detail">
-          <span className="movement-transfer-card__label">Transferencia</span>
-          <div className="movement-transfer-card__transfer-path">
-            <span className="movement-transfer-card__account-name">
-              <OrigenIcon size={14} className="movement-transfer-card__account-icon" />
-              {origenNombre}
+      <div className="movement-transfer-card__main">
+        <div className="movement-transfer-card__title-row">
+          <span className="movement-transfer-card__title">
+            <OrigenIcon size={14} className="movement-transfer-card__account-icon" aria-hidden="true" />
+            {origenNombre}
+            <ArrowRight className="movement-transfer-card__arrow" size={12} aria-hidden="true" />
+            <DestinoIcon size={14} className="movement-transfer-card__account-icon" aria-hidden="true" />
+            {destinoNombre}
+          </span>
+          <span className="movement-transfer-card__badge-text">Transferencia</span>
+        </div>
+        <div className="movement-transfer-card__subtitle">
+          <span className="movement-transfer-card__subtitle-item">
+            {formatFechaHora(origen.fecha, origen.hora)}
+          </span>
+          {notas && (
+            <span className="movement-transfer-card__notas" title={notas}>
+              {notas}
             </span>
-            <ArrowRight className="movement-transfer-card__arrow" size={16} />
-            <span className="movement-transfer-card__account-name">
-              <DestinoIcon size={14} className="movement-transfer-card__account-icon" />
-              {destinoNombre}
-            </span>
-          </div>
+          )}
         </div>
       </div>
 
-      <div className="movement-transfer-card__badge">
-        <span className="movement-transfer-card__badge-text">Transferencia</span>
-      </div>
-
-      {notas && (
-        <div className="movement-transfer-card__notas">
-          <span className="movement-transfer-card__label">Notas</span>
-          <span className="movement-transfer-card__value">{notas}</span>
-        </div>
-      )}
+      <span className="movement-transfer-card__monto">{amount}</span>
     </div>
   )
 }

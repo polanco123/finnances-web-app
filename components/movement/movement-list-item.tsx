@@ -3,6 +3,7 @@
 import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { CATEGORIAS } from '@/lib/catalogs/categorias'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
+import { formatFechaHora } from '@/components/movement/movement-format'
 import './movement-list-item.css'
 
 interface MovimientoListItemProps {
@@ -57,59 +58,37 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
   const CategoriaIcon = resolveIcon(resolveCatalogIcono(movimiento.categoria_id, CATEGORIAS), 'categoria')
   const isTransfer = movimiento.es_transferencia === true
 
+  const LeadingIcon = isTransfer ? CuentaIcon : CategoriaIcon
+
   return (
     <div className={`movement-list-item ${isTransfer ? 'movement-list-item--transfer' : ''}`}>
-      <div className="movement-list-item__header">
-        <span className={`movement-list-item__monto ${isPositive ? 'positive' : 'negative'}`}>
-          {value}
-        </span>
-        <span className="movement-list-item__fecha">
-          {movimiento.fecha}
-          {movimiento.hora && <span className="movement-list-item__hora"> {movimiento.hora}</span>}
-        </span>
-      </div>
+      <span className="movement-list-item__icon-badge">
+        <LeadingIcon size={16} aria-hidden="true" />
+      </span>
 
-      <div className="movement-list-item__details">
-        {isTransfer ? (
-          <div className="movement-list-item__detail">
-            <span className="movement-list-item__label">Transferencia</span>
-            <span className="movement-list-item__value movement-list-item__value--transfer">
-              <CuentaIcon size={14} className="movement-list-item__icon" />
-              {cuentaNombre}
+      <div className="movement-list-item__main">
+        <div className="movement-list-item__title-row">
+          <span className="movement-list-item__title">
+            {isTransfer ? cuentaNombre : categoriaNombre}
+          </span>
+          {isTransfer && <span className="movement-list-item__badge-text">Transferencia</span>}
+        </div>
+        <div className="movement-list-item__subtitle">
+          {!isTransfer && <span className="movement-list-item__subtitle-item">{cuentaNombre}</span>}
+          <span className="movement-list-item__subtitle-item">
+            {formatFechaHora(movimiento.fecha, movimiento.hora)}
+          </span>
+          {movimiento.notas && (
+            <span className="movement-list-item__notas" title={movimiento.notas}>
+              {movimiento.notas}
             </span>
-          </div>
-        ) : (
-          <>
-            <div className="movement-list-item__detail">
-              <span className="movement-list-item__label">Categoría</span>
-              <span className="movement-list-item__value">
-                <CategoriaIcon size={14} className="movement-list-item__icon" />
-                {categoriaNombre}
-              </span>
-            </div>
-            <div className="movement-list-item__detail">
-              <span className="movement-list-item__label">Cuenta</span>
-              <span className="movement-list-item__value">
-                <CuentaIcon size={14} className="movement-list-item__icon" />
-                {cuentaNombre}
-              </span>
-            </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
 
-      {isTransfer && (
-        <div className="movement-list-item__badge">
-          <span className="movement-list-item__badge-text">Transferencia</span>
-        </div>
-      )}
-
-      {movimiento.notas && (
-        <div className="movement-list-item__notas">
-          <span className="movement-list-item__label">Notas</span>
-          <span className="movement-list-item__value">{movimiento.notas}</span>
-        </div>
-      )}
+      <span className={`movement-list-item__monto ${isPositive ? 'positive' : 'negative'}`}>
+        {value}
+      </span>
     </div>
   )
 }

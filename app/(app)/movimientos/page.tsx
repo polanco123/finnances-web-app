@@ -132,27 +132,31 @@ function MovimientosContent() {
         {loadingInitial ? (
           <div className="movimientos-page__loading">Cargando movimientos...</div>
         ) : (
-          <div className="movimientos-list">
-            {displayItems.map((item: DisplayItem) =>
-              item.kind === 'merged-transfer' ? (
-                <MovementTransferCard
-                  key={`merged-${item.transferenciaId}`}
-                  origen={item.origen}
-                  destino={item.destino}
-                />
-              ) : (
-                <MovementListItem key={item.data.id} movimiento={item.data} />
-              ),
-            )}
-            {hasMore && (
-              <div ref={sentinelCallbackRef} className="movimientos-list__sentinel">
-                {loadingMore && (
-                  <span className="movimientos-list__loading-more">Cargando más...</span>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+          <>
+            <div className="movimientos-list">
+              <h2>Últimos movimientos</h2>
+              {displayItems.map((item: DisplayItem) =>
+                item.kind === 'merged-transfer' ? (
+                  <MovementTransferCard
+                    key={`merged-${item.transferenciaId}`}
+                    origen={item.origen}
+                    destino={item.destino}
+                  />
+                ) : (
+                  <MovementListItem key={item.data.id} movimiento={item.data} />
+                ),
+              )}
+              {hasMore && (
+                <div ref={sentinelCallbackRef} className="movimientos-list__sentinel">
+                  {loadingMore && (
+                    <span className="movimientos-list__loading-more">Cargando más...</span>
+                  )}
+                </div>
+              )}
+            </div></>
+        )
+
+        }
       </div>
     </div>
   )
