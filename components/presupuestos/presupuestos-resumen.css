@@ -1,0 +1,28 @@
+@import '@/lib/theme.css';
+
+.presupuestos-resumen {
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-3);
+}
+
+.presupuestos-resumen__title {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+}
+
+/* Dark Mode */
+.dark .presupuestos-resumen {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  box-shadow: var(--theme-glass-shadow);
+}
