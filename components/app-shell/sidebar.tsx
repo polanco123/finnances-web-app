@@ -12,6 +12,7 @@ import {
   Settings,
   MinusCircle,
   Target,
+  PiggyBank,
 } from 'lucide-react'
 import './sidebar.css'
 
@@ -30,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/deudas', label: 'Deudas', icon: MinusCircle },
   { href: '/metas', label: 'Metas', icon: Target },
   { href: '/categorias', label: 'Categorías', icon: Tags },
+  { href: '/presupuestos', label: 'Presupuestos', icon: PiggyBank },
   { href: '/reportes', label: 'Reportes', icon: BarChart3 },
   { href: '/configuracion', label: 'Configuración', icon: Settings, comingSoon: true },
 ]

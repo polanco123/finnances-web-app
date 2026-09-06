@@ -1,0 +1,253 @@
+@import '@/lib/theme.css';
+
+.presupuesto-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.presupuesto-card + .presupuesto-card {
+  border-top: 1px solid var(--theme-border-default);
+}
+
+.presupuesto-card__row {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-3);
+  width: 100%;
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: background-color var(--theme-transition-fast);
+}
+
+.presupuesto-card__row:hover {
+  background: var(--theme-bg-surface-variant);
+}
+
+.presupuesto-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.presupuesto-card__name {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.presupuesto-card__icon {
+  color: var(--theme-text-secondary);
+  flex-shrink: 0;
+}
+
+.presupuesto-card__chevron {
+  color: var(--theme-text-secondary);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.presupuesto-card__chevron--expanded {
+  transform: rotate(180deg);
+}
+
+.presupuesto-card__detail {
+  background: var(--theme-bg-surface-variant);
+  border-top: 1px solid var(--theme-border-default);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4) var(--theme-spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-3);
+}
+
+.presupuesto-card__actions {
+  display: flex;
+  gap: var(--theme-spacing-2);
+}
+
+.presupuesto-card__action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-1);
+  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-sm);
+  background: var(--theme-bg-surface);
+  color: var(--theme-text-primary);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast);
+}
+
+.presupuesto-card__action-btn:hover {
+  background: var(--theme-bg-surface-variant);
+}
+
+.presupuesto-card__action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.presupuesto-card__action-btn--danger {
+  color: var(--theme-color-error);
+  border-color: var(--theme-color-error);
+}
+
+.presupuesto-card__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  margin: 0;
+}
+
+.presupuesto-card__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-3);
+  padding: var(--theme-spacing-3);
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+}
+
+.presupuesto-card__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-1);
+}
+
+.presupuesto-card__label {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.presupuesto-card__input {
+  width: 100%;
+  padding: var(--theme-spacing-2) var(--theme-spacing-2);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface);
+  border: none;
+  border-bottom: 1px solid var(--theme-border-default);
+  border-radius: 0;
+  outline: none;
+  transition: border-color var(--theme-transition-fast);
+  box-sizing: border-box;
+}
+
+.presupuesto-card__input:focus {
+  border-bottom-color: var(--theme-border-focus);
+}
+
+.presupuesto-card__input--error {
+  border-bottom-color: var(--theme-border-error);
+}
+
+.presupuesto-card__form-actions {
+  display: flex;
+  gap: var(--theme-spacing-2);
+}
+
+.presupuesto-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--theme-transition-fast),
+              opacity var(--theme-transition-fast);
+}
+
+.presupuesto-card__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.presupuesto-card__btn--save {
+  color: var(--theme-text-on-primary);
+  background: var(--theme-color-primary);
+}
+
+.presupuesto-card__btn--save:hover:not(:disabled) {
+  background: var(--theme-color-primary-dark);
+}
+
+.presupuesto-card__btn--cancel {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
+}
+
+.presupuesto-card__btn--cancel:hover:not(:disabled) {
+  background: var(--theme-border-default);
+}
+
+/* Dark Mode */
+.dark .presupuesto-card__row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .presupuesto-card__detail {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dark .presupuesto-card__action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--theme-border-default);
+}
+
+.dark .presupuesto-card__action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .presupuesto-card__edit-form {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .presupuesto-card__input {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: var(--theme-border-default);
+}
+
+.dark .presupuesto-card__input:focus {
+  border-bottom-color: var(--theme-border-focus);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .presupuesto-card__btn--cancel {
+  color: var(--theme-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .presupuesto-card__btn--cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
