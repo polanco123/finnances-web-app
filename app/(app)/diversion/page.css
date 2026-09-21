@@ -106,6 +106,8 @@
 }
 
 .diversion-page__list {
+  display: flex;
+  flex-direction: column;
   margin-top: var(--theme-spacing-2);
 }
 
@@ -159,4 +161,35 @@
 .dark .diversion-empty-state__icon {
   color: var(--theme-text-secondary);
   opacity: 0.4;
+}
+
+.diversion-page__new-expense-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--theme-spacing-2);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  margin-top: var(--theme-spacing-4);
+  background: var(--theme-color-primary);
+  color: var(--theme-text-on-primary);
+  border-radius: var(--theme-radius-lg);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-medium);
+  text-decoration: none;
+  transition: opacity var(--theme-transition-fast), transform var(--theme-transition-fast);
+}
+
+.diversion-page__new-expense-link:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.diversion-page__new-expense-link:active {
+  transform: translateY(0);
+}
+
+.dark .diversion-page__new-expense-link {
+  background: var(--theme-color-primary);
+  color: var(--theme-text-on-primary);
 }

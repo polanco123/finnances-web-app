@@ -25,6 +25,7 @@ const VALID_TIPOS = ['gasto', 'ingreso', 'transferencia']
 function MovimientosContent() {
   const searchParams = useSearchParams()
   const tipoParam = searchParams.get('tipo')
+  const categoriaParam = searchParams.get('categoria')
   const initialTipoFromUrl = VALID_TIPOS.includes(tipoParam ?? '')
     ? (tipoParam as 'gasto' | 'ingreso' | 'transferencia')
     : undefined
@@ -129,7 +130,7 @@ function MovimientosContent() {
           initialTipo={voicePrefill?.tipo ?? initialTipoFromUrl}
           initialMonto={voicePrefill?.cantidad != null ? String(voicePrefill.cantidad) : undefined}
           initialCuentaId={voicePrefill?.cuentaId ?? undefined}
-          initialCategoriaId={voicePrefill?.categoriaId ?? undefined}
+          initialCategoriaId={voicePrefill?.categoriaId ?? categoriaParam ?? undefined}
           initialCuentaOrigenId={voicePrefill?.cuentaOrigenId ?? undefined}
           initialCuentaDestinoId={voicePrefill?.cuentaDestinoId ?? undefined}
           initialNotas={voicePrefill?.notas ?? undefined}

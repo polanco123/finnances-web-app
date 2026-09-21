@@ -21,8 +21,9 @@ import DiversionEmptyState from '@/components/diversion/diversion-empty-state'
 import DiversionProgress from '@/components/diversion/diversion-progress'
 import DiversionDailyAllowance from '@/components/diversion/diversion-daily-allowance'
 import DiversionBudgetEdit from '@/components/diversion/diversion-budget-edit'
-import DiversionForm from '@/components/diversion/diversion-form'
-import DiversionListItem from '@/components/diversion/diversion-list-item'
+import Link from 'next/link'
+import { Plus } from 'lucide-react'
+import MovementListItem from '@/components/movement/movement-list-item'
 import DiversionMissingBudgetAlert from '@/components/diversion/diversion-missing-budget-alert'
 import './page.css'
 
@@ -213,7 +214,7 @@ function DiversionContent() {
               </p>
             ) : (
               movements.map((movimiento, index) => (
-                <DiversionListItem key={index} movimiento={movimiento} />
+                <MovementListItem key={index} movimiento={movimiento} leadWithCuenta />
               ))
             )}
           </div>
@@ -242,7 +243,12 @@ function DiversionContent() {
           />
         )}
 
-        {isCurrentWeek && <DiversionForm onMovimientoCreado={refetchMovements} />}
+        {isCurrentWeek && (
+          <Link href={`/movimientos?categoria=${encodeURIComponent('af6b676c-04db-4fda-b9f7-349123d75e1a')}&tipo=gasto`} className="diversion-page__new-expense-link">
+            <Plus size={18} />
+            Registrar gasto de diversión
+          </Link>
+        )}
 
         <div className="diversion-page__list">
           {movements.length === 0 ? (
@@ -251,7 +257,7 @@ function DiversionContent() {
             </p>
           ) : (
             movements.map((movimiento, index) => (
-              <DiversionListItem key={index} movimiento={movimiento} />
+              <MovementListItem key={index} movimiento={movimiento} leadWithCuenta />
             ))
           )}
         </div>

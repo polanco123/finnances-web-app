@@ -19,6 +19,12 @@ interface MovimientoListItemProps {
     es_transferencia?: boolean | null
     transferencia_id?: string | null
   }
+  /**
+   * Leads the row with the cuenta instead of the categoria. For lists that are
+   * already scoped to a single categoria (e.g. `/diversion`), where repeating
+   * the categoria name on every row carries no information.
+   */
+  leadWithCuenta?: boolean
 }
 
 function formatCurrency(amount: number): { value: string; isPositive: boolean } {
@@ -59,7 +65,10 @@ function resolveCatalogColor(
   return item?.color ?? null
 }
 
-export default function MovementListItem({ movimiento }: MovimientoListItemProps) {
+export default function MovementListItem({
+  movimiento,
+  leadWithCuenta = false,
+}: MovimientoListItemProps) {
   const { value, isPositive } = formatCurrency(movimiento.monto)
   const cuentaNombre = resolveCatalogName(movimiento.cuenta_id, CUENTAS)
   const categoriaNombre = resolveCatalogName(movimiento.categoria_id, CATEGORIAS)
@@ -67,8 +76,12 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
   const CategoriaIcon = resolveIcon(resolveCatalogIcono(movimiento.categoria_id, CATEGORIAS), 'categoria')
   const isTransfer = movimiento.es_transferencia === true
 
-  const LeadingIcon = isTransfer ? CuentaIcon : CategoriaIcon
-  const leadingColor = isTransfer
+  // Transferencias have no categoria of their own, so they lead with the cuenta
+  // for the same reason a categoria-scoped list does.
+  const cuentaLeads = isTransfer || leadWithCuenta
+
+  const LeadingIcon = cuentaLeads ? CuentaIcon : CategoriaIcon
+  const leadingColor = cuentaLeads
     ? resolveCatalogColor(movimiento.cuenta_id, CUENTAS)
     : resolveCatalogColor(movimiento.categoria_id, CATEGORIAS)
 
@@ -81,12 +94,12 @@ export default function MovementListItem({ movimiento }: MovimientoListItemProps
       <div className="movement-list-item__main">
         <div className="movement-list-item__title-row">
           <span className="movement-list-item__title">
-            {isTransfer ? cuentaNombre : categoriaNombre}
+            {cuentaLeads ? cuentaNombre : categoriaNombre}
           </span>
           {isTransfer && <span className="movement-list-item__badge-text">Transferencia</span>}
         </div>
         <div className="movement-list-item__subtitle">
-          {!isTransfer && <span className="movement-list-item__subtitle-item">{cuentaNombre}</span>}
+          {!cuentaLeads && <span className="movement-list-item__subtitle-item">{cuentaNombre}</span>}
           <span className="movement-list-item__subtitle-item">
             {formatFechaHora(movimiento.fecha, movimiento.hora)}
           </span>
