@@ -1,4 +1,4 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .presupuesto-progress {
   display: flex;
@@ -14,17 +14,17 @@
 }
 
 .presupuesto-progress__label {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-primary);
 }
 
 .presupuesto-progress__pct {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-accent);
+  color: var(--theme-color-primary);
 }
 
 .presupuesto-progress__label--excedido {
@@ -32,17 +32,21 @@
 }
 
 .presupuesto-progress__track {
-  height: 8px;
+  height: 6px;
   background: var(--theme-bg-surface-variant);
-  border-radius: 4px;
+  border-radius: var(--theme-radius-xs);
   overflow: hidden;
+}
+
+.dark .presupuesto-progress__track {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .presupuesto-progress__fill {
   height: 100%;
-  border-radius: 4px;
-  background: var(--theme-color-accent);
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: var(--theme-radius-xs);
+  background: var(--theme-color-primary);
+  transition: width var(--theme-transition-slow) cubic-bezier(0.22, 1, 0.36, 1);
   min-width: 0;
 }
 
@@ -52,13 +56,8 @@
 
 .presupuesto-progress__excedente {
   align-self: flex-start;
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-color-error);
-}
-
-/* Dark Mode */
-.dark .presupuesto-progress__track {
-  background: rgba(255, 255, 255, 0.08);
 }

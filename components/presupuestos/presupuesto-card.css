@@ -1,4 +1,4 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .presupuesto-card {
   display: flex;
@@ -7,6 +7,10 @@
 
 .presupuesto-card + .presupuesto-card {
   border-top: 1px solid var(--theme-border-default);
+}
+
+.dark .presupuesto-card + .presupuesto-card {
+  border-top-color: var(--theme-glass-border);
 }
 
 .presupuesto-card__row {
@@ -40,7 +44,7 @@
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-2);
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-sm);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-primary);
@@ -68,10 +72,15 @@
 .presupuesto-card__detail {
   background: var(--theme-bg-surface-variant);
   border-top: 1px solid var(--theme-border-default);
-  padding: var(--theme-spacing-3) var(--theme-spacing-4) var(--theme-spacing-4);
+  padding: var(--theme-spacing-4);
   display: flex;
   flex-direction: column;
   gap: var(--theme-spacing-3);
+}
+
+.dark .presupuesto-card__detail {
+  background: rgba(255, 255, 255, 0.03);
+  border-top-color: var(--theme-glass-border);
 }
 
 .presupuesto-card__actions {
@@ -83,20 +92,23 @@
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-1);
-  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  padding: var(--theme-spacing-2) var(--theme-spacing-3);
   border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-sm);
   background: var(--theme-bg-surface);
   color: var(--theme-text-primary);
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
-  transition: background-color var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
 }
 
 .presupuesto-card__action-btn:hover {
   background: var(--theme-bg-surface-variant);
+  border-color: var(--theme-text-primary);
 }
 
 .presupuesto-card__action-btn:disabled {
@@ -109,8 +121,21 @@
   border-color: var(--theme-color-error);
 }
 
+.presupuesto-card__action-btn--danger:hover {
+  background: var(--theme-color-error-dim);
+}
+
+.dark .presupuesto-card__action-btn {
+  background: transparent;
+  border-color: var(--theme-glass-border);
+}
+
+.dark .presupuesto-card__action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .presupuesto-card__error {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   color: var(--theme-color-error);
   margin: 0;
@@ -120,21 +145,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--theme-spacing-3);
-  padding: var(--theme-spacing-3);
+  padding: var(--theme-spacing-4);
   background: var(--theme-bg-surface);
   border-radius: var(--theme-radius-lg);
+}
+
+.dark .presupuesto-card__edit-form {
+  background: transparent;
 }
 
 .presupuesto-card__field {
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-1);
+  gap: var(--theme-spacing-2);
 }
 
 .presupuesto-card__label {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -142,17 +171,17 @@
 
 .presupuesto-card__input {
   width: 100%;
-  padding: var(--theme-spacing-2) var(--theme-spacing-2);
-  font-family: var(--theme-font-family);
+  padding: var(--theme-spacing-2);
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: var(--theme-font-size-lg);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-primary);
   background: var(--theme-bg-surface);
   border: none;
-  border-bottom: 1px solid var(--theme-border-default);
+  border-bottom: 2px solid var(--theme-border-default);
   border-radius: 0;
   outline: none;
-  transition: border-color var(--theme-transition-fast);
+  transition: border-color var(--theme-transition-normal);
   box-sizing: border-box;
 }
 
@@ -161,7 +190,17 @@
 }
 
 .presupuesto-card__input--error {
-  border-bottom-color: var(--theme-border-error);
+  border-bottom-color: var(--theme-color-error);
+}
+
+.dark .presupuesto-card__input {
+  color: var(--theme-text-primary);
+  background: transparent;
+  border-bottom-color: var(--theme-glass-border);
+}
+
+.dark .presupuesto-card__input:focus {
+  border-bottom-color: var(--theme-border-focus);
 }
 
 .presupuesto-card__form-actions {
@@ -174,17 +213,16 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: var(--theme-spacing-2) var(--theme-spacing-4);
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
+  padding: var(--theme-spacing-2) var(--theme-spacing-3);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   border: none;
   border-radius: var(--theme-radius-sm);
   cursor: pointer;
-  transition: background-color var(--theme-transition-fast),
-              opacity var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
 }
 
 .presupuesto-card__btn:disabled {
@@ -193,21 +231,24 @@
 }
 
 .presupuesto-card__btn--save {
-  color: var(--theme-text-on-primary);
+  color: #ffffff;
   background: var(--theme-color-primary);
 }
 
 .presupuesto-card__btn--save:hover:not(:disabled) {
   background: var(--theme-color-primary-dark);
+  transform: translateY(-2px);
 }
 
 .presupuesto-card__btn--cancel {
   color: var(--theme-text-primary);
   background: var(--theme-bg-surface-variant);
+  border: 1px solid var(--theme-border-default);
 }
 
 .presupuesto-card__btn--cancel:hover:not(:disabled) {
-  background: var(--theme-border-default);
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-text-primary);
 }
 
 /* Dark Mode */
@@ -215,39 +256,12 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
-.dark .presupuesto-card__detail {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.dark .presupuesto-card__action-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--theme-border-default);
-}
-
-.dark .presupuesto-card__action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dark .presupuesto-card__edit-form {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.dark .presupuesto-card__input {
-  color: var(--theme-text-primary);
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom-color: var(--theme-border-default);
-}
-
-.dark .presupuesto-card__input:focus {
-  border-bottom-color: var(--theme-border-focus);
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .dark .presupuesto-card__btn--cancel {
   color: var(--theme-text-primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border-color: var(--theme-glass-border);
 }
 
 .dark .presupuesto-card__btn--cancel:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
 }

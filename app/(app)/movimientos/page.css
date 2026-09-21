@@ -1,26 +1,70 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .movimientos-page {
-  padding: var(--theme-spacing-6) var(--theme-spacing-4);
+  background: var(--theme-bg-background);
+  color: var(--theme-text-primary);
+  min-height: 100vh;
+  font-family: var(--font-inter), sans-serif;
+  padding: var(--theme-spacing-6) var(--theme-spacing-4) var(--theme-spacing-8);
 }
 
 .movimientos-page__container {
-  max-width: 640px;
+  max-width: 720px;
   margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-5);
+}
+
+.movimientos-page__loading,
+.movimientos-page__error {
+  text-align: center;
+  padding: var(--theme-spacing-8);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-md);
+  border-radius: var(--theme-radius-lg);
 }
 
 .movimientos-page__loading {
-  text-align: center;
-  padding: var(--theme-spacing-8);
   color: var(--theme-text-secondary);
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-md);
+}
+
+.movimientos-page__error {
+  background: var(--theme-color-error-dim);
+  border: 1px solid var(--theme-color-error);
+  color: var(--theme-color-error);
 }
 
 .movimientos-list {
   display: flex;
   flex-direction: column;
-  padding: var(--theme-spacing-4) 0;
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-md);
+  overflow: hidden;
+}
+
+.dark .movimientos-list {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.movimientos-list h2 {
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-text-secondary);
+  margin: 0;
+  padding: var(--theme-spacing-4);
+  border-bottom: 1px solid var(--theme-border-default);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.dark .movimientos-list h2 {
+  border-bottom-color: var(--theme-glass-border);
 }
 
 .movimientos-list__sentinel {
@@ -31,7 +75,7 @@
   text-align: center;
   padding: var(--theme-spacing-4);
   color: var(--theme-text-secondary);
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-md);
 }
 

@@ -1,44 +1,39 @@
 :root {
-  /* Colors - Primary */
+  /* Fonts */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Colors - Semantic (aligned with /cuentas design system) */
+  --theme-color-success: #1f9d6c;
+  --theme-color-success-dim: #d7f0e4;
+  --theme-color-error: #c9433e;
+  --theme-color-error-dim: #fbdede;
+  --theme-color-warning: #b5790f;
+  --theme-color-warning-dim: #f6e6c8;
+
+  /* Colors - Primary (for transfers and interactive) */
   --theme-color-primary: #1976d2;
   --theme-color-primary-dark: #1565c0;
   --theme-color-primary-light: #42a5f5;
 
-  /* Colors - Secondary */
-  --theme-color-secondary: #9c27b0;
-  --theme-color-secondary-dark: #7b1fa2;
-  --theme-color-secondary-light: #ba68c8;
-
-  /* Colors - Accent */
-  --theme-color-accent: #ff6f00;
-  --theme-color-accent-dark: #e65100;
-  --theme-color-accent-light: #ffa726;
-
-  /* Colors - Semantic */
-  --theme-color-success: #2e7d32;
-  --theme-color-error: #c62828;
-  --theme-color-warning: #f57f17;
-  --theme-color-info: #0288d1;
-
-  /* Text Colors */
-  --theme-text-primary: #212121;
-  --theme-text-secondary: #757575;
-  --theme-text-disabled: #9e9e9e;
-  --theme-text-hint: #bdbdbd;
+  /* Text Colors (Light mode) */
+  --theme-text-primary: #12151c;
+  --theme-text-secondary: #5b6274;
+  --theme-text-disabled: #9aa0b0;
+  --theme-text-hint: #9aa0b0;
   --theme-text-on-primary: #ffffff;
-  --theme-text-on-secondary: #ffffff;
 
-  /* Background Colors */
-  --theme-bg-background: #fafafa;
+  /* Background Colors (Light mode) */
+  --theme-bg-background: #f5f6f8;
   --theme-bg-surface: #ffffff;
-  --theme-bg-surface-variant: #f5f5f5;
+  --theme-bg-surface-variant: #eceef2;
 
-  /* Border Colors */
-  --theme-border-default: #e0e0e0;
-  --theme-border-focus: #1976d2;
-  --theme-border-error: #c62828;
+  /* Border Colors (Light mode) */
+  --theme-border-default: #dde1e8;
+  --theme-border-focus: #12151c;
+  --theme-border-error: #c9433e;
 
-  /* Spacing (multiples of 4px) */
+  /* Spacing (4px scale) */
   --theme-spacing-1: 4px;
   --theme-spacing-2: 8px;
   --theme-spacing-3: 12px;
@@ -50,91 +45,84 @@
   --theme-spacing-12: 48px;
 
   /* Border Radius */
-  --theme-radius-sm: 4px;
+  --theme-radius-xs: 4px;
+  --theme-radius-sm: 6px;
   --theme-radius-md: 8px;
-  --theme-radius-lg: 12px;
+  --theme-radius-lg: 10px;
   --theme-radius-xl: 16px;
   --theme-radius-full: 9999px;
 
-  /* Shadows */
-  --theme-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --theme-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
-  --theme-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10);
-  --theme-shadow-4: 0 14px 28px rgba(0, 0, 0, 0.18), 0 10px 10px rgba(0, 0, 0, 0.12);
+  /* Typography */
+  --theme-font-size-xs: 10px;
+  --theme-font-size-sm: 12px;
+  --theme-font-size-md: 13px;
+  --theme-font-size-lg: 14px;
+  --theme-font-size-xl: 16px;
+  --theme-font-size-2xl: 20px;
+  --theme-font-size-3xl: 32px;
+
+  --theme-font-weight-normal: 400;
+  --theme-font-weight-medium: 500;
+  --theme-font-weight-bold: 600;
+  --theme-font-weight-extra-bold: 700;
 
   /* Transitions */
   --theme-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --theme-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --theme-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Typography */
-  --theme-font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --theme-font-size-xs: 0.75rem;
-  --theme-font-size-sm: 0.875rem;
-  --theme-font-size-md: 1rem;
-  --theme-font-size-lg: 1.25rem;
-  --theme-font-size-xl: 1.5rem;
-  --theme-font-weight-normal: 400;
-  --theme-font-weight-medium: 500;
-  --theme-font-weight-bold: 700;
+  /* No shadows (flat design) */
+  --theme-shadow-none: none;
 
-  /* Glassmorphic Tokens */
+  /* Glassmorphic Tokens (minimal) */
   --theme-glass-bg: rgba(255, 255, 255, 0.7);
   --theme-glass-blur: 10px;
-  --theme-glass-border: rgba(255, 255, 255, 0.3);
-  --theme-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --theme-glass-border: rgba(0, 0, 0, 0.05);
+  --theme-glass-shadow: none;
 }
 
 /* Dark Mode */
 .dark {
-  /* Colors - Primary */
+  /* Fonts (same) */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Colors - Semantic (dark variants) */
+  --theme-color-success: #3fb68b;
+  --theme-color-success-dim: #1e4a3c;
+  --theme-color-error: #d9534f;
+  --theme-color-error-dim: #4a2422;
+  --theme-color-warning: #e8a33d;
+  --theme-color-warning-dim: #4a3a1e;
+
+  /* Colors - Primary (for transfers) */
   --theme-color-primary: #42a5f5;
   --theme-color-primary-dark: #1976d2;
   --theme-color-primary-light: #90caf9;
 
-  /* Colors - Secondary */
-  --theme-color-secondary: #ba68c8;
-  --theme-color-secondary-dark: #9c27b0;
-  --theme-color-secondary-light: #ce93d8;
-
-  /* Colors - Accent */
-  --theme-color-accent: #ffa726;
-  --theme-color-accent-dark: #ff6f00;
-  --theme-color-accent-light: #ffcc80;
-
-  /* Colors - Semantic */
-  --theme-color-success: #66bb6a;
-  --theme-color-error: #ef5350;
-  --theme-color-warning: #ffa726;
-  --theme-color-info: #29b6f6;
-
-  /* Text Colors */
-  --theme-text-primary: #e0e0e0;
-  --theme-text-secondary: #9e9e9e;
-  --theme-text-disabled: #616161;
-  --theme-text-hint: #757575;
+  /* Text Colors (Dark mode) */
+  --theme-text-primary: #f2f0ea;
+  --theme-text-secondary: #8b92a5;
+  --theme-text-disabled: #545b6b;
+  --theme-text-hint: #545b6b;
   --theme-text-on-primary: #000000;
-  --theme-text-on-secondary: #000000;
 
-  /* Background Colors */
-  --theme-bg-background: #121212;
-  --theme-bg-surface: #1e1e1e;
-  --theme-bg-surface-variant: #2c2c2c;
+  /* Background Colors (Dark mode) */
+  --theme-bg-background: #0b0e14;
+  --theme-bg-surface: #12161f;
+  --theme-bg-surface-variant: #1b2029;
 
-  /* Border Colors */
-  --theme-border-default: #424242;
+  /* Border Colors (Dark mode) */
+  --theme-border-default: #262b38;
   --theme-border-focus: #42a5f5;
-  --theme-border-error: #ef5350;
+  --theme-border-error: #d9534f;
 
-  /* Shadows */
-  --theme-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
-  --theme-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.3);
-  --theme-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.35), 0 3px 6px rgba(0, 0, 0, 0.25);
-  --theme-shadow-4: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+  /* No shadows (flat design) */
+  --theme-shadow-none: none;
 
   /* Glassmorphic Tokens */
-  --theme-glass-bg: rgba(30, 30, 30, 0.6);
+  --theme-glass-bg: rgba(18, 22, 31, 0.6);
   --theme-glass-blur: 12px;
   --theme-glass-border: rgba(255, 255, 255, 0.08);
-  --theme-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --theme-glass-shadow: none;
 }

@@ -1,11 +1,11 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .presupuestos-mes-selector {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--theme-spacing-4);
-  margin-bottom: var(--theme-spacing-4);
+  margin-bottom: var(--theme-spacing-5);
 }
 
 .presupuestos-mes-selector__btn {
@@ -18,7 +18,7 @@
   background: none;
   color: var(--theme-text-secondary);
   cursor: pointer;
-  transition: background-color var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
 }
 
 .presupuestos-mes-selector__btn:hover {
@@ -26,17 +26,16 @@
   color: var(--theme-text-primary);
 }
 
+.dark .presupuestos-mes-selector__btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .presupuestos-mes-selector__label {
   min-width: 10ch;
   text-align: center;
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-lg);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-primary);
   text-transform: capitalize;
-}
-
-/* Dark Mode */
-.dark .presupuestos-mes-selector__btn:hover {
-  background: rgba(255, 255, 255, 0.08);
 }

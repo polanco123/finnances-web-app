@@ -1,26 +1,30 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .presupuesto-form {
   display: flex;
   flex-direction: column;
   gap: var(--theme-spacing-3);
   background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-lg);
-  box-shadow: var(--theme-shadow-2);
-  padding: var(--theme-spacing-4);
-  margin-bottom: var(--theme-spacing-4);
+  padding: var(--theme-spacing-5);
+  margin-bottom: var(--theme-spacing-5);
+}
+
+.dark .presupuesto-form {
+  border-color: var(--theme-glass-border);
 }
 
 .presupuesto-form__field {
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-1);
+  gap: var(--theme-spacing-2);
 }
 
 .presupuesto-form__label {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -28,17 +32,17 @@
 
 .presupuesto-form__input {
   width: 100%;
-  padding: var(--theme-spacing-2) var(--theme-spacing-2);
-  font-family: var(--theme-font-family);
+  padding: var(--theme-spacing-2);
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: var(--theme-font-size-lg);
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-primary);
   background: var(--theme-bg-surface);
   border: none;
-  border-bottom: 1px solid var(--theme-border-default);
+  border-bottom: 2px solid var(--theme-border-default);
   border-radius: 0;
   outline: none;
-  transition: border-color var(--theme-transition-fast);
+  transition: border-color var(--theme-transition-normal);
   box-sizing: border-box;
 }
 
@@ -47,11 +51,16 @@
 }
 
 .presupuesto-form__input--error {
-  border-bottom-color: var(--theme-border-error);
+  border-bottom-color: var(--theme-color-error);
+}
+
+.dark .presupuesto-form__input {
+  background: transparent;
+  border-bottom-color: var(--theme-glass-border);
 }
 
 .presupuesto-form__error {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   color: var(--theme-color-error);
   margin: 0;

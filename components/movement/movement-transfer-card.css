@@ -1,12 +1,18 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .movement-transfer-card {
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-3);
-  background: none;
   padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  background: none;
   transition: background-color var(--theme-transition-normal);
+}
+
+.movement-transfer-card + .movement-transfer-card,
+.movement-transfer-card + .movement-list-item,
+.movement-list-item + .movement-transfer-card {
+  border-top: 1px solid var(--theme-border-default);
 }
 
 .movement-transfer-card:hover {
@@ -20,9 +26,10 @@
   width: 36px;
   height: 36px;
   border-radius: var(--theme-radius-full);
-  background: color-mix(in srgb, var(--theme-color-primary) 15%, transparent);
+  background: rgba(25, 118, 210, 0.15);
   color: var(--theme-color-primary);
   flex-shrink: 0;
+  font-size: var(--theme-font-size-xl);
 }
 
 .movement-transfer-card__main {
@@ -43,6 +50,7 @@
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-1);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-md);
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-primary);
@@ -66,6 +74,7 @@
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-1);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   color: var(--theme-text-secondary);
   min-width: 0;
@@ -92,23 +101,28 @@
 
 .movement-transfer-card__monto {
   flex-shrink: 0;
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: var(--theme-font-size-md);
   font-weight: var(--theme-font-weight-bold);
   letter-spacing: -0.02em;
   color: var(--theme-color-primary);
+  text-align: right;
+  min-width: 80px;
 }
 
 .movement-transfer-card__badge-text {
   display: inline-block;
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--theme-color-primary);
   background: var(--theme-bg-surface-variant);
   padding: var(--theme-spacing-1) var(--theme-spacing-2);
-  border-radius: var(--theme-radius-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  border-radius: var(--theme-radius-xs);
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @media (max-width: 767px) {
@@ -119,6 +133,13 @@
   .movement-transfer-card__title-row {
     flex-wrap: wrap;
   }
+}
+
+/* Dark mode */
+.dark .movement-transfer-card + .movement-transfer-card,
+.dark .movement-transfer-card + .movement-list-item,
+.dark .movement-list-item + .movement-transfer-card {
+  border-top-color: var(--theme-glass-border);
 }
 
 .dark .movement-transfer-card:hover {

@@ -1,9 +1,9 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .metas-progress {
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-2);
+  gap: var(--theme-spacing-3);
 }
 
 .metas-progress__header {
@@ -14,17 +14,20 @@
 }
 
 .metas-progress__label {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-text-secondary);
 }
 
 .metas-progress__pct {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: var(--theme-font-size-lg);
   font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-accent);
+  color: var(--theme-color-primary);
+  letter-spacing: -0.01em;
 }
 
 .metas-progress__label--negative {
@@ -32,17 +35,17 @@
 }
 
 .metas-progress__track {
-  height: 8px;
+  height: 6px;
   background: var(--theme-bg-surface-variant);
-  border-radius: 4px;
+  border-radius: var(--theme-radius-xs);
   overflow: hidden;
 }
 
 .metas-progress__fill {
   height: 100%;
-  border-radius: 4px;
-  background: var(--theme-color-accent);
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: var(--theme-radius-xs);
+  background: var(--theme-color-primary);
+  transition: width var(--theme-transition-slow) cubic-bezier(0.22, 1, 0.36, 1);
   min-width: 0;
 }
 
@@ -52,10 +55,15 @@
 
 .metas-progress__badge {
   align-self: flex-start;
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-success);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  background: var(--theme-color-success);
+  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  border-radius: var(--theme-radius-xs);
 }
 
 /* Dark Mode */
