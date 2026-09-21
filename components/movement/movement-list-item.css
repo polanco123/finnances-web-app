@@ -1,11 +1,11 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .movement-list-item {
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-3);
-  background: none;
   padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  background: none;
   transition: background-color var(--theme-transition-normal);
 }
 
@@ -30,10 +30,11 @@
   background: var(--theme-bg-surface-variant);
   color: var(--theme-text-secondary);
   flex-shrink: 0;
+  font-size: var(--theme-font-size-xl);
 }
 
 .movement-list-item--transfer .movement-list-item__icon-badge {
-  background: color-mix(in srgb, var(--theme-color-primary) 15%, transparent);
+  background: rgba(25, 118, 210, 0.15);
   color: var(--theme-color-primary);
 }
 
@@ -52,6 +53,7 @@
 }
 
 .movement-list-item__title {
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-md);
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-primary);
@@ -64,6 +66,7 @@
   display: flex;
   align-items: center;
   gap: var(--theme-spacing-1);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   color: var(--theme-text-secondary);
   min-width: 0;
@@ -95,9 +98,12 @@
 
 .movement-list-item__monto {
   flex-shrink: 0;
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: var(--theme-font-size-md);
   font-weight: var(--theme-font-weight-bold);
   letter-spacing: -0.02em;
+  text-align: right;
+  min-width: 80px;
 }
 
 .movement-list-item__monto.positive {
@@ -110,15 +116,17 @@
 
 .movement-list-item__badge-text {
   display: inline-block;
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
   font-weight: var(--theme-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--theme-color-primary);
   background: var(--theme-bg-surface-variant);
   padding: var(--theme-spacing-1) var(--theme-spacing-2);
-  border-radius: var(--theme-radius-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  border-radius: var(--theme-radius-xs);
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @media (max-width: 767px) {
@@ -131,8 +139,7 @@
   }
 }
 
-/* Dark mode: flat row, no elevation — hover feedback stays light-mode only,
-   matching .acct-row__toggle's convention. */
+/* Dark mode */
 .dark .movement-list-item + .movement-list-item,
 .dark .movement-list-item + .movement-transfer-card,
 .dark .movement-transfer-card + .movement-list-item,

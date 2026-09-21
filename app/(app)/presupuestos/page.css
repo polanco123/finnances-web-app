@@ -1,56 +1,73 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .presupuestos-page {
-  padding: var(--theme-spacing-6) var(--theme-spacing-4);
+  background: var(--theme-bg-background);
+  color: var(--theme-text-primary);
+  min-height: 100vh;
+  font-family: var(--font-inter), sans-serif;
+  padding: var(--theme-spacing-4) var(--theme-spacing-3) var(--theme-spacing-8);
 }
 
 .presupuestos-page__container {
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-4);
+  gap: var(--theme-spacing-5);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .presupuestos-page__header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: var(--theme-spacing-4);
+  flex-wrap: wrap;
 }
 
 .presupuestos-page__title {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-xl);
-  font-weight: var(--theme-font-weight-bold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-3xl);
+  font-weight: var(--theme-font-weight-extra-bold);
   color: var(--theme-text-primary);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .presupuestos-page__toggle-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--theme-spacing-2) var(--theme-spacing-3);
-  font-family: var(--theme-font-family);
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--theme-text-primary);
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-sm);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
 }
 
 .presupuestos-page__toggle-button:hover {
   background: var(--theme-bg-surface-variant);
+  border-color: var(--theme-text-primary);
 }
 
 .presupuestos-page__create-form {
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
-  border-radius: var(--theme-radius-lg);
-  padding: var(--theme-spacing-4);
+  border-radius: var(--theme-radius-xl);
+  padding: var(--theme-spacing-5);
+}
+
+.dark .presupuestos-page__create-form {
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-glass-border);
 }
 
 .presupuestos-page__list {
@@ -58,26 +75,32 @@
   flex-direction: column;
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
-  border-radius: var(--theme-radius-lg);
+  border-radius: var(--theme-radius-md);
   overflow: hidden;
+}
+
+.dark .presupuestos-page__list {
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
 
 .presupuestos-page__loading {
   text-align: center;
-  padding: var(--theme-spacing-10);
+  padding: var(--theme-spacing-8);
   color: var(--theme-text-secondary);
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-md);
 }
 
 .presupuestos-page__error {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-md);
   color: var(--theme-color-error);
-  background: color-mix(in srgb, var(--theme-color-error) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--theme-color-error) 20%, transparent);
-  border-radius: var(--theme-radius-md);
-  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  background: var(--theme-color-error-dim);
+  border: 1px solid var(--theme-color-error);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-4);
 }
 
 .presupuestos-page__empty {
@@ -86,15 +109,20 @@
   align-items: center;
   gap: var(--theme-spacing-3);
   text-align: center;
-  padding: var(--theme-spacing-10) var(--theme-spacing-4);
+  padding: var(--theme-spacing-8);
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-lg);
 }
 
+.dark .presupuestos-page__empty {
+  background: transparent;
+  border: none;
+}
+
 .presupuestos-page__empty-text {
   color: var(--theme-text-secondary);
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-md);
   margin: 0;
 }
@@ -104,21 +132,27 @@
   align-items: center;
   justify-content: center;
   padding: var(--theme-spacing-2) var(--theme-spacing-4);
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-on-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #ffffff;
   background: var(--theme-color-primary);
   border: none;
   border-radius: var(--theme-radius-sm);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color var(--theme-transition-fast),
-              opacity var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
 }
 
 .presupuestos-page__copy-button:hover:not(:disabled) {
   background: var(--theme-color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.presupuestos-page__copy-button:active {
+  transform: translateY(0);
 }
 
 .presupuestos-page__copy-button:disabled {
@@ -127,16 +161,29 @@
 }
 
 /* Responsive */
-@media (min-width: 768px) {
-  .presupuestos-page {
-    padding: var(--theme-spacing-8) var(--theme-spacing-6);
+@media (max-width: 639px) {
+  .presupuestos-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .presupuestos-page__title {
+    font-size: var(--theme-font-size-2xl);
+  }
+
+  .presupuestos-page__toggle-button {
+    width: 100%;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 640px) and (max-width: 959px) {
   .presupuestos-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--theme-spacing-10) var(--theme-spacing-8);
+    padding: var(--theme-spacing-6);
+  }
+}
+
+@media (min-width: 960px) {
+  .presupuestos-page {
+    padding: var(--theme-spacing-8);
   }
 }

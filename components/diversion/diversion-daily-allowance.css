@@ -1,35 +1,35 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .diversion-daily-allowance {
   background: var(--theme-bg-surface);
-  border-radius: var(--theme-radius-lg);
-  box-shadow: var(--theme-shadow-2);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-xl);
   padding: var(--theme-spacing-4);
-  margin-bottom: var(--theme-spacing-4);
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: var(--theme-spacing-4);
+}
+
+.dark .diversion-daily-allowance {
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-glass-border);
 }
 
 .diversion-daily-allowance__label {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
-  color: var(--theme-text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-text-secondary);
 }
 
 .diversion-daily-allowance__amount {
-  font-family: var(--theme-font-family);
-  font-size: var(--theme-font-size-sm);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: var(--theme-font-size-xl);
   font-weight: var(--theme-font-weight-bold);
-  color: var(--theme-color-accent);
-}
-
-/* Dark Mode */
-.dark .diversion-daily-allowance {
-  background: var(--theme-glass-bg);
-  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
-  backdrop-filter: blur(var(--theme-glass-blur));
-  border: 1px solid var(--theme-glass-border);
-  box-shadow: var(--theme-glass-shadow);
+  color: var(--theme-color-warning);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }

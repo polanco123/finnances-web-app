@@ -1,10 +1,13 @@
-@import '@/lib/theme.css';
+@import '@/lib/components-base.css';
 
 .categorias-period-filter {
   display: flex;
   flex-direction: column;
   gap: var(--theme-spacing-3);
-  margin-bottom: var(--theme-spacing-6);
+  margin-bottom: var(--theme-spacing-5);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .categorias-period-filter__group {
@@ -14,61 +17,75 @@
 }
 
 .categorias-period-filter__button {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-sm);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-secondary);
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-full);
   padding: var(--theme-spacing-2) var(--theme-spacing-4);
   cursor: pointer;
-  transition: background var(--theme-transition-fast), color var(--theme-transition-fast), border-color var(--theme-transition-fast);
+  transition: all var(--theme-transition-normal);
+  text-transform: capitalize;
 }
 
 .categorias-period-filter__button:hover {
   border-color: var(--theme-color-primary);
   color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
 }
 
 .categorias-period-filter__button--active {
   background: var(--theme-color-primary);
   border-color: var(--theme-color-primary);
-  color: var(--theme-text-on-primary);
+  color: #ffffff;
 }
 
 .categorias-period-filter__range {
   display: flex;
   flex-wrap: wrap;
   gap: var(--theme-spacing-4);
-  padding: var(--theme-spacing-3) var(--theme-spacing-4);
-  background: var(--theme-bg-surface-variant);
-  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-4);
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-lg);
+}
+
+.dark .categorias-period-filter__range {
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-glass-border);
 }
 
 .categorias-period-filter__range-field {
   display: flex;
   flex-direction: column;
-  gap: var(--theme-spacing-1);
-  font-family: var(--theme-font-family);
+  gap: var(--theme-spacing-2);
+  font-family: var(--font-inter), sans-serif;
 }
 
 .categorias-period-filter__range-label {
   font-size: var(--theme-font-size-xs);
-  font-weight: var(--theme-font-weight-medium);
+  font-weight: var(--theme-font-weight-bold);
   color: var(--theme-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .categorias-period-filter__range-field input[type='date'] {
-  font-family: var(--theme-font-family);
+  font-family: var(--font-inter), sans-serif;
   font-size: var(--theme-font-size-sm);
   color: var(--theme-text-primary);
   background: var(--theme-bg-surface);
   border: 1px solid var(--theme-border-default);
   border-radius: var(--theme-radius-sm);
   padding: var(--theme-spacing-2);
+  transition: border-color var(--theme-transition-normal);
+}
+
+.dark .categorias-period-filter__range-field input[type='date'] {
+  background: var(--theme-bg-surface);
+  border-color: var(--theme-glass-border);
 }
 
 .categorias-period-filter__range-field input[type='date']:focus {
@@ -76,10 +93,25 @@
   border-color: var(--theme-border-focus);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 639px) {
+  .categorias-period-filter__range {
+    flex-direction: column;
+  }
+
+  .categorias-period-filter__range-field {
+    width: 100%;
+  }
+}
+
+@media (min-width: 640px) {
   .categorias-period-filter {
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+  }
+
+  .categorias-period-filter__range {
+    flex-direction: row;
+    align-items: flex-end;
   }
 }
