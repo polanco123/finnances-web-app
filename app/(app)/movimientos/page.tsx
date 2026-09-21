@@ -13,6 +13,8 @@ import {
   fetchMovimientosPage,
 } from '@/components/movement/movement-service'
 import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
+import DiversionBudgetHint from '@/components/diversion/diversion-budget-hint'
+import { isDiversionCategoria } from '@/components/diversion/diversion-service'
 import type { ParsedMovimiento } from '@/components/voice-entry/voice-parser'
 import './page.css'
 
@@ -36,6 +38,8 @@ function MovimientosContent() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const [voicePrefill, setVoicePrefill] = useState<ParsedMovimiento | null>(null)
   const [formKey, setFormKey] = useState(0)
+  const [gastoCategoriaId, setGastoCategoriaId] = useState<string | null>(null)
+  const [hintRefreshToken, setHintRefreshToken] = useState(0)
 
   const loadInitial = useCallback(async () => {
     try {
@@ -72,6 +76,7 @@ function MovimientosContent() {
     setMovements([])
     setCursor(null)
     setHasMore(true)
+    setHintRefreshToken((t) => t + 1)
     loadInitial()
   }, [loadInitial])
 
@@ -114,6 +119,10 @@ function MovimientosContent() {
       <div className="movimientos-page__container">
         <VoiceEntryButton onParsed={handleVoiceParsed} />
 
+        {isDiversionCategoria(gastoCategoriaId) && (
+          <DiversionBudgetHint refreshToken={hintRefreshToken} />
+        )}
+
         <MovementForm
           key={formKey}
           onMovimientoCreado={handleMovimientoCreado}
@@ -125,6 +134,7 @@ function MovimientosContent() {
           initialCuentaDestinoId={voicePrefill?.cuentaDestinoId ?? undefined}
           initialNotas={voicePrefill?.notas ?? undefined}
           autoFocusMonto={Boolean(initialTipoFromUrl) && !voicePrefill}
+          onGastoCategoriaChange={setGastoCategoriaId}
         />
 
         {error && <div className="movimientos-page__error">{error}</div>}

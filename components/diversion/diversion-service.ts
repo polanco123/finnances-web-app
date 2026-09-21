@@ -3,8 +3,25 @@
 //   GRANT SELECT, INSERT, UPDATE ON public.fondo_semanal TO authenticated;
 
 import { createClient } from '@/lib/supabase/client'
+import { CATEGORIAS } from '@/lib/catalogs/catalog-store'
 
-const DIVERSION_CATEGORIA_ID = 'af6b676c-04db-4fda-b9f7-349123d75e1a'
+export const DIVERSION_CATEGORIA_ID = 'af6b676c-04db-4fda-b9f7-349123d75e1a'
+
+/**
+ * Tells whether a categoria id belongs to the Diversion budget.
+ *
+ * Prefers the catalog's `es_diversion` flag so renaming the categoria never
+ * breaks the check, and falls back to the known id while the catalog cache is
+ * still empty (first render before `catalog-init` hydrates it).
+ */
+export function isDiversionCategoria(categoriaId: string | null | undefined): boolean {
+  if (!categoriaId) return false
+
+  const categoria = CATEGORIAS.find((c) => c.id === categoriaId)
+  if (categoria) return categoria.es_diversion === true
+
+  return categoriaId === DIVERSION_CATEGORIA_ID
+}
 
 export const DEFAULT_MONTO_PRESUPUESTADO = 1500
 

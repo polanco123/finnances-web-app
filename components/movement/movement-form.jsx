@@ -26,6 +26,7 @@ const toLocalTime = (d) => d.toTimeString().slice(0, 5)
  * @param {string} [props.initialCuentaDestinoId]
  * @param {string} [props.initialNotas]
  * @param {boolean} [props.autoFocusMonto]
+ * @param {(categoriaId: string | null) => void} [props.onGastoCategoriaChange]
  */
 export default function MovementForm({
   onMovimientoCreado,
@@ -37,6 +38,7 @@ export default function MovementForm({
   initialCuentaDestinoId,
   initialNotas,
   autoFocusMonto,
+  onGastoCategoriaChange,
 }) {
   const montoInputRef = useRef(null)
   const [monto, setMonto] = useState(initialMonto || '')
@@ -62,6 +64,13 @@ export default function MovementForm({
   useEffect(() => {
     if (autoFocusMonto) montoInputRef.current?.focus()
   }, [autoFocusMonto])
+
+  // Let the parent react to which gasto categoria is selected (null for
+  // ingreso/transferencia, which have no gasto categoria of their own).
+  useEffect(() => {
+    if (!onGastoCategoriaChange) return
+    onGastoCategoriaChange(tipoMovimiento === 'gasto' ? categoriaId : null)
+  }, [onGastoCategoriaChange, tipoMovimiento, categoriaId])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

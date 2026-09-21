@@ -1,0 +1,97 @@
+@import '@/lib/theme.css';
+
+.diversion-budget-hint {
+  position: relative;
+  background: var(--theme-bg-surface);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-2);
+  padding: var(--theme-spacing-4);
+  padding-right: var(--theme-spacing-6);
+  margin-bottom: var(--theme-spacing-4);
+  border-left: 4px solid var(--theme-color-primary);
+}
+
+.diversion-budget-hint--tight {
+  border-left-color: var(--theme-color-warning);
+}
+
+.diversion-budget-hint--over {
+  border-left-color: var(--theme-color-error);
+}
+
+.diversion-budget-hint__message {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  margin: 0;
+}
+
+.diversion-budget-hint__detail {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  margin: var(--theme-spacing-1) 0 0;
+}
+
+.diversion-budget-hint .diversion-progress {
+  margin-top: var(--theme-spacing-3);
+}
+
+.diversion-budget-hint__close {
+  position: absolute;
+  top: var(--theme-spacing-2);
+  right: var(--theme-spacing-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-1);
+  color: var(--theme-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  cursor: pointer;
+}
+
+.diversion-budget-hint__close:hover {
+  color: var(--theme-text-primary);
+  background: var(--theme-bg-surface-variant);
+}
+
+.diversion-budget-hint__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--theme-spacing-1);
+  margin-top: var(--theme-spacing-3);
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+  text-decoration: none;
+}
+
+.diversion-budget-hint__link:hover {
+  text-decoration: underline;
+}
+
+/* Dark Mode */
+.dark .diversion-budget-hint {
+  background: var(--theme-glass-bg);
+  -webkit-backdrop-filter: blur(var(--theme-glass-blur));
+  backdrop-filter: blur(var(--theme-glass-blur));
+  border: 1px solid var(--theme-glass-border);
+  border-left: 4px solid var(--theme-color-primary);
+  box-shadow: var(--theme-glass-shadow);
+}
+
+.dark .diversion-budget-hint--tight {
+  border-left-color: var(--theme-color-warning);
+}
+
+.dark .diversion-budget-hint--over {
+  border-left-color: var(--theme-color-error);
+}
+
+.dark .diversion-budget-hint__close:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
