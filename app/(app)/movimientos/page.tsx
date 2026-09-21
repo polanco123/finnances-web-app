@@ -12,7 +12,9 @@ import {
   type MovimientoCursor,
   fetchMovimientosPage,
 } from '@/components/movement/movement-service'
-import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
+// import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
+import DiversionBudgetHint from '@/components/diversion/diversion-budget-hint'
+import { isDiversionCategoria } from '@/components/diversion/diversion-service'
 import type { ParsedMovimiento } from '@/components/voice-entry/voice-parser'
 import './page.css'
 
@@ -23,6 +25,7 @@ const VALID_TIPOS = ['gasto', 'ingreso', 'transferencia']
 function MovimientosContent() {
   const searchParams = useSearchParams()
   const tipoParam = searchParams.get('tipo')
+  const categoriaParam = searchParams.get('categoria')
   const initialTipoFromUrl = VALID_TIPOS.includes(tipoParam ?? '')
     ? (tipoParam as 'gasto' | 'ingreso' | 'transferencia')
     : undefined
@@ -36,6 +39,8 @@ function MovimientosContent() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const [voicePrefill, setVoicePrefill] = useState<ParsedMovimiento | null>(null)
   const [formKey, setFormKey] = useState(0)
+  const [gastoCategoriaId, setGastoCategoriaId] = useState<string | null>(null)
+  const [hintRefreshToken, setHintRefreshToken] = useState(0)
 
   const loadInitial = useCallback(async () => {
     try {
@@ -72,6 +77,7 @@ function MovimientosContent() {
     setMovements([])
     setCursor(null)
     setHasMore(true)
+    setHintRefreshToken((t) => t + 1)
     loadInitial()
   }, [loadInitial])
 
@@ -112,7 +118,12 @@ function MovimientosContent() {
   return (
     <div className="movimientos-page">
       <div className="movimientos-page__container">
-        <VoiceEntryButton onParsed={handleVoiceParsed} />
+        {/* Botón de voz desactivado temporalmente - faltan detalles por afinar */}
+        {/* <VoiceEntryButton onParsed={handleVoiceParsed} /> */}
+
+        {isDiversionCategoria(gastoCategoriaId) && (
+          <DiversionBudgetHint refreshToken={hintRefreshToken} />
+        )}
 
         <MovementForm
           key={formKey}
@@ -120,11 +131,12 @@ function MovimientosContent() {
           initialTipo={voicePrefill?.tipo ?? initialTipoFromUrl}
           initialMonto={voicePrefill?.cantidad != null ? String(voicePrefill.cantidad) : undefined}
           initialCuentaId={voicePrefill?.cuentaId ?? undefined}
-          initialCategoriaId={voicePrefill?.categoriaId ?? undefined}
+          initialCategoriaId={voicePrefill?.categoriaId ?? categoriaParam ?? undefined}
           initialCuentaOrigenId={voicePrefill?.cuentaOrigenId ?? undefined}
           initialCuentaDestinoId={voicePrefill?.cuentaDestinoId ?? undefined}
           initialNotas={voicePrefill?.notas ?? undefined}
           autoFocusMonto={Boolean(initialTipoFromUrl) && !voicePrefill}
+          onGastoCategoriaChange={setGastoCategoriaId}
         />
 
         {error && <div className="movimientos-page__error">{error}</div>}

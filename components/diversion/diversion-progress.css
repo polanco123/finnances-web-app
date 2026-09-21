@@ -3,7 +3,6 @@
 .diversion-progress {
   background: var(--theme-bg-surface);
   border-radius: var(--theme-radius-lg);
-  box-shadow: var(--theme-shadow-2);
   padding: var(--theme-spacing-4);
   margin-bottom: var(--theme-spacing-4);
 }
