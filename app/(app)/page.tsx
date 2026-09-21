@@ -13,6 +13,7 @@ import {
   Area,
 } from 'recharts'
 import MovementFab from '@/components/movement/movement-fab'
+import DiversionBudgetHint from '@/components/diversion/diversion-budget-hint'
 import MovementListItem from '@/components/movement/movement-list-item'
 import MovementTransferCard from '@/components/movement/movement-transfer-card'
 import { groupMovimientos } from '@/components/movement/movement-grouping'
@@ -372,6 +373,7 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [hintRefreshToken, setHintRefreshToken] = useState(0)
   const { resolvedTheme } = useTheme()
 
   useEffect(() => {
@@ -479,6 +481,8 @@ function DashboardContent() {
         </header>
 
         <div className="dashboard__grid">
+          <DiversionBudgetHint refreshToken={hintRefreshToken} />
+
           {scopedData ? (
             <BalanceCard
               balance={scopedData.balance}

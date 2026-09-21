@@ -12,7 +12,7 @@ import {
   type MovimientoCursor,
   fetchMovimientosPage,
 } from '@/components/movement/movement-service'
-import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
+// import VoiceEntryButton from '@/components/voice-entry/voice-entry-button'
 import DiversionBudgetHint from '@/components/diversion/diversion-budget-hint'
 import { isDiversionCategoria } from '@/components/diversion/diversion-service'
 import type { ParsedMovimiento } from '@/components/voice-entry/voice-parser'
@@ -118,7 +118,8 @@ function MovimientosContent() {
   return (
     <div className="movimientos-page">
       <div className="movimientos-page__container">
-        <VoiceEntryButton onParsed={handleVoiceParsed} />
+        {/* Botón de voz desactivado temporalmente - faltan detalles por afinar */}
+        {/* <VoiceEntryButton onParsed={handleVoiceParsed} /> */}
 
         {isDiversionCategoria(gastoCategoriaId) && (
           <DiversionBudgetHint refreshToken={hintRefreshToken} />
