@@ -77,3 +77,9 @@ export function insertSorted(
 
   return result
 }
+
+/** Appends a fetched page, skipping ids already in the list (patched or overlapping). */
+export function appendNewRows(rows: Movimiento[], page: Movimiento[]): Movimiento[] {
+  const present = new Set(rows.map((row) => row.id))
+  return [...rows, ...page.filter((row) => !present.has(row.id))]
+}

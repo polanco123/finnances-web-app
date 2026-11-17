@@ -23,6 +23,7 @@ export interface UseUndoAction {
 export function useUndoAction(windowMs: number = UNDO_WINDOW_MS): UseUndoAction {
   const [active, setActive] = useState<ActiveUndo | null>(null)
   const undoRef = useRef<(() => Promise<void>) | null>(null)
+  const labelRef = useRef('')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startedAtRef = useRef(0)
   const remainingRef = useRef(0)
@@ -53,18 +54,29 @@ export function useUndoAction(windowMs: number = UNDO_WINDOW_MS): UseUndoAction 
   const start = useCallback(
     (label: string, undo: () => Promise<void>) => {
       undoRef.current = undo
+      labelRef.current = label
       setActive({ label })
       arm(windowMs)
     },
     [arm, windowMs],
   )
 
+  /**
+   * Runs the undo. If it throws, the slot is kept and the window re-armed so
+   * the user can retry; the caller owns reporting the error. A newer undo
+   * started while this one was in flight is never overwritten.
+   */
   const run = useCallback(async () => {
     const undo = undoRef.current
     if (!undo) return
+    const label = labelRef.current
     dismiss()
-    await undo()
-  }, [dismiss])
+    try {
+      await undo()
+    } catch {
+      if (undoRef.current === null) start(label, undo)
+    }
+  }, [dismiss, start])
 
   const pause = useCallback(() => {
     if (timerRef.current === null) return

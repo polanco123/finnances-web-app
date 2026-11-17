@@ -141,26 +141,29 @@ export async function updateMovimiento(original: Movimiento, edit: MovimientoEdi
   return data[0]
 }
 
-/** Returns the deleted rows so the caller can restore them (undo). */
+/**
+ * Returns the deleted rows (every column) so the caller can restore them
+ * (undo) without losing columns that are not part of `SELECT_FIELDS`.
+ */
 export async function deleteMovimiento(id: string): Promise<Movimiento[]> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('movimiento')
     .delete()
     .eq('id', id)
-    .select(SELECT_FIELDS)
+    .select()
   if (error) throw error
   if (!data || data.length === 0) throw new Error('Movement not deleted')
   return data
 }
 
-/** Re-inserts rows keeping their original id and created_at. */
+/** Re-inserts full rows keeping their original id and created_at. */
 export async function restoreMovimiento(rows: Movimiento[]): Promise<Movimiento[]> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('movimiento')
     .insert(rows)
-    .select(SELECT_FIELDS)
+    .select()
   if (error) throw error
   return data ?? []
 }

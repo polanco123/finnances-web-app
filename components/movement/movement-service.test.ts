@@ -101,6 +101,13 @@ describe('deleteMovimiento', () => {
     expect(out).toEqual([row()])
   })
 
+  it('selects every column so an undo restores the full row (no column loss)', async () => {
+    result = { data: [row()], error: null }
+    await deleteMovimiento('m1')
+
+    expect(findCall('select')?.args).toEqual([])
+  })
+
   it('throws the supabase error', async () => {
     const err = new Error('boom')
     result = { data: null, error: err }
@@ -121,6 +128,15 @@ describe('restoreMovimiento', () => {
 
     expect(findCall('insert')?.args).toEqual([rows])
     expect(out).toEqual(rows)
+  })
+
+  it('sends rows untouched (extra columns preserved) and returns every column', async () => {
+    const full = [{ ...row(), extra_col: 'keep-me' }] as Movimiento[]
+    result = { data: full, error: null }
+    await restoreMovimiento(full)
+
+    expect(findCall('insert')?.args).toEqual([full])
+    expect(findCall('select')?.args).toEqual([])
   })
 
   it('throws the supabase error', async () => {
