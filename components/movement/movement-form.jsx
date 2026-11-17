@@ -27,6 +27,9 @@ const toLocalTime = (d) => d.toTimeString().slice(0, 5)
  * @param {string} [props.initialNotas]
  * @param {boolean} [props.autoFocusMonto]
  * @param {(categoriaId: string | null) => void} [props.onGastoCategoriaChange]
+ * @param {'create' | 'edit'} [props.mode] edit mode only exposes monto + account(s)
+ * @param {import('./movement-edit-values').EditInitialValues} [props.initialValues] prefill for edit mode
+ * @param {(values: import('./movement-edit-values').EditSubmission) => Promise<void> | void} [props.onEditSubmit]
  */
 export default function MovementForm({
   onMovimientoCreado,
@@ -39,17 +42,25 @@ export default function MovementForm({
   initialNotas,
   autoFocusMonto,
   onGastoCategoriaChange,
+  mode = 'create',
+  initialValues,
+  onEditSubmit,
 }) {
+  const isEdit = mode === 'edit'
   const montoInputRef = useRef(null)
-  const [monto, setMonto] = useState(initialMonto || '')
+  const [monto, setMonto] = useState(initialValues?.monto ?? (initialMonto || ''))
   const [categoriaId, setCategoriaId] = useState(initialCategoriaId || CATEGORIAS[0]?.id || '')
-  const [cuentaId, setCuentaId] = useState(initialCuentaId || CUENTAS[0]?.id || '')
-  const [cuentaOrigenId, setCuentaOrigenId] = useState(initialCuentaOrigenId || CUENTAS[0]?.id || '')
-  const [cuentaDestinoId, setCuentaDestinoId] = useState(initialCuentaDestinoId || CUENTAS[1]?.id || '')
+  const [cuentaId, setCuentaId] = useState(initialValues?.cuentaId ?? (initialCuentaId || CUENTAS[0]?.id || ''))
+  const [cuentaOrigenId, setCuentaOrigenId] = useState(
+    initialValues?.cuentaOrigenId ?? (initialCuentaOrigenId || CUENTAS[0]?.id || ''),
+  )
+  const [cuentaDestinoId, setCuentaDestinoId] = useState(
+    initialValues?.cuentaDestinoId ?? (initialCuentaDestinoId || CUENTAS[1]?.id || ''),
+  )
   const [fecha, setFecha] = useState(() => toLocalDate(new Date()))
   const [hora, setHora] = useState(() => toLocalTime(new Date()))
   const [notas, setNotas] = useState(initialNotas || '')
-  const [tipoMovimiento, setTipoMovimiento] = useState(initialTipo || 'gasto')
+  const [tipoMovimiento, setTipoMovimiento] = useState(initialValues?.tipo ?? (initialTipo || 'gasto'))
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState(null)
 
@@ -72,8 +83,37 @@ export default function MovementForm({
     onGastoCategoriaChange(tipoMovimiento === 'gasto' ? categoriaId : null)
   }, [onGastoCategoriaChange, tipoMovimiento, categoriaId])
 
+  const handleEditSubmitInternal = async () => {
+    const montoNumber = Number(monto)
+    if (!monto || !Number.isFinite(montoNumber) || montoNumber <= 0) {
+      setError('Ingresa un monto mayor a 0')
+      return
+    }
+    if (isTransferencia && cuentaOrigenId === cuentaDestinoId) {
+      setError('La cuenta origen y destino deben ser diferentes')
+      return
+    }
+    try {
+      setGuardando(true)
+      setError(null)
+      await onEditSubmit?.(
+        isTransferencia
+          ? { tipo: tipoMovimiento, monto: montoNumber, cuentaOrigenId, cuentaDestinoId }
+          : { tipo: tipoMovimiento, monto: montoNumber, cuentaId },
+      )
+    } catch (err) {
+      setError(err?.message || 'Error al guardar')
+    } finally {
+      setGuardando(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (isEdit) {
+      await handleEditSubmitInternal()
+      return
+    }
     if (!monto || Number(monto) <= 0) return
 
     if (isTransferencia && cuentaOrigenId === cuentaDestinoId) {
@@ -122,11 +162,12 @@ export default function MovementForm({
   }
 
   return (
-    <form className="movement-form" onSubmit={handleSubmit}>
-      <h2 className="movement-form__title">Nuevo Movimiento</h2>
+    <form className="movement-form" onSubmit={handleSubmit} noValidate={isEdit}>
+      <h2 className="movement-form__title">{isEdit ? 'Editar Movimiento' : 'Nuevo Movimiento'}</h2>
 
       {error && <div className="movement-form__error">{error}</div>}
 
+      {!isEdit && (
       <div className="movement-form__tabs">
         <button
           type="button"
@@ -150,6 +191,7 @@ export default function MovementForm({
           Transferencia
         </button>
       </div>
+      )}
 
       <div className="movement-form__group">
         <label className="movement-form__label">Monto</label>
@@ -192,17 +234,21 @@ export default function MovementForm({
             onChange={setCuentaId}
             kind="cuenta"
           />
-          <AutocompleteInput
-            label="Categoría"
-            options={CATEGORIAS}
-            value={categoriaId}
-            onChange={setCategoriaId}
-            kind="categoria"
-            onCreateOption={handleCreateCategoria}
-          />
+          {!isEdit && (
+            <AutocompleteInput
+              label="Categoría"
+              options={CATEGORIAS}
+              value={categoriaId}
+              onChange={setCategoriaId}
+              kind="categoria"
+              onCreateOption={handleCreateCategoria}
+            />
+          )}
         </div>
       )}
 
+      {!isEdit && (
+      <>
       <div className="movement-form__group">
         <label className="movement-form__label">Notas</label>
         <textarea
@@ -235,6 +281,8 @@ export default function MovementForm({
           />
         </div>
       </div>
+      </>
+      )}
 
       <button
         className="movement-form__button"
