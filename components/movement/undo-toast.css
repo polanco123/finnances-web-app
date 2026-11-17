@@ -1,0 +1,50 @@
+@import '@/lib/components-base.css';
+
+.undo-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--theme-spacing-6);
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-4);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4);
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-md);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+}
+
+.undo-toast__label {
+  min-width: 0;
+}
+
+.undo-toast__action {
+  background: none;
+  border: none;
+  padding: var(--theme-spacing-1) var(--theme-spacing-2);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-color-primary);
+  border-radius: var(--theme-radius-xs);
+  cursor: pointer;
+}
+
+.undo-toast__action:hover {
+  background: var(--theme-bg-surface-variant);
+}
+
+.undo-toast__action:focus-visible {
+  outline: 2px solid var(--theme-border-focus);
+  outline-offset: 2px;
+}
+
+.dark .undo-toast {
+  border-color: var(--theme-glass-border);
+}

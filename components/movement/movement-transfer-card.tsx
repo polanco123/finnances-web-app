@@ -5,6 +5,7 @@ import { CUENTAS } from '@/lib/catalogs/cuentas'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
 import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import { formatFechaHora } from '@/components/movement/movement-format'
+import { SELECTABLE_CLASS, selectableProps } from '@/components/movement/selectable-props'
 import './movement-transfer-card.css'
 
 interface MovementTransferCardProps {
@@ -22,6 +23,8 @@ interface MovementTransferCardProps {
     cuenta_id: string
     notas?: string | null
   }
+  /** Opt-in: makes the card a button that reports both legs. */
+  onSelect?: (origen: MovementTransferCardProps['origen'], destino: MovementTransferCardProps['destino']) => void
 }
 
 function formatCurrency(amount: number): string {
@@ -56,7 +59,7 @@ function resolveCatalogColor(
   return item?.color ?? null
 }
 
-export default function MovementTransferCard({ origen, destino }: MovementTransferCardProps) {
+export default function MovementTransferCard({ origen, destino, onSelect }: MovementTransferCardProps) {
   const amount = formatCurrency(origen.monto)
   const origenNombre = resolveCatalogName(origen.cuenta_id, CUENTAS)
   const destinoNombre = resolveCatalogName(destino.cuenta_id, CUENTAS)
@@ -67,7 +70,10 @@ export default function MovementTransferCard({ origen, destino }: MovementTransf
   const notas = origen.notas || destino.notas
 
   return (
-    <div className="movement-transfer-card">
+    <div
+      className={`movement-transfer-card ${onSelect ? SELECTABLE_CLASS : ''}`}
+      {...selectableProps(onSelect && (() => onSelect(origen, destino)))}
+    >
       <span className="movement-transfer-card__icon-badge">
         <ArrowRight size={16} aria-hidden="true" />
       </span>

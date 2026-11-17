@@ -5,6 +5,7 @@ import { CATEGORIAS } from '@/lib/catalogs/categorias'
 import { resolveIcon } from '@/lib/catalogs/icon-catalog'
 import { resolveIconColor } from '@/lib/catalogs/icon-colors'
 import { formatFechaHora } from '@/components/movement/movement-format'
+import { SELECTABLE_CLASS, selectableProps } from '@/components/movement/selectable-props'
 import './movement-list-item.css'
 
 interface MovimientoListItemProps {
@@ -25,6 +26,8 @@ interface MovimientoListItemProps {
    * the categoria name on every row carries no information.
    */
   leadWithCuenta?: boolean
+  /** Opt-in: makes the row a button that reports the movement it renders. */
+  onSelect?: (movimiento: MovimientoListItemProps['movimiento']) => void
 }
 
 function formatCurrency(amount: number): { value: string; isPositive: boolean } {
@@ -68,6 +71,7 @@ function resolveCatalogColor(
 export default function MovementListItem({
   movimiento,
   leadWithCuenta = false,
+  onSelect,
 }: MovimientoListItemProps) {
   const { value, isPositive } = formatCurrency(movimiento.monto)
   const cuentaNombre = resolveCatalogName(movimiento.cuenta_id, CUENTAS)
@@ -86,7 +90,10 @@ export default function MovementListItem({
     : resolveCatalogColor(movimiento.categoria_id, CATEGORIAS)
 
   return (
-    <div className={`movement-list-item ${isTransfer ? 'movement-list-item--transfer' : ''}`}>
+    <div
+      className={`movement-list-item ${isTransfer ? 'movement-list-item--transfer' : ''} ${onSelect ? SELECTABLE_CLASS : ''}`}
+      {...selectableProps(onSelect && (() => onSelect(movimiento)))}
+    >
       <span className="movement-list-item__icon-badge">
         <LeadingIcon size={16} aria-hidden="true" style={{ color: resolveIconColor(leadingColor) }} />
       </span>
