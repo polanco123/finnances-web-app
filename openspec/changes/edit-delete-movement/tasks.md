@@ -54,20 +54,20 @@ Chain strategy: feature-branch-chain
 
 ## Phase 5: UI (tests first)
 
-- [ ] 5.1 RED/GREEN: `undo-toast.tsx` (`role="status"`, Deshacer button, hover/focus pause).
-- [ ] 5.2 RED/GREEN: `movement-actions-popover.tsx` (Editar/Eliminar via Radix popover).
-- [ ] 5.3 RED/GREEN: opt-in `onSelect` in `movement-list-item.tsx` and `movement-transfer-card.tsx` (role/tabIndex/Enter/Space only when provided; MSI never selectable; existing consumers unchanged).
-- [ ] 5.4 RED/GREEN: `movement-form.jsx` edit mode (`mode`, `initialValues`, `onEditSubmit`; only monto/accounts; invalid amount and same origen/destino rejected; tab derived from row).
-- [ ] 5.5 RED/GREEN: `movement-edit-dialog.tsx` wrapping the form in edit mode.
+- [x] 5.1 RED/GREEN: `undo-toast.tsx` (`role="status"`, Deshacer button, hover/focus pause).
+- [x] 5.2 RED/GREEN: `movement-actions-popover.tsx` (Editar/Eliminar via Radix popover).
+- [x] 5.3 RED/GREEN: opt-in `onSelect` in `movement-list-item.tsx` and `movement-transfer-card.tsx` (role/tabIndex/Enter/Space only when provided; MSI never selectable; existing consumers unchanged).
+- [x] 5.4 RED/GREEN: `movement-form.jsx` edit mode (`mode`, `initialValues`, `onEditSubmit`; only monto/accounts; invalid amount and same origen/destino rejected; tab derived from row).
+- [x] 5.5 RED/GREEN: `movement-edit-dialog.tsx` wrapping the form in edit mode.
 
 ## Phase 6: Page Wiring
 
-- [ ] 6.1 RED: page integration test (tap -> popover -> delete -> toast -> Undo restores row at original position).
-- [ ] 6.2 GREEN: wire hook, popover, dialog, toast in `app/(app)/movimientos/page.tsx`.
+- [x] 6.1 RED: page integration test (tap -> popover -> delete -> toast -> Undo restores row at original position).
+- [x] 6.2 GREEN: wire hook, popover, dialog, toast in `app/(app)/movimientos/page.tsx`.
 
 ## Phase 7: Verification
 
-- [ ] 7.1 Run `npm run test`, `npm run lint`, `npm run build`; fix failures.
+- [x] 7.1 Run `npm run test`, `npm run lint`, `npm run build`; fix failures.
 - [ ] 7.2 Manual check of all spec scenarios; re-run drift query.
 
 ## PR 1 Manual DB Notes (apply-progress)
