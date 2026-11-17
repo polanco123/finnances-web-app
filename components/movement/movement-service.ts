@@ -19,6 +19,7 @@ export interface Movimiento {
   created_at: string
   es_transferencia?: boolean | null
   transferencia_id?: string | null
+  msi_id?: string | number | null
 }
 
 export interface MovimientosPage {
@@ -28,7 +29,7 @@ export interface MovimientosPage {
 }
 
 const SELECT_FIELDS =
-  'id, monto, descripcion, fecha, hora, cuenta_id, categoria_id, notas, created_at, es_transferencia, transferencia_id'
+  'id, monto, descripcion, fecha, hora, cuenta_id, categoria_id, notas, created_at, es_transferencia, transferencia_id, msi_id'
 
 /**
  * Builds the PostgREST `.or()` predicate for "strictly before `cursor` in
@@ -113,4 +114,85 @@ export async function insertarTransferencia(
     .select()
   if (errorDestino) throw errorDestino
   return { origen: dataOrigen, destino: dataDestino }
+}
+
+export interface MovimientoEdit {
+  monto: number
+  cuentaId: string
+}
+
+export interface TransferenciaEdit {
+  monto: number
+  cuentaOrigen: string
+  cuentaDestino: string
+}
+
+/** Edited amount keeps the sign of the original row (type change is out of scope). */
+export async function updateMovimiento(original: Movimiento, edit: MovimientoEdit): Promise<Movimiento> {
+  const supabase = createClient()
+  const sign = original.monto < 0 ? -1 : 1
+  const { data, error } = await supabase
+    .from('movimiento')
+    .update({ monto: sign * Math.abs(edit.monto), cuenta_id: edit.cuentaId })
+    .eq('id', original.id)
+    .select(SELECT_FIELDS)
+  if (error) throw error
+  if (!data || data.length === 0) throw new Error('Movement not updated')
+  return data[0]
+}
+
+/** Returns the deleted rows so the caller can restore them (undo). */
+export async function deleteMovimiento(id: string): Promise<Movimiento[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('movimiento')
+    .delete()
+    .eq('id', id)
+    .select(SELECT_FIELDS)
+  if (error) throw error
+  if (!data || data.length === 0) throw new Error('Movement not deleted')
+  return data
+}
+
+/** Re-inserts rows keeping their original id and created_at. */
+export async function restoreMovimiento(rows: Movimiento[]): Promise<Movimiento[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('movimiento')
+    .insert(rows)
+    .select(SELECT_FIELDS)
+  if (error) throw error
+  return data ?? []
+}
+
+export async function updateTransferencia(
+  transferenciaId: string,
+  edit: TransferenciaEdit,
+): Promise<Movimiento[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('update_transferencia', {
+    p_transferencia_id: transferenciaId,
+    p_monto: Math.abs(edit.monto),
+    p_cuenta_origen: edit.cuentaOrigen,
+    p_cuenta_destino: edit.cuentaDestino,
+  })
+  if (error) throw error
+  return data ?? []
+}
+
+/** Returns both deleted legs so the caller can restore them (undo). */
+export async function deleteTransferencia(transferenciaId: string): Promise<Movimiento[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('delete_transferencia', {
+    p_transferencia_id: transferenciaId,
+  })
+  if (error) throw error
+  return data ?? []
+}
+
+export async function restoreTransferencia(rows: Movimiento[]): Promise<Movimiento[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('restore_transferencia', { p_rows: rows })
+  if (error) throw error
+  return data ?? []
 }
