@@ -3,7 +3,16 @@
 -- 2. UPDATE/DELETE policies and grants for authenticated.
 -- 3. Atomic transfer RPCs: update_transferencia, delete_transferencia,
 --    restore_transferencia.
+-- 4. Guard trigger: transfer legs and MSI rows can only be modified through
+--    the RPCs below (direct PostgREST UPDATE/DELETE is rejected).
 -- Run supabase/checks/saldo_drift.sql before and after applying.
+--
+-- SINGLE-TENANT ASSUMPTION (review finding R1-001): movimiento has no owner
+-- column, so the UPDATE/DELETE policies below are USING (true) for every
+-- authenticated user. This is only safe while the app is single-tenant with
+-- sign-up disabled (one trusted user). Before enabling sign-up or adding a
+-- second user, add an ownership column (e.g. user_id) and scope these
+-- policies and the RPCs to it. No user_id is invented here on purpose.
 
 -- ---------------------------------------------------------------------------
 -- 1. Balance trigger
@@ -55,6 +64,7 @@ CREATE TRIGGER trg_actualizar_saldo
 --    names so the migration is re-runnable; pre-existing policies are not
 --    touched (PERMISSIVE policies are OR-ed, so an extra one is harmless).
 -- ---------------------------------------------------------------------------
+-- NOTE: USING (true) = single-tenant assumption, see header.
 DROP POLICY IF EXISTS movimiento_update_authenticated ON public.movimiento;
 CREATE POLICY movimiento_update_authenticated
   ON public.movimiento FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
@@ -64,6 +74,40 @@ CREATE POLICY movimiento_delete_authenticated
   ON public.movimiento FOR DELETE TO authenticated USING (true);
 
 GRANT UPDATE, DELETE ON public.movimiento TO authenticated;
+
+-- ---------------------------------------------------------------------------
+-- 2b. Guard trigger. Transfer legs (es_transferencia) and MSI rows (msi_id)
+--     must keep their invariants (pair atomicity, plan integrity), so they can
+--     only be updated or deleted by the RPCs, which set the transaction-local
+--     flag app.movimiento_rpc. set_config(..., true) is scoped to the current
+--     transaction, so the flag never leaks across requests, and clients cannot
+--     set it through PostgREST (only RPCs exposed in public are callable).
+--     INSERT is intentionally not guarded (new movements and undo restores).
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.guard_movimiento_protected_rows()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SET search_path = public
+AS $$
+BEGIN
+  IF (OLD.es_transferencia IS TRUE OR OLD.msi_id IS NOT NULL
+      OR (TG_OP = 'UPDATE' AND (NEW.es_transferencia IS TRUE OR NEW.msi_id IS NOT NULL)))
+     AND coalesce(current_setting('app.movimiento_rpc', true), '') <> 'on' THEN
+    RAISE EXCEPTION 'movimiento % is a transfer leg or MSI row and can only be changed through its RPC', OLD.id;
+  END IF;
+
+  IF TG_OP = 'DELETE' THEN
+    RETURN OLD;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_guard_movimiento_protected ON public.movimiento;
+CREATE TRIGGER trg_guard_movimiento_protected
+  BEFORE UPDATE OR DELETE ON public.movimiento
+  FOR EACH ROW
+  EXECUTE FUNCTION public.guard_movimiento_protected_rows();
 
 -- ---------------------------------------------------------------------------
 -- 3. Transfer RPCs (SECURITY INVOKER: RLS and grants of the caller apply).
@@ -88,6 +132,8 @@ DECLARE
   v_origen integer;
   v_destino integer;
 BEGIN
+  PERFORM set_config('app.movimiento_rpc', 'on', true);
+
   IF p_monto IS NULL OR p_monto = 0 THEN
     RAISE EXCEPTION 'monto must be non-zero';
   END IF;
@@ -137,6 +183,8 @@ DECLARE
   v_legs integer;
   v_msi integer;
 BEGIN
+  PERFORM set_config('app.movimiento_rpc', 'on', true);
+
   PERFORM 1 FROM public.movimiento
   WHERE transferencia_id = p_transferencia_id
   FOR UPDATE;
@@ -163,8 +211,12 @@ BEGIN
 END;
 $$;
 
--- Undo of delete_transferencia: re-insert both legs with their original
--- id / created_at. p_rows is the jsonb array of the two deleted rows.
+-- Undo of delete_transferencia: re-insert both legs with ALL their original
+-- columns (id, created_at, descripcion, notas, ...). p_rows is the jsonb array
+-- of the two rows returned by delete_transferencia (SETOF movimiento, so it
+-- carries every column). The legs are validated before inserting so a forged
+-- payload cannot mint money: exactly 2 rows, same transferencia_id,
+-- es_transferencia = true, one negative and one positive leg, net zero, no MSI.
 CREATE OR REPLACE FUNCTION public.restore_transferencia(p_rows jsonb)
 RETURNS SETOF public.movimiento
 LANGUAGE plpgsql
@@ -172,22 +224,36 @@ SET search_path = public
 AS $$
 DECLARE
   v_legs integer;
-  v_ids integer;
+  v_flagged integer;
+  v_transfers integer;
+  v_negative integer;
+  v_positive integer;
+  v_net numeric;
   v_msi integer;
+  v_no_id integer;
 BEGIN
+  PERFORM set_config('app.movimiento_rpc', 'on', true);
+
   IF jsonb_typeof(p_rows) <> 'array' OR jsonb_array_length(p_rows) <> 2 THEN
     RAISE EXCEPTION 'restore_transferencia expects a jsonb array of exactly 2 legs';
   END IF;
 
   SELECT count(*),
+         count(*) FILTER (WHERE r.es_transferencia IS TRUE AND r.transferencia_id IS NOT NULL),
          count(DISTINCT r.transferencia_id),
-         count(*) FILTER (WHERE r.msi_id IS NOT NULL)
-    INTO v_legs, v_ids, v_msi
-  FROM jsonb_populate_recordset(null::public.movimiento, p_rows) r
-  WHERE r.es_transferencia = true AND r.transferencia_id IS NOT NULL;
+         count(*) FILTER (WHERE r.monto < 0),
+         count(*) FILTER (WHERE r.monto > 0),
+         coalesce(sum(r.monto), 0),
+         count(*) FILTER (WHERE r.msi_id IS NOT NULL),
+         count(*) FILTER (WHERE r.id IS NULL)
+    INTO v_legs, v_flagged, v_transfers, v_negative, v_positive, v_net, v_msi, v_no_id
+  FROM jsonb_populate_recordset(null::public.movimiento, p_rows) r;
 
-  IF v_legs <> 2 OR v_ids <> 1 THEN
-    RAISE EXCEPTION 'restore_transferencia expects 2 legs of one transfer';
+  IF v_legs <> 2 OR v_flagged <> 2 OR v_transfers <> 1 OR v_no_id > 0 THEN
+    RAISE EXCEPTION 'restore_transferencia expects 2 identified legs (es_transferencia) of one transfer';
+  END IF;
+  IF v_negative <> 1 OR v_positive <> 1 OR v_net <> 0 THEN
+    RAISE EXCEPTION 'restore_transferencia expects one negative and one positive leg with net zero';
   END IF;
   IF v_msi > 0 THEN
     RAISE EXCEPTION 'MSI transfers cannot be restored through this function';
@@ -213,6 +279,8 @@ GRANT EXECUTE ON FUNCTION public.restore_transferencia(jsonb) TO authenticated;
 --   DROP FUNCTION public.update_transferencia(uuid, numeric, uuid, uuid);
 --   DROP FUNCTION public.delete_transferencia(uuid);
 --   DROP FUNCTION public.restore_transferencia(jsonb);
+--   DROP TRIGGER trg_guard_movimiento_protected ON public.movimiento;
+--   DROP FUNCTION public.guard_movimiento_protected_rows();
 --   DROP POLICY movimiento_update_authenticated ON public.movimiento;
 --   DROP POLICY movimiento_delete_authenticated ON public.movimiento;
 --   REVOKE UPDATE, DELETE ON public.movimiento FROM authenticated;
