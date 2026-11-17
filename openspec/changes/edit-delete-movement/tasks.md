@@ -87,3 +87,16 @@ Tasks 2.2 and 2.5 (and the "run before applying" part of 2.1) need a live Supaba
    - `delete_transferencia` returns 2 rows; `restore_transferencia` with that jsonb restores balances.
    - Fresh INSERT still updates the balance.
 5. Open risk: `restore_transferencia` uses `INSERT INTO movimiento SELECT * FROM jsonb_populate_recordset(...)`; if `movimiento` has generated columns it must be switched to an explicit column list.
+
+## Review-fix batch: manual DB notes (staging)
+
+The migration (still unapplied) was edited in place; SQL cannot be unit-tested here, so verify on staging:
+
+1. Apply the migration; `supabase/checks/saldo_drift.sql` must return 0 rows for both queries (balance drift and transfer integrity).
+2. Guard trigger (R1-002/R3-004): in a transaction, direct `UPDATE`/`DELETE` of an `es_transferencia = true` row and of an `msi_id IS NOT NULL` row must fail ("can only be changed through its RPC"); then `ROLLBACK`. Direct UPDATE/DELETE of a regular row must still work (edit/delete/undo from the UI).
+3. `update_transferencia` / `delete_transferencia` still work from the UI (they set the transaction-local flag `app.movimiento_rpc`). Check the flag does not leak: right after an RPC call, a separate direct UPDATE of a transfer leg must still fail.
+4. `restore_transferencia` (R1-003): reject each of these payloads: 1 leg, 3 legs, two negative legs, net != 0, different `transferencia_id`, `es_transferencia` false/null, `msi_id` set, missing `id`. Accept the exact jsonb returned by `delete_transferencia`.
+5. Undo fidelity (R3-004): delete a row that has `descripcion`/`notas` (and any column outside the old select list), undo, and compare every column with the pre-delete row (both regular rows and transfer legs).
+6. Check nothing else in the DB updates/deletes `msi_id` rows directly (e.g. cascades from an MSI plan table): the guard would block it unless it goes through an RPC that sets `app.movimiento_rpc`.
+7. Single-tenant assumption (R1-001): the UPDATE/DELETE policies are `USING (true)`; confirm sign-up is disabled in Supabase Auth before relying on them. Add an ownership column and scope policies before adding a second user.
+
