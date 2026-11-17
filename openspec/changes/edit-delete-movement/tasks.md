@@ -40,17 +40,17 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Service and List Patch (tests first)
 
-- [ ] 3.1 RED: `movement-service.test.ts` for `updateMovimiento`, `deleteMovimiento`, `restoreMovimiento`, `updateTransferencia`, `deleteTransferencia`, `restoreTransferencia` (payloads, sign kept, error throw).
-- [ ] 3.2 GREEN: implement in `components/movement/movement-service.ts`; add `msi_id` to type/select.
-- [ ] 3.3 RED: `movement-list-patch.test.ts` (`removeByIds`, `replaceRows`, `insertSorted` with null `hora`, past-cursor skip).
-- [ ] 3.4 GREEN: create `components/movement/movement-list-patch.ts`; REFACTOR both.
+- [x] 3.1 RED: `movement-service.test.ts` for `updateMovimiento`, `deleteMovimiento`, `restoreMovimiento`, `updateTransferencia`, `deleteTransferencia`, `restoreTransferencia` (payloads, sign kept, error throw).
+- [x] 3.2 GREEN: implement in `components/movement/movement-service.ts`; add `msi_id` to type/select.
+- [x] 3.3 RED: `movement-list-patch.test.ts` (`removeByIds`, `replaceRows`, `insertSorted` with null `hora`, past-cursor skip).
+- [x] 3.4 GREEN: create `components/movement/movement-list-patch.ts`; REFACTOR both.
 
 ## Phase 4: Hooks (tests first)
 
-- [ ] 4.1 RED: `use-undo-action.test.ts` with fake timers (6s expiry, pause/resume, replacement, no undo after expiry).
-- [ ] 4.2 GREEN: create `use-undo-action.ts`.
-- [ ] 4.3 RED: `use-movement-actions.test.ts` (mocked service: edit, delete, transfer delete+undo, undo edit, failure leaves list unchanged and surfaces error, undo fails).
-- [ ] 4.4 GREEN: create `use-movement-actions.ts` (patch state, bump `hintRefreshToken`, start undo).
+- [x] 4.1 RED: `use-undo-action.test.ts` with fake timers (6s expiry, pause/resume, replacement, no undo after expiry).
+- [x] 4.2 GREEN: create `use-undo-action.ts`.
+- [x] 4.3 RED: `use-movement-actions.test.ts` (mocked service: edit, delete, transfer delete+undo, undo edit, failure leaves list unchanged and surfaces error, undo fails).
+- [x] 4.4 GREEN: create `use-movement-actions.ts` (patch state, bump `hintRefreshToken`, start undo).
 
 ## Phase 5: UI (tests first)
 
