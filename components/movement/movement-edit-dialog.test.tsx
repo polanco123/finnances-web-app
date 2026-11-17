@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -61,6 +61,45 @@ describe('MovementEditDialog', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it('shows a visible error inside the dialog when the write fails', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(false)
+    render(<MovementEditDialog target={{ kind: 'movimiento', row: row({}) }} onSubmit={onSubmit} onClose={vi.fn()} />)
+
+    expect(within(screen.getByRole('dialog')).queryByRole('alert')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    expect(await within(screen.getByRole('dialog')).findByRole('alert')).toHaveTextContent(
+      'No se pudo guardar el cambio.',
+    )
+  })
+
+  it('clears the error on the next submit attempt and closes when it succeeds', async () => {
+    const onSubmit = vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true)
+    const onClose = vi.fn()
+    render(<MovementEditDialog target={{ kind: 'movimiento', row: row({}) }} onSubmit={onSubmit} onClose={onClose} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
+    expect(await screen.findByRole('alert')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('shows the same error for a failed transfer edit', async () => {
+    const origen = row({ monto: -200, cuenta_id: 'A', es_transferencia: true, transferencia_id: 't' })
+    const destino = row({ monto: 200, cuenta_id: 'B', es_transferencia: true, transferencia_id: 't' })
+    render(
+      <MovementEditDialog
+        target={{ kind: 'transfer', origen, destino }}
+        onSubmit={vi.fn().mockResolvedValue(false)}
+        onClose={vi.fn()}
+      />,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('No se pudo guardar el cambio.')
   })
 
   it('maps a transfer target to origen/destino', async () => {

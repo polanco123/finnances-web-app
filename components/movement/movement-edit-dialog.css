@@ -44,3 +44,10 @@
 .dark .movement-edit-dialog {
   border-color: var(--theme-glass-border);
 }
+
+.movement-edit-dialog__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4) 0;
+}

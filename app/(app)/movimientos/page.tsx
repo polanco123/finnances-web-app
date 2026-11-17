@@ -1,6 +1,16 @@
 'use client'
 
-import { Fragment, Suspense, useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import {
+  Fragment,
+  Suspense,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  type Dispatch,
+  type SetStateAction,
+} from 'react'
 import { useSearchParams } from 'next/navigation'
 import MovementForm from '@/components/movement/movement-form'
 import MovementListItem from '@/components/movement/movement-list-item'
@@ -11,6 +21,7 @@ import UndoToast from '@/components/movement/undo-toast'
 import { useMovementActions } from '@/components/movement/use-movement-actions'
 import type { EditTarget } from '@/components/movement/movement-edit-values'
 import { groupMovimientos } from '@/components/movement/movement-grouping'
+import { appendNewRows } from '@/components/movement/movement-list-patch'
 import type { DisplayItem } from '@/components/movement/movement-grouping'
 import {
   type Movimiento,
@@ -51,9 +62,17 @@ function MovimientosContent() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
 
+  // Bumped on every optimistic patch (edit/delete/undo). A page fetched before a
+  // patch is stale (it can resurrect deleted rows or hold pre-edit values).
+  const patchEpochRef = useRef(0)
+  const patchMovements = useCallback<Dispatch<SetStateAction<Movimiento[]>>>((update) => {
+    patchEpochRef.current += 1
+    setMovements(update)
+  }, [])
+
   const bumpHintRefreshToken = useCallback(() => setHintRefreshToken((t) => t + 1), [])
   const actions = useMovementActions({
-    setMovements,
+    setMovements: patchMovements,
     cursor,
     hasMore,
     onChanged: bumpHintRefreshToken,
@@ -79,8 +98,11 @@ function MovimientosContent() {
     try {
       setLoadingMore(true)
       setError(null)
+      const epoch = patchEpochRef.current
       const page = await fetchMovimientosPage(cursor, PAGE_SIZE)
-      setMovements((prev) => [...prev, ...page.movimientos])
+      // Patched while in flight: drop the stale page; the sentinel refetches it.
+      if (epoch !== patchEpochRef.current) return
+      setMovements((prev) => appendNewRows(prev, page.movimientos))
       setCursor(page.nextCursor)
       setHasMore(page.hasMore)
     } catch (err) {
@@ -136,6 +158,12 @@ function MovimientosContent() {
     [actions, editTarget],
   )
 
+  const { clearError } = actions
+  const handleEditClose = useCallback(() => {
+    setEditTarget(null)
+    clearError()
+  }, [clearError])
+
   const displayItems = useMemo(() => groupMovimientos(movements), [movements])
 
   useEffect(() => {
@@ -167,7 +195,8 @@ function MovimientosContent() {
         />
 
         {error && <div className="movimientos-page__error">{error}</div>}
-        {actions.error && (
+        {/* While the edit dialog is open it shows its own error (the overlay hides this one). */}
+        {actions.error && !editTarget && (
           <div className="movimientos-page__error" role="alert">
             {actions.error}
           </div>
@@ -208,7 +237,9 @@ function MovimientosContent() {
                 }
 
                 const row = item.data
-                if (row.msi_id != null) {
+                // MSI rows and unpaired transfer legs are never editable alone:
+                // a lone leg would break the atomic pair (design: both legs or none).
+                if (row.msi_id != null || row.es_transferencia) {
                   return <MovementListItem key={row.id} movimiento={row} />
                 }
                 return (
@@ -239,7 +270,7 @@ function MovimientosContent() {
       <MovementEditDialog
         target={editTarget}
         onSubmit={handleEditSubmit}
-        onClose={() => setEditTarget(null)}
+        onClose={handleEditClose}
       />
 
       {actions.undo.active && (
