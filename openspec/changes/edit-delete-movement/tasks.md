@@ -33,7 +33,7 @@ Chain strategy: feature-branch-chain
 ## Phase 2: Migration and Drift Check
 
 - [x] 2.1 Create `supabase/checks/saldo_drift.sql` (saldo_calculado vs SUM(monto)); run before applying (manual, record result).
-- [ ] 2.2 Verify existing `movimiento` RLS policies/grants in Supabase (design open question).
+- [x] 2.2 Verify existing `movimiento` RLS policies/grants in Supabase (design open question). Findings (verified live by the user): `movimiento` has `user_id uuid` (nullable, DEFAULT auth.uid()); policies are only `Allow public read access` (SELECT, USING true) and `Enable insert for users based on user_id` (INSERT, WITH CHECK auth.uid() = user_id); no UPDATE/DELETE policies. All 1337 rows have user_id (88 legacy rows backfilled, 0 null). Sign-up disabled, 1 user. Migration now scopes UPDATE/DELETE by `auth.uid() = user_id`.
 - [x] 2.3 Create `supabase/migrations/20261118090000_movimiento_edit_delete.sql`: TG_OP trigger function, trigger recreate, idempotent UPDATE/DELETE policies, GRANTs.
 - [x] 2.4 In the same file add RPCs `update_transferencia`, `delete_transferencia`, `restore_transferencia` (reject msi, origen = destino, legs != 2) with GRANT EXECUTE.
 - [ ] 2.5 Manual DB run on staging: edit/delete/undo flows, then drift query shows 0 rows (spec: balances = SUM(monto)).
@@ -98,5 +98,6 @@ The migration (still unapplied) was edited in place; SQL cannot be unit-tested h
 4. `restore_transferencia` (R1-003): reject each of these payloads: 1 leg, 3 legs, two negative legs, net != 0, different `transferencia_id`, `es_transferencia` false/null, `msi_id` set, missing `id`. Accept the exact jsonb returned by `delete_transferencia`.
 5. Undo fidelity (R3-004): delete a row that has `descripcion`/`notas` (and any column outside the old select list), undo, and compare every column with the pre-delete row (both regular rows and transfer legs).
 6. Check nothing else in the DB updates/deletes `msi_id` rows directly (e.g. cascades from an MSI plan table): the guard would block it unless it goes through an RPC that sets `app.movimiento_rpc`.
-7. Single-tenant assumption (R1-001): the UPDATE/DELETE policies are `USING (true)`; confirm sign-up is disabled in Supabase Auth before relying on them. Add an ownership column and scope policies before adding a second user.
+7. Ownership (R1-001): UPDATE/DELETE policies are scoped by `auth.uid() = user_id`. Backfill is done (0 null rows) and the migration aborts if any `user_id IS NULL` row exists. On staging verify: `saldo_drift.sql` null_user_id = 0 and the policy listing shows the two new policies; edit/delete of own rows works from the UI; as a different authenticated user (or with a forged user_id) UPDATE/DELETE affect 0 rows; `restore_transferencia` with the exact `delete_transferencia` output succeeds (restored legs keep their user_id, INSERT WITH CHECK passes) and with a leg whose user_id differs from auth.uid() fails. The public SELECT policy is pre-existing and out of scope.
+8. SQL has no automated tests here; all of the above is manual.
 
