@@ -7,12 +7,28 @@
 --    the RPCs below (direct PostgREST UPDATE/DELETE is rejected).
 -- Run supabase/checks/saldo_drift.sql before and after applying.
 --
--- SINGLE-TENANT ASSUMPTION (review finding R1-001): movimiento has no owner
--- column, so the UPDATE/DELETE policies below are USING (true) for every
--- authenticated user. This is only safe while the app is single-tenant with
--- sign-up disabled (one trusted user). Before enabling sign-up or adding a
--- second user, add an ownership column (e.g. user_id) and scope these
--- policies and the RPCs to it. No user_id is invented here on purpose.
+-- OWNERSHIP (review finding R1-001): movimiento.user_id (uuid, DEFAULT
+-- auth.uid()) is the owner column. The UPDATE/DELETE policies below are scoped
+-- with auth.uid() = user_id. Rows with user_id IS NULL would become
+-- unreachable, so legacy rows MUST be backfilled before applying; the
+-- pre-check right below aborts the migration if any remain. The existing
+-- public SELECT policy ("Allow public read access") and the INSERT policy
+-- ("Enable insert for users based on user_id") are pre-existing and out of
+-- scope: this migration does not touch them.
+
+-- ---------------------------------------------------------------------------
+-- 0. Pre-check: fail loudly instead of silently locking ownerless rows.
+-- ---------------------------------------------------------------------------
+DO $$
+DECLARE
+  v_null_owner bigint;
+BEGIN
+  SELECT count(*) INTO v_null_owner FROM public.movimiento WHERE user_id IS NULL;
+  IF v_null_owner > 0 THEN
+    RAISE EXCEPTION 'movimiento has % rows with user_id IS NULL; backfill them before applying this migration', v_null_owner;
+  END IF;
+END;
+$$;
 
 -- ---------------------------------------------------------------------------
 -- 1. Balance trigger
@@ -64,14 +80,17 @@ CREATE TRIGGER trg_actualizar_saldo
 --    names so the migration is re-runnable; pre-existing policies are not
 --    touched (PERMISSIVE policies are OR-ed, so an extra one is harmless).
 -- ---------------------------------------------------------------------------
--- NOTE: USING (true) = single-tenant assumption, see header.
+-- Scoped by owner (see header). WITH CHECK also stops a user from reassigning
+-- a row to another user_id.
 DROP POLICY IF EXISTS movimiento_update_authenticated ON public.movimiento;
 CREATE POLICY movimiento_update_authenticated
-  ON public.movimiento FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+  ON public.movimiento FOR UPDATE TO authenticated
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS movimiento_delete_authenticated ON public.movimiento;
 CREATE POLICY movimiento_delete_authenticated
-  ON public.movimiento FOR DELETE TO authenticated USING (true);
+  ON public.movimiento FOR DELETE TO authenticated
+  USING (auth.uid() = user_id);
 
 GRANT UPDATE, DELETE ON public.movimiento TO authenticated;
 
@@ -217,6 +236,11 @@ $$;
 -- carries every column). The legs are validated before inserting so a forged
 -- payload cannot mint money: exactly 2 rows, same transferencia_id,
 -- es_transferencia = true, one negative and one positive leg, net zero, no MSI.
+-- Ownership: restored rows keep the user_id returned by delete_transferencia.
+-- No explicit user_id check is coded here on purpose: the function is SECURITY
+-- INVOKER, so the INSERT policy (WITH CHECK auth.uid() = user_id) rejects any
+-- leg whose user_id differs from the caller (or is missing from the payload,
+-- because jsonb_populate_recordset does not apply column defaults).
 CREATE OR REPLACE FUNCTION public.restore_transferencia(p_rows jsonb)
 RETURNS SETOF public.movimiento
 LANGUAGE plpgsql

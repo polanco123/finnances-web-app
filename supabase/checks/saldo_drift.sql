@@ -32,6 +32,20 @@ HAVING count(*) <> 2
     OR sum(m.monto) <> 0
 ORDER BY m.transferencia_id;
 
+-- Ownership: rows without user_id become unreachable under the owner-scoped
+-- UPDATE/DELETE policies. Expect null_user_id = 0 (the migration also aborts
+-- if this is not 0).
+SELECT count(*) AS null_user_id FROM movimiento WHERE user_id IS NULL;
+
+-- Policies on movimiento. Expect: public SELECT (pre-existing), INSERT by
+-- user_id (pre-existing), and after the migration movimiento_update_authenticated
+-- (UPDATE) and movimiento_delete_authenticated (DELETE), both with
+-- auth.uid() = user_id.
+SELECT policyname, cmd, roles, qual, with_check
+FROM pg_policies
+WHERE schemaname = 'public' AND tablename = 'movimiento'
+ORDER BY cmd, policyname;
+
 -- Guard trigger smoke test (run manually inside a transaction and ROLLBACK):
 --   BEGIN;
 --   -- Must FAIL with "can only be changed through its RPC":
