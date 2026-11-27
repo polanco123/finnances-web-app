@@ -47,12 +47,16 @@ function setup(initial: Movimiento[], paging: { cursor: MovimientoCursor | null;
   return { ...hook, onChanged }
 }
 
+let consoleError: ReturnType<typeof vi.spyOn>
+
 beforeEach(() => {
   vi.useFakeTimers()
   vi.resetAllMocks()
+  consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
 })
 
 afterEach(() => {
+  consoleError.mockRestore()
   vi.useRealTimers()
 })
 
@@ -296,5 +300,96 @@ describe('single active undo and error handling', () => {
       await result.current.actions.deleteMovimiento(r2)
     })
     expect(result.current.actions.error).toBeNull()
+  })
+})
+
+describe('undo retry after failure', () => {
+  it('keeps the undo available after a failed restore and a retry succeeds', async () => {
+    mocked.deleteMovimiento.mockResolvedValue([r2])
+    mocked.restoreMovimiento.mockRejectedValueOnce(new Error('dup')).mockResolvedValueOnce([r2])
+    const { result, onChanged } = setup([r1, r2, r3])
+
+    await act(async () => {
+      await result.current.actions.deleteMovimiento(r2)
+    })
+    await act(async () => {
+      await result.current.actions.undo.run()
+    })
+    expect(result.current.actions.error).toBeTruthy()
+    expect(result.current.actions.undo.active).toEqual({ label: 'Movimiento eliminado' })
+    expect(ids(result.current.movements)).toEqual(['r1', 'r3'])
+
+    await act(async () => {
+      await result.current.actions.undo.run()
+    })
+    expect(mocked.restoreMovimiento).toHaveBeenCalledTimes(2)
+    expect(ids(result.current.movements)).toEqual(['r1', 'r2', 'r3'])
+    expect(result.current.actions.error).toBeNull()
+    expect(result.current.actions.undo.active).toBeNull()
+    expect(onChanged).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the undo available after a failed transfer edit undo', async () => {
+    mocked.updateTransferencia
+      .mockResolvedValueOnce([origen, destino])
+      .mockRejectedValueOnce(new Error('rpc'))
+    const { result } = setup([origen, destino])
+
+    await act(async () => {
+      await result.current.actions.editTransferencia(origen, destino, { monto: 200, cuentaOrigen: 'A', cuentaDestino: 'B' })
+    })
+    await act(async () => {
+      await result.current.actions.undo.run()
+    })
+    expect(result.current.actions.undo.active).not.toBeNull()
+  })
+})
+
+describe('error logging', () => {
+  it('logs the original error when an edit fails', async () => {
+    const boom = new Error('rls denied')
+    mocked.updateMovimiento.mockRejectedValue(boom)
+    const { result } = setup([r1, r2])
+
+    await act(async () => {
+      await result.current.actions.editMovimiento(r2, { monto: 1, cuentaId: 'A' })
+    })
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), boom)
+  })
+
+  it('logs the original error when a delete fails', async () => {
+    const boom = new Error('fk violation')
+    mocked.deleteTransferencia.mockRejectedValue(boom)
+    const { result } = setup([origen, destino])
+
+    await act(async () => {
+      await result.current.actions.deleteTransferencia('t1')
+    })
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), boom)
+  })
+
+  it('logs the original error when an undo fails', async () => {
+    const boom = new Error('duplicate key')
+    mocked.deleteMovimiento.mockResolvedValue([r2])
+    mocked.restoreMovimiento.mockRejectedValue(boom)
+    const { result } = setup([r1, r2])
+
+    await act(async () => {
+      await result.current.actions.deleteMovimiento(r2)
+    })
+    await act(async () => {
+      await result.current.actions.undo.run()
+    })
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), boom)
+  })
+
+  it('does not log on success', async () => {
+    mocked.deleteMovimiento.mockResolvedValue([r2])
+    const { result } = setup([r1, r2])
+
+    await act(async () => {
+      await result.current.actions.deleteMovimiento(r2)
+    })
+    expect(consoleError).not.toHaveBeenCalled()
   })
 })

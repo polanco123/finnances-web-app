@@ -78,7 +78,8 @@ export function useMovementActions({
       const result = await write()
       setError(null)
       return result
-    } catch {
+    } catch (err) {
+      console.error(`[movement-actions] ${message}`, err)
       setError(message)
       return null
     }
@@ -92,8 +93,11 @@ export function useMovementActions({
           await inverse()
           setError(null)
           onChanged()
-        } catch {
+        } catch (err) {
+          console.error(`[movement-actions] ${MESSAGES.undo}`, err)
           setError(MESSAGES.undo)
+          // Rethrow so the undo slot stays available for a retry.
+          throw err
         }
       })
     },

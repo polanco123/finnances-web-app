@@ -1,0 +1,55 @@
+@import '@/lib/components-base.css';
+
+/* Rows wrapped by the anchor keep the list separators of movement-list-item.css */
+.movement-actions-popover__anchor + .movement-actions-popover__anchor,
+.movement-actions-popover__anchor + .movement-list-item,
+.movement-actions-popover__anchor + .movement-transfer-card,
+.movement-list-item + .movement-actions-popover__anchor,
+.movement-transfer-card + .movement-actions-popover__anchor {
+  border-top: 1px solid var(--theme-border-default);
+}
+
+.movement-actions-popover {
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  padding: var(--theme-spacing-1);
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-md);
+}
+
+.movement-actions-popover__action {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: var(--theme-spacing-2) var(--theme-spacing-3);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  border-radius: var(--theme-radius-xs);
+  cursor: pointer;
+}
+
+.movement-actions-popover__action:hover,
+.movement-actions-popover__action:focus-visible {
+  background: var(--theme-bg-surface-variant);
+  outline: none;
+}
+
+.movement-actions-popover__action--danger {
+  color: var(--theme-color-error);
+}
+
+.dark .movement-actions-popover {
+  border-color: var(--theme-glass-border);
+}
+
+.dark .movement-actions-popover__anchor + .movement-actions-popover__anchor,
+.dark .movement-actions-popover__anchor + .movement-list-item,
+.dark .movement-actions-popover__anchor + .movement-transfer-card,
+.dark .movement-list-item + .movement-actions-popover__anchor,
+.dark .movement-transfer-card + .movement-actions-popover__anchor {
+  border-top-color: var(--theme-glass-border);
+}

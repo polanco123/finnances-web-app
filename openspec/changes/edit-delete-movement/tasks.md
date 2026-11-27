@@ -33,7 +33,7 @@ Chain strategy: feature-branch-chain
 ## Phase 2: Migration and Drift Check
 
 - [x] 2.1 Create `supabase/checks/saldo_drift.sql` (saldo_calculado vs SUM(monto)); run before applying (manual, record result).
-- [ ] 2.2 Verify existing `movimiento` RLS policies/grants in Supabase (design open question).
+- [x] 2.2 Verify existing `movimiento` RLS policies/grants in Supabase (design open question). Findings (verified live by the user): `movimiento` has `user_id uuid` (nullable, DEFAULT auth.uid()); policies are only `Allow public read access` (SELECT, USING true) and `Enable insert for users based on user_id` (INSERT, WITH CHECK auth.uid() = user_id); no UPDATE/DELETE policies. All 1337 rows have user_id (88 legacy rows backfilled, 0 null). Sign-up disabled, 1 user. Migration now scopes UPDATE/DELETE by `auth.uid() = user_id`.
 - [x] 2.3 Create `supabase/migrations/20261118090000_movimiento_edit_delete.sql`: TG_OP trigger function, trigger recreate, idempotent UPDATE/DELETE policies, GRANTs.
 - [x] 2.4 In the same file add RPCs `update_transferencia`, `delete_transferencia`, `restore_transferencia` (reject msi, origen = destino, legs != 2) with GRANT EXECUTE.
 - [ ] 2.5 Manual DB run on staging: edit/delete/undo flows, then drift query shows 0 rows (spec: balances = SUM(monto)).
@@ -54,20 +54,20 @@ Chain strategy: feature-branch-chain
 
 ## Phase 5: UI (tests first)
 
-- [ ] 5.1 RED/GREEN: `undo-toast.tsx` (`role="status"`, Deshacer button, hover/focus pause).
-- [ ] 5.2 RED/GREEN: `movement-actions-popover.tsx` (Editar/Eliminar via Radix popover).
-- [ ] 5.3 RED/GREEN: opt-in `onSelect` in `movement-list-item.tsx` and `movement-transfer-card.tsx` (role/tabIndex/Enter/Space only when provided; MSI never selectable; existing consumers unchanged).
-- [ ] 5.4 RED/GREEN: `movement-form.jsx` edit mode (`mode`, `initialValues`, `onEditSubmit`; only monto/accounts; invalid amount and same origen/destino rejected; tab derived from row).
-- [ ] 5.5 RED/GREEN: `movement-edit-dialog.tsx` wrapping the form in edit mode.
+- [x] 5.1 RED/GREEN: `undo-toast.tsx` (`role="status"`, Deshacer button, hover/focus pause).
+- [x] 5.2 RED/GREEN: `movement-actions-popover.tsx` (Editar/Eliminar via Radix popover).
+- [x] 5.3 RED/GREEN: opt-in `onSelect` in `movement-list-item.tsx` and `movement-transfer-card.tsx` (role/tabIndex/Enter/Space only when provided; MSI never selectable; existing consumers unchanged).
+- [x] 5.4 RED/GREEN: `movement-form.jsx` edit mode (`mode`, `initialValues`, `onEditSubmit`; only monto/accounts; invalid amount and same origen/destino rejected; tab derived from row).
+- [x] 5.5 RED/GREEN: `movement-edit-dialog.tsx` wrapping the form in edit mode.
 
 ## Phase 6: Page Wiring
 
-- [ ] 6.1 RED: page integration test (tap -> popover -> delete -> toast -> Undo restores row at original position).
-- [ ] 6.2 GREEN: wire hook, popover, dialog, toast in `app/(app)/movimientos/page.tsx`.
+- [x] 6.1 RED: page integration test (tap -> popover -> delete -> toast -> Undo restores row at original position).
+- [x] 6.2 GREEN: wire hook, popover, dialog, toast in `app/(app)/movimientos/page.tsx`.
 
 ## Phase 7: Verification
 
-- [ ] 7.1 Run `npm run test`, `npm run lint`, `npm run build`; fix failures.
+- [x] 7.1 Run `npm run test`, `npm run lint`, `npm run build`; fix failures.
 - [ ] 7.2 Manual check of all spec scenarios; re-run drift query.
 
 ## PR 1 Manual DB Notes (apply-progress)
@@ -87,3 +87,17 @@ Tasks 2.2 and 2.5 (and the "run before applying" part of 2.1) need a live Supaba
    - `delete_transferencia` returns 2 rows; `restore_transferencia` with that jsonb restores balances.
    - Fresh INSERT still updates the balance.
 5. Open risk: `restore_transferencia` uses `INSERT INTO movimiento SELECT * FROM jsonb_populate_recordset(...)`; if `movimiento` has generated columns it must be switched to an explicit column list.
+
+## Review-fix batch: manual DB notes (staging)
+
+The migration (still unapplied) was edited in place; SQL cannot be unit-tested here, so verify on staging:
+
+1. Apply the migration; `supabase/checks/saldo_drift.sql` must return 0 rows for both queries (balance drift and transfer integrity).
+2. Guard trigger (R1-002/R3-004): in a transaction, direct `UPDATE`/`DELETE` of an `es_transferencia = true` row and of an `msi_id IS NOT NULL` row must fail ("can only be changed through its RPC"); then `ROLLBACK`. Direct UPDATE/DELETE of a regular row must still work (edit/delete/undo from the UI).
+3. `update_transferencia` / `delete_transferencia` still work from the UI (they set the transaction-local flag `app.movimiento_rpc`). Check the flag does not leak: right after an RPC call, a separate direct UPDATE of a transfer leg must still fail.
+4. `restore_transferencia` (R1-003): reject each of these payloads: 1 leg, 3 legs, two negative legs, net != 0, different `transferencia_id`, `es_transferencia` false/null, `msi_id` set, missing `id`. Accept the exact jsonb returned by `delete_transferencia`.
+5. Undo fidelity (R3-004): delete a row that has `descripcion`/`notas` (and any column outside the old select list), undo, and compare every column with the pre-delete row (both regular rows and transfer legs).
+6. Check nothing else in the DB updates/deletes `msi_id` rows directly (e.g. cascades from an MSI plan table): the guard would block it unless it goes through an RPC that sets `app.movimiento_rpc`.
+7. Ownership (R1-001): UPDATE/DELETE policies are scoped by `auth.uid() = user_id`. Backfill is done (0 null rows) and the migration aborts if any `user_id IS NULL` row exists. On staging verify: `saldo_drift.sql` null_user_id = 0 and the policy listing shows the two new policies; edit/delete of own rows works from the UI; as a different authenticated user (or with a forged user_id) UPDATE/DELETE affect 0 rows; `restore_transferencia` with the exact `delete_transferencia` output succeeds (restored legs keep their user_id, INSERT WITH CHECK passes) and with a leg whose user_id differs from auth.uid() fails. The public SELECT policy is pre-existing and out of scope.
+8. SQL has no automated tests here; all of the above is manual.
+

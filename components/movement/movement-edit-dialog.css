@@ -1,0 +1,53 @@
+@import '@/lib/components-base.css';
+
+.movement-edit-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.movement-edit-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 301;
+  width: calc(100% - var(--theme-spacing-8));
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-default);
+  border-radius: var(--theme-radius-xl);
+}
+
+.movement-edit-dialog:focus {
+  outline: none;
+}
+
+/* The form already renders its own heading; keep the dialog title for a11y only. */
+.movement-edit-dialog__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.movement-edit-dialog .movement-form {
+  border: none;
+  margin-bottom: 0;
+}
+
+.dark .movement-edit-dialog {
+  border-color: var(--theme-glass-border);
+}
+
+.movement-edit-dialog__error {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-color-error);
+  padding: var(--theme-spacing-3) var(--theme-spacing-4) 0;
+}

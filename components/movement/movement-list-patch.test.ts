@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  appendNewRows,
   compareMovimiento,
   insertSorted,
   removeByIds,
@@ -137,5 +138,23 @@ describe('insertSorted', () => {
   it('does not duplicate a row that is already present', () => {
     const out = insertSorted(page, [row('b', { fecha: '2026-11-11' })], noMore)
     expect(ids(out)).toEqual(['a', 'b', 'c', 'd'])
+  })
+})
+
+describe('appendNewRows', () => {
+  it('appends rows that are not in the list yet, keeping page order', () => {
+    const out = appendNewRows([row('a'), row('b')], [row('c'), row('d')])
+    expect(out.map((r) => r.id)).toEqual(['a', 'b', 'c', 'd'])
+  })
+
+  it('skips ids already present (overlap, restored or patched rows)', () => {
+    const out = appendNewRows([row('a'), row('b')], [row('b'), row('c')])
+    expect(out.map((r) => r.id)).toEqual(['a', 'b', 'c'])
+  })
+
+  it('keeps the list row (patched value) over the fetched duplicate', () => {
+    const patched = row('b', { monto: -999 })
+    const out = appendNewRows([row('a'), patched], [row('b')])
+    expect(out[1]).toBe(patched)
   })
 })
